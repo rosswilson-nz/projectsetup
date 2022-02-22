@@ -1,0 +1,82 @@
+---
+title: 'Paper title'
+author:
+- Author list (one per line)
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: word_document
+abstract: |
+  **Abstract**
+  
+  **Background**
+  
+  **Aim**
+  
+  **Methods**
+  
+  **Results**
+  
+  **Conclusion**
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(  
+	collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  echo = FALSE,
+  comment = "#>"
+)
+options(knitr.kable.NA = "")
+
+# Load required libraries
+library(targets)
+#library(knitr) # Uncomment if knitr::kable used to print tables
+#library(fs) # Uncomment if fs::path_wd() used to generate path to figure files
+#library(formattr) # Pretty number formatting
+#library(tidyverse) # For manipulating analysis objects if required
+```
+
+```{r load-data, include=FALSE, echo=FALSE, cache=FALSE}
+# Load the previously stored results
+#tar_load(figure_1)
+#tar_load(results)
+
+# Any other variables to be loaded/defined in here; extract data from analysis objects if required
+```
+
+# Introduction
+
+# Methods
+
+# Results
+
+```{r table-1}
+# kable(
+#   results,
+#   caption = "Table 1: Table caption"
+# )
+```
+
+> Table notes
+
+<br>
+
+<!-- ![Figure 1: Figure caption](`r #path_wd(figure_1)`) -->
+
+> Figure notes
+
+<br>
+
+# Discussion
+
+# Conclusion
+
+# Funding
+
+# Conflicts of Interest
+
+# References
+<!-- The following line ensures the references appear here for the MS Word or HTML output files, rather than right at the end of the document (this will not work for PDF files):  -->
+<div id="refs"></div>
+
+# Supplementary material

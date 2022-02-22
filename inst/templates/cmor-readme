@@ -1,0 +1,69 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+# Put the project citation details here to include them in the file below.
+Title <- "Title of your paper goes here"
+Authors <- "Author list goes here"
+Year <- "Year of publication"
+Journal <- "Name of journal/publication; Volume/Issue/Page numbers"
+DOI <- "Citation DOI"
+```
+
+# {{{ name }}} project
+
+This repository contains the data and code for our project...
+
+
+### How to cite
+
+This repository contains work-in-progress. Please do not cite.
+
+<!-- Update and uncomment this section once the work is citable
+
+Please cite this work as:
+
+> `r Authors`, (`r Year`). _`r Title`_. `Journal`. <https://doi.org/`r DOI`>
+
+-->
+
+{{#github}}
+### How to download{{#is_package}} or install{{/is_package}}
+
+You can download the repository as a zip from from this URL: <{{{url}}}/archive/master.zip>
+{{#is_package}}
+
+Or you can install as an R package, {{{ name }}}, from GitHub with:
+
+```{r gh-installation, eval = FALSE}
+# install.packages("devtools")
+remotes::install_github("{{{username}}}/{{{repo}}}")
+```
+
+If you install the package, run `build_project(<path>)` to recreate the project folder as an R project, then `run_analysis()` to re-run the analyses and produce the final report.
+{{/is_package}}
+{{/github}}
+
+{{#is_package}}
+<!--
+
+### Licenses
+
+If appropriate, describe the licences governing use of the package: e.g.
+
+**Text and figures :**  [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)
+
+**Code :** See the [DESCRIPTION](DESCRIPTION) file
+
+**Data :** [CC-0](http://creativecommons.org/publicdomain/zero/1.0/) attribution requested in reuse
+
+-->
+{{/is_package}}
