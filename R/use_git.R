@@ -5,7 +5,7 @@ use_git <- function(message = "Initial commit") {
   cli::cli_alert_success("Initialising Git repo")
   git2r::init(getwd())
   usethis::use_git_ignore(c(".Rhistory", ".RData", ".Rproj.user", ".Rprofile",
-                            ".httr-oauth", ".DS_Store"))
+                            ".httr-oauth", ".DS_Store", "_targets/"))
   git_ask_commit(message, untracked = TRUE)
   invisible(TRUE)
 }
