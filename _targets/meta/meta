@@ -1,0 +1,17 @@
+name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+.Random.seed|object|137f4a430a38c997|||||||||||||||
+basedir|object|cecbb01feb5dc684|||||||||||||||
+column|object|8e4862f38ea9ea7a|||||||||||||||
+details|object|2f02e56e5f90ab32|||||||||||||||
+extra_files|object|1f5ab3e245369c9e|||||||||||||||
+f|function|31e4e40ab9b11265|||||||||||||||
+file_word_styles|stem|a1f42303a6d518da|4f6e6cd375acbc9a|321508ec42589096|83707512|C:/Users/wilro23p/code/CMORprojects/inst/templates/word-styles-reference-01.docx|t18179.8461374315s|a8f1dbdb7652b975|28015|file|local|vector|||0||
+frmt|object|33594a770ce89c9b|||||||||||||||
+g|function|1e071dc1ebd92fe2|||||||||||||||
+manuscript|stem|ebde4a45c30544e8|4641f65453f1d7be|d84d7cdd1c3c4b08|615889701|inst/templates/manuscript.docx*inst/templates/manuscript.qmd*inst/templates/references.bib*inst/templates/vancouver.csl*inst/templates/word-styles-reference-01.docx|t19398.0730291736s|0dc50c4c9f11569d|66622|file|local|vector|||3.16||
+out|object|493ecb76d69f0606|||||||||||||||
+output_file|object|6b675834c6ff6a6a|||||||||||||||
+path|object|7bc849b1e48da5b2|||||||||||||||
+qmd_file|object|7bc849b1e48da5b2|||||||||||||||
+rmd_file|object|193be40d44c34ec6|||||||||||||||
+word_styles_file|object|24fafe7a0ca3c58c|||||||||||||||

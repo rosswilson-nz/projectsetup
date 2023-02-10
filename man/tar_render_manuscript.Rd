@@ -46,9 +46,10 @@ to the BibTeX file holding reference details.}
 pandoc. See \code{\link[rmarkdown:word_document]{rmarkdown::word_document()}}.}
 
 \item{render_args}{(optional) Other render arguments passed to
-\code{\link[rmarkdown:render]{rmarkdown::render()}}. Unlike the \code{render_arguments}
-argument to \code{\link[tarchetypes:tar_render_raw]{tarchetypes::tar_render_raw()}}, this should be a
-named list of arguments, not a language object containing such a list.}
+\code{\link[rmarkdown:render]{rmarkdown::render()}}. Only used for Rmarkdown source files. Unlike the
+\code{render_arguments} argument to \code{\link[tarchetypes:tar_render_raw]{tarchetypes::tar_render_raw()}}, this
+should be a named list of arguments, not a language object containing
+such a list.}
 
 \item{packages, library, error, deployment, priority, resources, retrieval, cue, quiet}{See \code{\link[tarchetypes:tar_render_raw]{tarchetypes::tar_render_raw()}}.}
 }

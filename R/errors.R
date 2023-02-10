@@ -39,6 +39,11 @@ stop_file_not_found <- function(file, path) {
   cli::cli_abort(x, "CMORprojects_error_file_not_found", path = path)
 }
 
+stop_invalid_file <- function(file, path) {
+  x <- "{.file {path}} is not a {file}."
+  cli::cli_abort(x, "CMORprojects_error_invalid_file", path = path)
+}
+
 stop_not_writable <- function(file, path) {
   x <- "{file} at {.file {path}} is not writeable."
   cli::cli_abort(x, "CMORprojects_error_not_writable", path = path)

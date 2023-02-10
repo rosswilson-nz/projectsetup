@@ -44,10 +44,10 @@ Create a target to render RMarkdown report to docx file in a `targets` pipeline:
 #   tar_file(data_file, "raw_data/data.csv"),
 # 	tar_target(data, read_raw_data(data_file)),
 # 	tar_target(analysis, do_some_analysis(data)),
-#   tar_file(file_word_styles, "reports/word-styles-reference-01.docx"),
-#   tar_file(file_csl, "reports/vancouver.csl"),
-#   tar_file(file_bib, "reports/references.bib"),
-# 	tar_render_manuscript(manuscript, "reports/manuscript.Rmd", "output/manuscript.docx",
+#   tar_file(file_word_styles, "output/word-styles-reference-01.docx"),
+#   tar_file(file_csl, "output/vancouver.csl"),
+#   tar_file(file_bib, "output/references.bib"),
+# 	tar_render_manuscript(manuscript, "output/manuscript.Rmd", "output/manuscript.docx",
 #                         file_word_styles, file_csl, file_bib)
 # )
 ```

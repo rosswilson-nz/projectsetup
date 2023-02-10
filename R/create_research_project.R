@@ -98,7 +98,7 @@ create_research_project <- function(
                "{.file README.md} for GitHub.')"),
         "rm('github')",
         paste0("cli::cli_ul('Put code in {.path /R}, raw data in {.path /raw_data}, and RMarkdown ",
-               "reports in {.path /reports}.')"),
+               "reports in {.path /output}.')"),
         if (workflow == "targets") c(
           paste0("cli::cli_ul('Use {.file _targets.R}, {.file _plan.R}, and {.file parameters.R} ",
                  "to specify the analysis workflow.')"),

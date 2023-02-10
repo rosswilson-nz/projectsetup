@@ -16,9 +16,10 @@
 #' @param pandoc_args (optional) Additional command-line options to pass to
 #'     pandoc. See [rmarkdown::word_document()].
 #' @param render_args (optional) Other render arguments passed to
-#'     [rmarkdown::render()]. Unlike the `render_arguments`
-#'     argument to [tarchetypes::tar_render_raw()], this should be a
-#'     named list of arguments, not a language object containing such a list.
+#'     [rmarkdown::render()]. Only used for Rmarkdown source files. Unlike the
+#'     `render_arguments` argument to [tarchetypes::tar_render_raw()], this
+#'     should be a named list of arguments, not a language object containing
+#'     such a list.
 #' @param packages,library,error,deployment,priority,resources,retrieval,cue,quiet
 #'     See [tarchetypes::tar_render_raw()].
 #' @export
@@ -35,12 +36,9 @@ tar_render_manuscript <- function(name, path, output_file,
                                   cue = targets::tar_option_get("cue"),
                                   quiet = TRUE) {
   if (!rlang::is_scalar_character(path)) stop_not_string("path")
-  if (!fs::file_exists(path)) stop_file_not_found("RMarkdown source file", path)
-  if (!rlang::is_scalar_character(output_file)) stop_not_string("output_file")
-  if (!fs::dir_exists(dirname(output_file)))
-    stop_file_not_found("Valid output file directory", dirname(output_file))
-  if (fs::file_exists(output_file) && !fs::file_access(output_file, "write"))
-    stop_not_writable("Output file", output_file)
+  if (!fs::file_exists(path)) stop_file_not_found("RMarkdown or Quarto source file", path)
+  if (!(tolower(fs::path_ext(path)) %in% c("qmd", "rmd", "rmarkdown")))
+    stop_invalid_file("RMarkdown or Quarto source file", path)
   if (!(
     is.null(pandoc_args) ||
     rlang::is_bare_character(pandoc_args) ||
@@ -53,31 +51,60 @@ tar_render_manuscript <- function(name, path, output_file,
      !valid_varnames(names(render_args)))
   ) stop_invalid_render_args()
 
-  file_reference_docx <- rlang::enexpr(file_reference_docx)
-  file_csl <- rlang::enexpr(file_csl)
-  file_bib <- rlang::enexpr(file_bib)
-  pandoc_args <- rlang::enexpr(pandoc_args)
-  render_args <- rlang::enexpr(render_args)
+  frmt <- if (tolower(fs::path_ext(path)) == "qmd") "quarto" else "rmarkdown"
 
-  render_arguments <- rlang::expr(c(
-    !!render_args,
-    list(
-      output_format = rmarkdown::word_document(
-        pandoc_args = c(
-          !!pandoc_args,
-          if (!is.null(!!file_reference_docx))
-            list("--reference-doc", fs::path_wd(!!file_reference_docx)),
-          if (!is.null(!!file_csl)) list("--csl", fs::path_wd(!!file_csl)),
-          if (!is.null(!!file_bib)) list("--citeproc", "--bibliography", fs::path_wd(!!file_bib))
+  switch(
+    frmt,
+    rmarkdown = {
+      if (!rlang::is_scalar_character(output_file)) stop_not_string("output_file")
+      if (!fs::dir_exists(dirname(output_file)))
+        stop_file_not_found("Valid output file directory", dirname(output_file))
+      if (fs::file_exists(output_file) && !fs::file_access(output_file, "write"))
+        stop_not_writable("Output file", output_file)
+      file_reference_docx <- rlang::enexpr(file_reference_docx)
+      file_csl <- rlang::enexpr(file_csl)
+      file_bib <- rlang::enexpr(file_bib)
+      pandoc_args <- rlang::enexpr(pandoc_args)
+      render_args <- rlang::enexpr(render_args)
+
+      render_arguments <- rlang::expr(c(
+        !!render_args,
+        list(
+          output_format = rmarkdown::word_document(
+            pandoc_args = c(
+              !!pandoc_args,
+              if (!is.null(!!file_reference_docx))
+                list("--reference-doc", fs::path_wd(!!file_reference_docx)),
+              if (!is.null(!!file_csl)) list("--csl", fs::path_wd(!!file_csl)),
+              if (!is.null(!!file_bib)) list("--citeproc", "--bibliography", fs::path_wd(!!file_bib))
+            )
+          ),
+          output_file = !!output_file, output_dir = "output"
         )
-      ),
-      output_file = !!output_file, output_dir = "output"
-    )
-  ))
+      ))
 
-  tarchetypes::tar_render_raw(rlang::as_name(rlang::ensym(name)), path, packages,
-                              library, error, deployment, priority, resources, retrieval, cue,
-                              quiet, render_arguments)
+      tarchetypes::tar_render_raw(rlang::as_name(rlang::ensym(name)), path, packages,
+                                  library, error, deployment, priority, resources, retrieval, cue,
+                                  quiet, render_arguments)
+    },
+    quarto = {
+      details <- quarto::quarto_inspect(path)
+      basedir <- fs::path_dir(path)
+      extra_files <- c(
+        if (!is.null(details$formats$docx$pandoc$`reference-doc`))
+          fs::path(basedir, details$formats$docx$pandoc$`reference-doc`),
+        if (!is.null(details$formats$docx$metadata$bibliography))
+          fs::path(basedir, details$formats$docx$metadata$bibliography),
+        if (!is.null(details$formats$docx$metadata$csl))
+          fs::path(basedir, details$formats$docx$metadata$csl)
+      )
+      tarchetypes::tar_quarto_raw(rlang::as_name(rlang::ensym(name)), path, extra_files,
+                                  execute_params = quote(list()), quiet = quiet,
+                                  pandoc_args = pandoc_args, packages = packages, library = library,
+                                  error = error, deployment = deployment, priority = priority,
+                                  resources = resources, retrieval = retrieval, cue = cue)
+    }
+  )
 }
 
 valid_varnames <- function(x) {
