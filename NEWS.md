@@ -1,3 +1,7 @@
+# CMORprojects 0.2.1
+
+* Make Quarto rendering consistent with RMarkdown (rendered output moved to 'output' directory)
+
 # CMORprojects 0.2.0
 
 * Add support for rendering Quarto documents as well as RMarkdown
