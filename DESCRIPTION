@@ -22,7 +22,7 @@ Imports:
     rlang,
     rmarkdown,
     rstudioapi,
-    tarchetypes,
+    tarchetypes (>= 0.6.0.9000),
     targets,
     usethis,
     whisker
