@@ -20,8 +20,8 @@
 #'     `render_arguments` argument to [tarchetypes::tar_render_raw()], this
 #'     should be a named list of arguments, not a language object containing
 #'     such a list.
-#' @param packages,library,error,deployment,priority,resources,retrieval,cue,quiet
-#'     See [tarchetypes::tar_render_raw()].
+#' @param packages,library,error,memory,garbage_collection,deployment,priority,resources,retrieval,cue,quiet
+#'     See [tarchetypes::tar_render_raw()] and [tarchetypes::tar_quarto_raw()].
 #' @export
 tar_render_manuscript <- function(name, path, output_file,
                                   file_reference_docx = NULL, file_csl = NULL, file_bib = NULL,
@@ -29,6 +29,8 @@ tar_render_manuscript <- function(name, path, output_file,
                                   packages = c("rmarkdown"),
                                   library = targets::tar_option_get("library"),
                                   error = targets::tar_option_get("error"),
+                                  memory = targets::tar_option_get("memory"),
+                                  garbage_collection = targets::tar_option_get("garbage_collection"),
                                   deployment = "main",
                                   priority = targets::tar_option_get("priority"),
                                   resources = targets::tar_option_get("resources"),
@@ -89,22 +91,65 @@ tar_render_manuscript <- function(name, path, output_file,
     },
     quarto = {
       details <- quarto::quarto_inspect(path)
+      if (!("docx" %in% names(details$formats)))
+        stop("Only 'docx' output is currently available for rendering from quarto input files")
       basedir <- fs::path_dir(path)
+      output_dir <- "output"
+      sources <- path
+      output <- fs::path(output_dir, details$formats$docx$pandoc$`output-file`)
       extra_files <- c(
-        if (!is.null(details$formats$docx$pandoc$`reference-doc`))
-          fs::path(basedir, details$formats$docx$pandoc$`reference-doc`),
-        if (!is.null(details$formats$docx$metadata$bibliography))
-          fs::path(basedir, details$formats$docx$metadata$bibliography),
-        if (!is.null(details$formats$docx$metadata$csl))
-          fs::path(basedir, details$formats$docx$metadata$csl)
+        fs::path(basedir, details$formats$docx$pandoc$`reference-doc`),
+        fs::path(basedir, details$formats$docx$metadata$bibliography),
+        fs::path(basedir, details$formats$docx$metadata$csl)
       )
-      tarchetypes::tar_quarto_raw(rlang::as_name(rlang::ensym(name)), path, extra_files,
-                                  execute_params = quote(list()), quiet = quiet,
-                                  pandoc_args = pandoc_args, packages = packages, library = library,
-                                  error = error, deployment = deployment, priority = priority,
-                                  resources = resources, retrieval = retrieval, cue = cue)
+      command <- tar_quarto_command(
+        path = path, sources = sources, output = output, input = extra_files,
+        execute = TRUE, execute_params = quote(list()), cache = NULL, cache_refresh = FALSE,
+        debug = FALSE, quiet = quiet, pandoc_args = pandoc_args
+      )
+      targets::tar_target_raw(rlang::as_name(rlang::ensym(name)), command, packages = packages,
+                              library = library, format = "file", repository = "local",
+                              error = error, memory = memory, garbage_collection = garbage_collection,
+                              deployment = deployment, priority = priority, resources = resources,
+                              retrieval = retrieval, cue = cue)
     }
   )
+}
+
+tar_quarto_command <- function (path, sources, output, input, execute, execute_params,
+                                cache, cache_refresh, debug, quiet, pandoc_args) {
+  args <- substitute(list(input = path, execute = execute,
+                          execute_params = execute_params, execute_dir = quote(getwd()),
+                          execute_daemon = 0, execute_daemon_restart = FALSE, execute_debug = FALSE,
+                          cache = cache, cache_refresh = cache_refresh, debug = debug,
+                          quiet = quiet, pandoc_args = pandoc_args, as_job = FALSE),
+                     env = list(path = path, execute = execute, execute_params = execute_params,
+                                cache = cache, cache_refresh = cache_refresh, debug = debug,
+                                quiet = quiet, pandoc_args = pandoc_args))
+  deps <- sort(unique(unlist(lapply(sources, tarchetypes:::knitr_deps))))
+  deps <- as.call(c(as.symbol("list"), lapply(deps, as.symbol)))
+  fun <- as.call(c(as.symbol(":::"), lapply(c("CMORprojects", "tar_quarto_run"), as.symbol)))
+  expr <- list(fun, args = args, deps = deps, sources = sources,
+               output = output, input = input)
+  as.expression(as.call(expr))
+}
+
+tar_quarto_run <- function (args, deps, sources, output, input) {
+  rm(deps)
+  gc()
+  assert_quarto()
+  args <- args[!map_lgl(args, is.null)]
+  do.call(what = quarto::quarto_render, args = args)
+  fs::file_move(fs::path(fs::path_dir(sources), fs::path_file(output)), output)
+  out <- unique(c(sort(output), sort(sources), sort(input)))
+  as.character(fs::path_rel(out))
+}
+
+assert_quarto <- function (debug = FALSE) {
+  targets::tar_assert_package("quarto")
+  if (is.null(quarto::quarto_path()) || debug) {
+    targets::tar_throw_validate("Quarto CLI not found.")
+  }
 }
 
 valid_varnames <- function(x) {
