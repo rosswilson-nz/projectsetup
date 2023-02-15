@@ -138,7 +138,7 @@ tar_quarto_run <- function (args, deps, sources, output, input) {
   rm(deps)
   gc()
   assert_quarto()
-  args <- args[!map_lgl(args, is.null)]
+  args <- args[!vapply(args, is.null, logical(1))]
   do.call(what = quarto::quarto_render, args = args)
   fs::file_move(fs::path(fs::path_dir(sources), fs::path_file(output)), output)
   out <- unique(c(sort(output), sort(sources), sort(input)))
