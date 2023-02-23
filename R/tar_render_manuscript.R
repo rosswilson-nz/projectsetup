@@ -118,8 +118,7 @@ tar_render_manuscript <- function(name, path, output_file,
 
 tar_quarto_command <- function (path, sources, output, input, execute, execute_params,
                                 cache, cache_refresh, debug, quiet, pandoc_args) {
-  args <- substitute(list(input = path, execute = execute,
-                          execute_params = execute_params, execute_dir = quote(getwd()),
+  args <- substitute(list(input = path, execute = execute, execute_params = execute_params,
                           execute_daemon = 0, execute_daemon_restart = FALSE, execute_debug = FALSE,
                           cache = cache, cache_refresh = cache_refresh, debug = debug,
                           quiet = quiet, pandoc_args = pandoc_args, as_job = FALSE),
