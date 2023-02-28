@@ -1,12 +1,3 @@
-##################
-### File paths ###
-##################
+library(tidyverse)
 
-# Output files
-file_output_rmd <- "{{#is_package}}inst/{{/is_package}}output/manuscript.Rmd"
-file_output_docx <- "output/manuscript.docx"
-
-## Templates
-file_word_styles <- '{{#is_package}}inst/{{/is_package}}output/word-styles-reference-01.docx'
-file_csl <- '{{#is_package}}inst/{{/is_package}}output/vancouver.csl'
-file_bib <- '{{#is_package}}inst/{{/is_package}}output/references.bib'
+# Define any analysis parameters or parameter grids in here

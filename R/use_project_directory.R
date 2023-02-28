@@ -36,6 +36,11 @@ use_project_directory <- function(package = FALSE, workflow = "targets", git = T
   if (git) {
     if (package) prefix <- "/inst/" else prefix <- "/"
 
+    usethis::use_git_ignore(c(
+      paste0(prefix, "misc"),
+      paste0(prefix, "_targets.yaml"),
+      paste0(prefix, "reports/_targets.yaml")
+    ))
     if (!data_in_git) usethis::use_git_ignore(c(
       paste0(prefix, "derived_data/*"),
       paste0("!", prefix, "derived_data/derived_data")
@@ -45,11 +50,7 @@ use_project_directory <- function(package = FALSE, workflow = "targets", git = T
     ))
     if (!output_in_git) usethis::use_git_ignore(c(
       paste0(prefix, "output/*"),
-      paste0("!", prefix, "output/*.csl"),
-      paste0("!", prefix, "output/*.bib"),
-      paste0("!", prefix, "output/*.qmd"),
-      paste0("!", prefix, "output/*.Rmd"),
-      paste0("!", prefix, "output/word-styles-*.docx"),
+      paste0("!", prefix, "output/output"),
       paste0("!", prefix, "output/figures/figures")
     ))
 
@@ -66,10 +67,10 @@ add_directories <- function(package) {
 
   usethis::use_directory(paste0(prefix, "raw_data"))
   usethis::use_directory(paste0(prefix, "derived_data"))
+  usethis::use_directory(paste0(prefix, "reports"))
   usethis::use_directory(paste0(prefix, "output"))
+  usethis::use_directory(paste0(prefix, "output/figures"))
   usethis::use_directory(paste0(prefix, "R"))
-  usethis::use_directory("output")
-  usethis::use_directory("output/figures")
 }
 
 # Add template files
@@ -111,44 +112,41 @@ add_templates <- function(package, workflow = "targets") {
   }
 
   # Manuscript templates and functions
-  # # quarto project options
-  # file.copy(system.file("templates", "_quarto.yml", package = "CMORprojects", mustWork = TRUE),
-  #           fs::path_wd(prefix))
   ## manuscript template - possibly include separate templates for
   ## figures/tables outputs as well:
   file.copy(system.file("templates", "manuscript.Rmd", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd(prefix, "output"))
+            fs::path_wd(prefix, "reports"))
   file.copy(system.file("templates", "manuscript.qmd", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd(prefix, "output"))
+            fs::path_wd(prefix, "reports"))
   ## example bibtex references file:
   file.copy(system.file("templates", "references.bib", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd(prefix, "output"))
+            fs::path_wd(prefix, "reports"))
   ## CSL citation formatting (Vancouver style):
   file.copy(system.file("templates", "vancouver.csl", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd(prefix, "output"))
+            fs::path_wd(prefix, "reports"))
   ## CSL citation formatting (Author-Date (JHE) style):
   file.copy(
     system.file("templates", "journal-of-health-economics.csl", package = "CMORprojects",
                 mustWork = TRUE),
-    fs::path_wd(prefix, "output")
+    fs::path_wd(prefix, "reports")
   )
   ## Reference .docx styles file
   file.copy(
     system.file("templates", "word-styles-reference-01.docx", package = "CMORprojects",
                 mustWork = TRUE),
-    fs::path_wd(prefix, "output")
+    fs::path_wd(prefix, "reports")
   )
   ## Reference .docx styles file for Medical Care
   file.copy(
     system.file("templates", "word-styles-reference-med-care.docx", package = "CMORprojects",
                 mustWork = TRUE),
-    fs::path_wd(prefix, "output")
+    fs::path_wd(prefix, "reports")
   )
   ## Reference .docx styles file for Journal of Health Economics
   file.copy(
     system.file("templates", "word-styles-reference-jhe.docx", package = "CMORprojects",
                 mustWork = TRUE),
-    fs::path_wd(prefix, "output")
+    fs::path_wd(prefix, "reports")
   )
 
   # Template 'packages' file to load required packages (for _drake.R)
@@ -166,6 +164,8 @@ add_templates <- function(package, workflow = "targets") {
   writeLines(template_out, fs::path_wd(prefix, "parameters.R"))
 
   # Placefolder files in output and data folders (so they are added to Git repo)
+  file.copy(system.file("templates", "output", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "output", "output"))
   file.copy(system.file("templates", "figures", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "output", "figures", "figures"))
   file.copy(system.file("templates", "raw_data", package = "CMORprojects", mustWork = TRUE),

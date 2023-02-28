@@ -1,25 +1,30 @@
 ---
 title: 'Paper title'
 author:
-- Author list (one per line)
-date: "`r format(Sys.time(), '%d %B %Y')`"
+  - Author list (one per line)
+date: last-modified
+date-format: "D MMMM YYYY"
 format:
   docx:
     reference-doc: "word-styles-reference-01.docx"
+    fig-width: 6
+    fig-height: 8
+    fig-dpi: 300
+callout-appearance: minimal
 bibliography: references.bib
 csl: vancouver.csl
 abstract: |
   **Abstract**
   
-  **Background**
+  *Background*
   
-  **Aim**
+  *Aim*
   
-  **Methods**
+  *Methods*
   
-  **Results**
+  *Results*
   
-  **Conclusion**
+  *Conclusion*
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
@@ -35,9 +40,29 @@ options(knitr.kable.NA = "")
 # Load required libraries
 library(targets)
 #library(knitr) # Uncomment if knitr::kable used to print tables
+#library(flextable) # Uncomment if flextable::flextable used to print tables
+#library(ftExtra) # Uncomment if ftExtra functions used with flextable for table formatting
 #library(fs) # Uncomment if fs::path_wd() used to generate path to figure files
 #library(formattr) # Pretty number formatting
 #library(tidyverse) # For manipulating analysis objects if required
+
+# Path to targets store (in parent directory)
+tar_config_set(store = here("_targets"))
+
+# Flextable table formatting (if required)
+#set_flextable_defaults(
+#  font.family = "Times New Roman", font.size = 9,
+#  line_spacing = 1.15, padding.top = 0, padding.bottom = 0,
+#  keep_with_next = TRUE, theme_fun = theme_booktabs,
+#  post_process_docx = function(x) x %>% 
+#    set_table_properties(layout = "autofit", width = 1, align = "left") %>% 
+#    hline_top(border = solid, part = "all") %>% 
+#    hline_bottom(border = solid) %>% 
+#    colformat_md()
+#)
+#solid <- fp_border_default("black")
+#dotted <- fp_border_default("black", "dotted")
+
 ```
 
 ```{r load-data, include=FALSE, echo=FALSE, cache=FALSE}
@@ -48,24 +73,52 @@ library(targets)
 # Any other variables to be loaded/defined in here; extract data from analysis objects if required
 ```
 
+<br>
+
+<!-- Anything else to go on the title page below title/author/abstract -->
+
+{{< pagebreak >}}
+
 # Introduction
 
 # Methods
 
+::: {.callout-important}
+Add callout blocks like this
+:::
+
 # Results
 
-```{r table-1}
-# kable(
-#   results,
-#   caption = "Table 1: Table caption"
-# )
+```{r table-chunk-label}
+#| label: tbl-label
+#| tbl-cap: Table caption
+
+# Either:
+# kable(results)
+
+# Or
+# flextable(results) %>% ...
 ```
 
 > Table notes
 
 <br>
 
+Figure from existing image file:
+
 <!-- ![Figure 1: Figure caption](`r #path_wd(figure_1)`) -->
+
+> Figure notes
+
+<br>
+
+Or, from R object:
+
+```{r figure-chunk-label}
+#| label: fig-label
+#| fig-cap: Figure caption
+# figure_1
+```
 
 > Figure notes
 
@@ -80,7 +133,8 @@ library(targets)
 # Conflicts of Interest
 
 # References
-<!-- The following line ensures the references appear here for the MS Word or HTML output files, rather than right at the end of the document (this will not work for PDF files):  -->
-<div id="refs"></div>
+
+::: {#refs}
+:::
 
 # Supplementary material
