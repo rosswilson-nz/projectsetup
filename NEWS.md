@@ -1,3 +1,7 @@
+# CMORprojects 0.2.1.9000
+
+* Include additional source files in `tar_render_manuscript()` via `include` argument (Quarto only)
+
 # CMORprojects 0.2.1
 
 * Make Quarto rendering consistent with RMarkdown (rendered output moved to 'output' directory)

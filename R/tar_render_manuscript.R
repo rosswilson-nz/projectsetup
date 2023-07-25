@@ -7,6 +7,8 @@
 #'     have length 1.
 #' @param output_file Character string, file path to the docx output file to
 #'     create.
+#' @param include (optional) Character vector, file paths to other source files
+#'     (e.g. included via Quarto includes in `path`).
 #' @param file_reference_docx (optional) Symbol, existing target containing the
 #'     file path to the reference styles file used to format the output.
 #' @param file_csl (optional) Symbol, existing target containing the file path
@@ -23,7 +25,7 @@
 #' @param packages,library,error,memory,garbage_collection,deployment,priority,resources,retrieval,cue,quiet
 #'     See [tarchetypes::tar_render_raw()] and [tarchetypes::tar_quarto_raw()].
 #' @export
-tar_render_manuscript <- function(name, path, output_file,
+tar_render_manuscript <- function(name, path, output_file, include = character(),
                                   file_reference_docx = NULL, file_csl = NULL, file_bib = NULL,
                                   pandoc_args = NULL, render_args = NULL,
                                   packages = c("rmarkdown"),
@@ -95,7 +97,7 @@ tar_render_manuscript <- function(name, path, output_file,
         stop("Only 'docx' output is currently available for rendering from quarto input files")
       basedir <- fs::path_dir(path)
       output_dir <- "output"
-      sources <- path
+      sources <- c(path, include)
       output <- fs::path(output_dir, details$formats$docx$pandoc$`output-file`)
       extra_files <- c(
         fs::path(basedir, details$formats$docx$pandoc$`reference-doc`),
