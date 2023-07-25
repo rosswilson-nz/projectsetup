@@ -8,6 +8,7 @@ tar_render_manuscript(
   name,
   path,
   output_file,
+  include = character(),
   file_reference_docx = NULL,
   file_csl = NULL,
   file_bib = NULL,
@@ -16,6 +17,8 @@ tar_render_manuscript(
   packages = c("rmarkdown"),
   library = targets::tar_option_get("library"),
   error = targets::tar_option_get("error"),
+  memory = targets::tar_option_get("memory"),
+  garbage_collection = targets::tar_option_get("garbage_collection"),
   deployment = "main",
   priority = targets::tar_option_get("priority"),
   resources = targets::tar_option_get("resources"),
@@ -32,6 +35,9 @@ have length 1.}
 
 \item{output_file}{Character string, file path to the docx output file to
 create.}
+
+\item{include}{(optional) Character vector, file paths to other source files
+(e.g. included via Quarto includes in \code{path}).}
 
 \item{file_reference_docx}{(optional) Symbol, existing target containing the
 file path to the reference styles file used to format the output.}
@@ -51,7 +57,7 @@ pandoc. See \code{\link[rmarkdown:word_document]{rmarkdown::word_document()}}.}
 should be a named list of arguments, not a language object containing
 such a list.}
 
-\item{packages, library, error, deployment, priority, resources, retrieval, cue, quiet}{See \code{\link[tarchetypes:tar_render_raw]{tarchetypes::tar_render_raw()}}.}
+\item{packages, library, error, memory, garbage_collection, deployment, priority, resources, retrieval, cue, quiet}{See \code{\link[tarchetypes:tar_render_raw]{tarchetypes::tar_render_raw()}} and \code{\link[tarchetypes:tar_quarto_raw]{tarchetypes::tar_quarto_raw()}}.}
 }
 \description{
 Render an R Markdown report to Word .docx file in a \code{targets} pipeline.
