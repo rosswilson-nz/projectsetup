@@ -141,7 +141,7 @@ tar_quarto_run <- function (args, deps, sources, output, input) {
   assert_quarto()
   args <- args[!vapply(args, is.null, logical(1))]
   do.call(what = quarto::quarto_render, args = args)
-  fs::file_move(fs::path(fs::path_dir(sources), fs::path_file(output)), output)
+  fs::file_move(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output)), output)
   out <- unique(c(sort(output), sort(sources), sort(input)))
   as.character(fs::path_rel(out))
 }
