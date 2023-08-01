@@ -1,4 +1,6 @@
-# CMORprojects 0.2.1.9000
+# CMORprojects 0.3.0.9000
+
+# CMORprojects 0.3.0
 
 * Include additional source files in `tar_render_manuscript()` via `include` argument (Quarto only)
 
