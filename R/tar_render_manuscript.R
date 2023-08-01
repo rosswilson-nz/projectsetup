@@ -60,6 +60,10 @@ tar_render_manuscript <- function(name, path, output_file, include = character()
   switch(
     frmt,
     rmarkdown = {
+      rlang::warn(c(
+        "Rendering from RMarkdown source files is soft deprecated in this version of `CMORprojects`",
+        i = "Quarto (`.qmd`) source files are now recommended"
+      ), .frequency = "once", .frequency_id = "render_rmarkdown")
       if (!rlang::is_scalar_character(output_file)) stop_not_string("output_file")
       if (!fs::dir_exists(dirname(output_file)))
         stop_file_not_found("Valid output file directory", dirname(output_file))
@@ -93,17 +97,17 @@ tar_render_manuscript <- function(name, path, output_file, include = character()
     },
     quarto = {
       details <- quarto::quarto_inspect(path)
-      if (!("docx" %in% names(details$formats)))
-        stop("Only 'docx' output is currently available for rendering from quarto input files")
       basedir <- fs::path_dir(path)
       output_dir <- "output"
       sources <- c(path, include)
-      output <- fs::path(output_dir, details$formats$docx$pandoc$`output-file`)
-      extra_files <- c(
+      output <- fs::path(output_dir, vapply(details$formats, function(f) f$pandoc$`output-file`, character(1)))
+      extra_files <- unique(c(
+        fs::path(basedir, details$formats$pdf$metadata$bibliography),
+        fs::path(basedir, details$formats$pdf$metadata$csl),
         fs::path(basedir, details$formats$docx$pandoc$`reference-doc`),
         fs::path(basedir, details$formats$docx$metadata$bibliography),
         fs::path(basedir, details$formats$docx$metadata$csl)
-      )
+      ))
       command <- tar_quarto_command(
         path = path, sources = sources, output = output, input = extra_files,
         execute = TRUE, execute_params = quote(list()), cache = NULL, cache_refresh = FALSE,

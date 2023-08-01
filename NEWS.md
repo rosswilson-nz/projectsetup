@@ -4,6 +4,8 @@
 
 * Update Quarto templates to use modular structure
 
+* Add support for PDF output in `tar_render_manuscript()`
+
 # CMORprojects 0.2.1
 
 * Make Quarto rendering consistent with RMarkdown (rendered output moved to 'output' directory)
