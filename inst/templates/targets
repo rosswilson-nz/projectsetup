@@ -39,8 +39,8 @@ if (FALSE) {
 ### Define targets ###
 ######################
 
-# Either define targets in here (`targets = ...`) or `source("_plan.R")` to load
-# these from the separate "_plan.R" file
+source("_plan.R")
+# Or define targets directly in here (`targets <- list(...)`)
 
 ################################
 ### End with list of targets ###

@@ -1,0 +1,34 @@
+<!--
+There are a few ways to add figures
+* Without any figure notes, the standard Quarto approaches work:
+-->
+
+![Figure title](`r path_ext_remove(here(figure_1))`){#fig-1}
+
+<br>
+
+or
+
+<br>
+
+```{r figure-1}
+#| label: fig-1
+#| fig-cap: Figure title
+figure_1
+```
+
+<br>
+
+<!--
+* If notes are needed, use latex:
+-->
+
+\begin{figure}
+  \setcapindent{0em}
+  \centering
+  \includegraphics{`r path_ext_remove(here(figure_1))`}
+  \caption[Figure title]{Figure title \smallskip \\ \scriptsize
+    Figure note 1 \\
+    Figure note 2
+    \label{fig-1}}
+\end{figure}

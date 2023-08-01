@@ -127,7 +127,7 @@ tar_quarto_command <- function (path, sources, output, input, execute, execute_p
                      env = list(path = path, execute = execute, execute_params = execute_params,
                                 cache = cache, cache_refresh = cache_refresh, debug = debug,
                                 quiet = quiet, pandoc_args = pandoc_args))
-  deps <- sort(unique(unlist(lapply(sources, tarchetypes:::knitr_deps))))
+  deps <- tarchetypes::tar_knitr_deps(sources)
   deps <- as.call(c(as.symbol("list"), lapply(deps, as.symbol)))
   fun <- as.call(c(as.symbol(":::"), lapply(c("CMORprojects", "tar_quarto_run"), as.symbol)))
   expr <- list(fun, args = args, deps = deps, sources = sources,
