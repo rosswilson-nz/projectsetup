@@ -1,4 +1,8 @@
-# CMORprojects 0.3.0.9000
+# CMORprojects 0.3.1.9000
+
+# CMORprojects 0.3.1
+
+* Correct targets configuration in `_targets.R` template
 
 # CMORprojects 0.3.0
 
