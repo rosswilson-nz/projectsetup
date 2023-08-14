@@ -1,4 +1,8 @@
-# CMORprojects 0.3.1.9000
+# CMORprojects 0.3.2.9000
+
+# CMORprojects 0.3.2
+
+* Minor revisions to `_targets.R` template
 
 # CMORprojects 0.3.1
 
