@@ -21,8 +21,8 @@ tar_test("tar_render_manuscript works for qmd input", {
   expect_equal(fs::path_file(tar_read(manuscript)[[3]]),
                fs::path_file(qmd_file))
   expect_setequal(
-    fs::path_abs(tar_read(manuscript)[4:6]),
-    fs::path_real(c("reports/references.bib", "reports/vancouver.csl",
+    fs::path_abs(tar_read(manuscript)[4:7]),
+    fs::path_real(c("reports/_setup.qmd", "reports/references.bib", "reports/vancouver.csl",
                     "reports/word-styles-reference-01.docx"))
   )
   expect_true(all(fs::file_exists(tar_read(manuscript)[1:2])))

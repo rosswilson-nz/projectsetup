@@ -1,4 +1,6 @@
-# CMORprojects 0.3.2.9000
+# CMORprojects 0.3.3
+
+* Automatically get dependencies for targets created with `tar_render_manuscript()` from 'include' statements in the Quarto source
 
 # CMORprojects 0.3.2
 
