@@ -6,5 +6,24 @@ targets <- list(
 # 	tar_target(data, read_raw_data(data_file)),
 # 	tar_target(clean, process_data(data)),
 # 	tar_target(results, analyse_data(clean)),
-# 	tar_render_manuscript(manuscript, "reports/manuscript.qmd")
+# 	tar_render_manuscript(
+#     manuscript, "reports/manuscript.qmd",
+#     include = c("reports/_setup.qmd",
+#                 "reports/_tables/table-1.qmd",
+#                 "reports/_figures/figure-1.qmd")
+#   ),
+# 	tar_render_manuscript(
+#     tables, "reports/tables.qmd",
+#     include = c("reports/_setup.qmd", "reports/_tables/table-1.qmd")
+#   ),
+# 	tar_render_manuscript(
+#     figures, "reports/figures.qmd",
+#     include = c("reports/_setup.qmd", "reports/_figures/figure-1.qmd")
+#   ),
+# 	tar_render_manuscript(
+#     appendix, "reports/appendix.qmd",
+#     include = c("reports/_setup.qmd",
+#                 "reports/_tables/table-a1.qmd",
+#                 "reports/_figures/figure-a1.qmd")
+#   )
 )

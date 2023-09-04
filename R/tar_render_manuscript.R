@@ -60,6 +60,10 @@ tar_render_manuscript <- function(name, path, output_file, include = character()
   switch(
     frmt,
     rmarkdown = {
+      rlang::warn(c(
+        "Rendering from RMarkdown source files is soft deprecated in this version of `CMORprojects`",
+        i = "Quarto (`.qmd`) source files are now recommended"
+      ), .frequency = "once", .frequency_id = "render_rmarkdown")
       if (!rlang::is_scalar_character(output_file)) stop_not_string("output_file")
       if (!fs::dir_exists(dirname(output_file)))
         stop_file_not_found("Valid output file directory", dirname(output_file))
@@ -93,20 +97,20 @@ tar_render_manuscript <- function(name, path, output_file, include = character()
     },
     quarto = {
       details <- quarto::quarto_inspect(path)
-      if (!("docx" %in% names(details$formats)))
-        stop("Only 'docx' output is currently available for rendering from quarto input files")
       basedir <- fs::path_dir(path)
       output_dir <- "output"
       sources <- c(path, include)
-      output <- fs::path(output_dir, details$formats$docx$pandoc$`output-file`)
+      output <- fs::path(output_dir, vapply(details$formats, function(f) f$pandoc$`output-file`, character(1)))
       includes <- grep("\\{\\{< include (.*\\.qmd) >\\}\\}", readLines(path), value = TRUE)
       includes <- sub("\\{\\{< include (.*\\.qmd) >\\}\\}", "\\1", includes)
-      extra_files <- c(
+      extra_files <- unique(c(
         fs::path(basedir, includes),
+        fs::path(basedir, details$formats$pdf$metadata$bibliography),
+        fs::path(basedir, details$formats$pdf$metadata$csl),
         fs::path(basedir, details$formats$docx$pandoc$`reference-doc`),
         fs::path(basedir, details$formats$docx$metadata$bibliography),
         fs::path(basedir, details$formats$docx$metadata$csl)
-      )
+      ))
       command <- tar_quarto_command(
         path = path, sources = sources, output = output, input = extra_files,
         execute = TRUE, execute_params = quote(list()), cache = NULL, cache_refresh = FALSE,
@@ -130,7 +134,7 @@ tar_quarto_command <- function (path, sources, output, input, execute, execute_p
                      env = list(path = path, execute = execute, execute_params = execute_params,
                                 cache = cache, cache_refresh = cache_refresh, debug = debug,
                                 quiet = quiet, pandoc_args = pandoc_args))
-  deps <- sort(unique(unlist(lapply(sources, tarchetypes:::knitr_deps))))
+  deps <- tarchetypes::tar_knitr_deps(sources)
   deps <- as.call(c(as.symbol("list"), lapply(deps, as.symbol)))
   fun <- as.call(c(as.symbol(":::"), lapply(c("CMORprojects", "tar_quarto_run"), as.symbol)))
   expr <- list(fun, args = args, deps = deps, sources = sources,

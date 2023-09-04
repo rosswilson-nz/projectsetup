@@ -1,6 +1,20 @@
-# CMORprojects 0.2.1.9000
+# CMORprojects 0.3.2.9000
+
+# CMORprojects 0.3.2
+
+* Minor revisions to `_targets.R` template
+
+# CMORprojects 0.3.1
+
+* Correct targets configuration in `_targets.R` template
+
+# CMORprojects 0.3.0
 
 * Include additional source files in `tar_render_manuscript()` via `include` argument (Quarto only)
+
+* Update Quarto templates to use modular structure
+
+* Add support for PDF output in `tar_render_manuscript()`
 
 # CMORprojects 0.2.1
 

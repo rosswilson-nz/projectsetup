@@ -4,14 +4,14 @@
 
 library(targets)
 library(tarchetypes)
-library(cmor.tools)
+library(CMORprojects)
 options(tidyverse.quiet = TRUE)
 
 # Define fixed parameters
 source("{{#is_package}}inst/{{/is_package}}parameters.R")
 
 # Load functions
-R.utils::sourceDirectory("{{#is_package}}inst/{{/is_package}}R")
+tar_source()
 
 # Set options
 tar_option_set(
@@ -19,7 +19,6 @@ tar_option_set(
   format = "qs"
 )
 tar_config_set(
-  store = here::here("_targets"),
   reporter_make = "timestamp_positives"
 )
 
@@ -39,8 +38,8 @@ if (FALSE) {
 ### Define targets ###
 ######################
 
-# Either define targets in here (`targets = ...`) or `source("_plan.R")` to load
-# these from the separate "_plan.R" file
+source("_plan.R")
+# Or define targets directly in here (`targets <- list(...)`)
 
 ################################
 ### End with list of targets ###

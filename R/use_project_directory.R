@@ -38,8 +38,10 @@ use_project_directory <- function(package = FALSE, workflow = "targets", git = T
 
     usethis::use_git_ignore(c(
       paste0(prefix, "misc"),
-      paste0(prefix, "_targets.yaml"),
-      paste0(prefix, "reports/_targets.yaml")
+      paste0(prefix, "reports/*.pdf"),
+      paste0(prefix, "reports/*_files"),
+      paste0(prefix, "reports/*.tex"),
+      paste0(prefix, "reports/*.log")
     ))
     if (!data_in_git) usethis::use_git_ignore(c(
       paste0(prefix, "derived_data/*"),
@@ -68,6 +70,8 @@ add_directories <- function(package) {
   usethis::use_directory(paste0(prefix, "raw_data"))
   usethis::use_directory(paste0(prefix, "derived_data"))
   usethis::use_directory(paste0(prefix, "reports"))
+  usethis::use_directory(paste0(prefix, "reports/_tables"))
+  usethis::use_directory(paste0(prefix, "reports/_figures"))
   usethis::use_directory(paste0(prefix, "output"))
   usethis::use_directory(paste0(prefix, "output/figures"))
   usethis::use_directory(paste0(prefix, "R"))
@@ -112,12 +116,22 @@ add_templates <- function(package, workflow = "targets") {
   }
 
   # Manuscript templates and functions
-  ## manuscript template - possibly include separate templates for
-  ## figures/tables outputs as well:
-  file.copy(system.file("templates", "manuscript.Rmd", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd(prefix, "reports"))
+  ## manuscript templates:
   file.copy(system.file("templates", "manuscript.qmd", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports"))
+  file.copy(system.file("templates", "tables.qmd", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports"))
+  file.copy(system.file("templates", "figures.qmd", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports"))
+  file.copy(system.file("templates", "appendix.qmd", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports"))
+  ## separate manuscript module templates
+  file.copy(system.file("templates", "_setup.qmd", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports"))
+  file.copy(system.file("templates", "table-1.qmd", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_tables"))
+  file.copy(system.file("templates", "figure-1.qmd", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_figures"))
   ## example bibtex references file:
   file.copy(system.file("templates", "references.bib", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports"))

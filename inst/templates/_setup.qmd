@@ -1,0 +1,23 @@
+```{r setup, include=FALSE, echo=FALSE}
+# Load required libraries
+library(targets)
+library(here)
+library(fs)
+# library(formattr) # Pretty number formatting
+# library(tidyverse) # For manipulating analysis objects if required
+library(kableExtra, exclude = "group_rows") # `group_rows` conflicts with tidyverse
+
+store <- here(tar_path_store())
+```
+
+```{r load-data, include=FALSE}
+# Load the previously stored results
+#tar_load(figure_1, store = store)
+#tar_load(table_1, store = store)
+
+# Any other calculations to get formatted tables ready to insert in the document
+```
+
+\newlength{\tablewidth}
+
+\setcapindent{0em}
