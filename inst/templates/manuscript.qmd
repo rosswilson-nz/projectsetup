@@ -22,11 +22,15 @@ format:
     geometry:
       - margin=1in
     fontsize: 10pt
+    include-in-header:
+      text: |
+        \usepackage{soul}
+        \newcommand{\ins}[1]{\textcolor{blue}{#1}}
+        \newcommand{\del}[1]{{\color{red}\st{#1}}}
+        \newcommand{\mrk}[1]{\colorbox{yellow}{#1}}
   docx:
     reference-doc: "word-styles-reference-01.docx"
     fig-dpi: 300
-fig-width: 6
-fig-height: 8
 callout-appearance: minimal
 bibliography: references.bib
 csl: vancouver.csl
