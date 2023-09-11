@@ -1,3 +1,9 @@
+# CMORprojects 0.3.4
+
+* Add `\ins{}`, `\del{}`, and `\mrk{}` commands to latex header template
+
+* Correct dependency identification in linked Quarto source documents
+
 # CMORprojects 0.3.3
 
 * Automatically get dependencies for targets created with `tar_render_manuscript()` from 'include' statements in the Quarto source

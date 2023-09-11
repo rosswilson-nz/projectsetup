@@ -99,12 +99,13 @@ tar_render_manuscript <- function(name, path, output_file, include = character()
       details <- quarto::quarto_inspect(path)
       basedir <- fs::path_dir(path)
       output_dir <- "output"
-      sources <- c(path, include)
-      output <- fs::path(output_dir, vapply(details$formats, function(f) f$pandoc$`output-file`, character(1)))
       includes <- grep("^\\{\\{< include (.*\\.qmd) >\\}\\}$", readLines(path), value = TRUE)
       includes <- sub("\\{\\{< include (.*\\.qmd) >\\}\\}", "\\1", includes)
+      includes <- fs::path(basedir, fs::path_file(includes))
+      sources <- c(path, include, includes)
+      output <- fs::path(output_dir,
+                         vapply(details$formats, function(f) f$pandoc$`output-file`, character(1)))
       extra_files <- unique(c(
-        fs::path(basedir, includes),
         fs::path(basedir, details$formats$pdf$metadata$bibliography),
         fs::path(basedir, details$formats$pdf$metadata$csl),
         fs::path(basedir, details$formats$docx$pandoc$`reference-doc`),
