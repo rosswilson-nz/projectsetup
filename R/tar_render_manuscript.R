@@ -101,7 +101,7 @@ tar_render_manuscript <- function(name, path, output_file, include = character()
       output_dir <- "output"
       includes <- grep("^\\{\\{< include (.*\\.qmd) >\\}\\}$", readLines(path), value = TRUE)
       includes <- sub("\\{\\{< include (.*\\.qmd) >\\}\\}", "\\1", includes)
-      includes <- fs::path(basedir, fs::path_file(includes))
+      includes <- fs::path(basedir, includes)
       sources <- c(path, include, includes)
       output <- fs::path(output_dir,
                          vapply(details$formats, function(f) f$pandoc$`output-file`, character(1)))

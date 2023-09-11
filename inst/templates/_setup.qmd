@@ -12,8 +12,8 @@ store <- here(tar_path_store())
 
 ```{r load-data, include=FALSE}
 # Load the previously stored results
-#tar_load(figure_1, store = store)
-#tar_load(table_1, store = store)
+tar_load(figure_1, store = store)
+tar_load(table_1, store = store)
 
 # Any other calculations to get formatted tables ready to insert in the document
 ```

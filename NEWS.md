@@ -1,3 +1,7 @@
+# CMORprojects 0.3.5
+
+* Correct identification of linked Quarto source documents in subfolders
+
 # CMORprojects 0.3.4
 
 * Add `\ins{}`, `\del{}`, and `\mrk{}` commands to latex header template
