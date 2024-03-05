@@ -58,9 +58,11 @@ create_research_project <- function(
     writeLines(
       c(
         ## Copy user Rprofile so we can start working with usual user settings
-        readLines(fs::path_home_r(".Rprofile")),
+        if (fs::file_access(fs::path_home_r(".Rprofile"), "read")) {
+          readLines(fs::path_home_r(".Rprofile"))
+        },
         ## Remove this temporary Rprofile once it's done what it needs to do
-        ".First <- function() invisible(fs::file_delete('.Rprofile'))",
+        ".Last <- function() invisible(fs::file_delete('.Rprofile'))",
         ## Continue project setup
         "",
         "cli::cli_text('{.strong Initial project setup:}')",
@@ -86,7 +88,7 @@ create_research_project <- function(
           "owner = gh::gh_tree_remote()$username, repo = gh::gh_tree_remote()$repo)$html_url))"
         ),
         "CMORprojects::use_cmor_readme(data)",
-        "rm(list = 'data')",
+        "rm('data')",
         "",
 
         ## Welcome message
@@ -97,8 +99,8 @@ create_research_project <- function(
         paste0("if (github) cli::cli_ul('Remember to render {.file README.Rmd} to ",
                "{.file README.md} for GitHub.')"),
         "rm('github')",
-        paste0("cli::cli_ul('Put code in {.path /R}, raw data in {.path /raw_data}, and RMarkdown ",
-               "reports in {.path /output}.')"),
+        paste0("cli::cli_ul('Put code in {.path /R}, raw data in {.path /raw_data}, and Quarto ",
+               "source documents in {.path /reports}.')"),
         if (workflow == "targets") c(
           paste0("cli::cli_ul('Use {.file _targets.R}, {.file _plan.R}, and {.file parameters.R} ",
                  "to specify the analysis workflow.')"),

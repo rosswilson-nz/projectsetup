@@ -1,3 +1,7 @@
+# CMORprojects 0.3.5.9000
+
+* Correct set-up of new project folder when no user .Rprofile is found
+
 # CMORprojects 0.3.5
 
 * Correct identification of linked Quarto source documents in subfolders
