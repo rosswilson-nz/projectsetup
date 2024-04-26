@@ -72,6 +72,7 @@ add_directories <- function(package) {
   usethis::use_directory(paste0(prefix, "reports"))
   usethis::use_directory(paste0(prefix, "reports/_tables"))
   usethis::use_directory(paste0(prefix, "reports/_figures"))
+  usethis::use_directory(paste0(prefix, "reports/_extensions/cmor"))
   usethis::use_directory(paste0(prefix, "output"))
   usethis::use_directory(paste0(prefix, "output/figures"))
   usethis::use_directory(paste0(prefix, "R"))
@@ -116,6 +117,17 @@ add_templates <- function(package, workflow = "targets") {
   }
 
   # Manuscript templates and functions
+  ## Typst format templates
+  file.copy(system.file("templates", "_extension.yml", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_extensions", "cmor"))
+  file.copy(system.file("templates", "template.typ", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_extensions", "cmor"))
+  file.copy(system.file("templates", "typst-template.typ", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_extensions", "cmor"))
+  file.copy(system.file("templates", "typst-show.typ", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_extensions", "cmor"))
+  ### A temporary workaround for a bug in Quarto [#9478]
+  file.create(fs::path_wd(prefix, "reports", "_quarto.yml"))
   ## manuscript templates:
   file.copy(system.file("templates", "manuscript.qmd", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports"))

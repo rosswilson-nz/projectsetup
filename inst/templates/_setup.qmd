@@ -5,7 +5,6 @@ library(here)
 library(fs)
 # library(formattr) # Pretty number formatting
 # library(tidyverse) # For manipulating analysis objects if required
-library(kableExtra, exclude = "group_rows") # `group_rows` conflicts with tidyverse
 
 store <- here(tar_path_store())
 ```
@@ -17,7 +16,3 @@ tar_load(table_1, store = store)
 
 # Any other calculations to get formatted tables ready to insert in the document
 ```
-
-\newlength{\tablewidth}
-
-\setcapindent{0em}

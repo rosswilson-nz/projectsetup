@@ -18,12 +18,11 @@ tar_test("tar_render_manuscript works for qmd input", {
   expect_equal(out, tibble::tibble(from = c("figure_1", "table_1"), to = "manuscript"))
   # results
   suppressWarnings(tar_make(callr_function = NULL))
-  expect_setequal(fs::path_abs(tar_read(manuscript)[1:2]),
-                  fs::path_real(c("output/manuscript.docx", "output/manuscript.pdf")))
+  expect_setequal(fs::path_abs(tar_read(manuscript)[[1]]),
+                  fs::path_real(c("output/manuscript.pdf")))
   expect_setequal(
-    fs::path_abs(tar_read(manuscript)[3:7]),
-    fs::path_real(c("reports/manuscript.qmd", "reports/_setup.qmd", "reports/references.bib",
-                    "reports/vancouver.csl", "reports/word-styles-reference-01.docx"))
+    fs::path_abs(tar_read(manuscript)[2:3]),
+    fs::path_real(c("reports/manuscript.qmd", "reports/_setup.qmd"))
   )
   expect_true(all(fs::file_exists(tar_read(manuscript)[1:2])))
   expect_false(any(fs::file_exists(c("reports/manuscript.docx", "reports/manuscript.pdf"))))

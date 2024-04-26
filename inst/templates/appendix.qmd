@@ -36,10 +36,10 @@ knitr:
 
 <br>
 
-{{< include _tables/table-a1.qmd >}}
+<!-- {{< include _tables/table-a1.qmd >}} -->
 
 <br>
 
-{{< include _tables/figure-a1.qmd >}}
+<!-- {{< include _tables/figure-a1.qmd >}} -->
 
 <br>

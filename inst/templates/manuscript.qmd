@@ -6,44 +6,16 @@ author:
       - ref: cmor
   - name: Author 2
     affiliations:
-      -ref: cmor
+      -ref: elsewhere
 affiliations:
   - id: cmor
     name: University of Otago
     department: Centre for Musculoskeletal Outcomes Research
     city: Dunedin
     country: New Zealand
-date: last-modified
-date-format: "D MMMM YYYY"
-format:
-  pdf:
-    number-sections: true
-    papersize: a4
-    geometry:
-      - margin=1in
-    fontsize: 10pt
-    include-in-header:
-      text: |
-        \usepackage{soul}
-        \newcommand{\ins}[1]{\textcolor{blue}{#1}}
-        \newcommand{\del}[1]{{\color{red}\st{#1}}}
-        \newcommand{\mrk}[1]{\colorbox{yellow}{#1}}
-  docx:
-    reference-doc: "word-styles-reference-01.docx"
-    fig-dpi: 300
-callout-appearance: minimal
-bibliography: references.bib
-csl: vancouver.csl
-prefer-html: true
-execute:
-  echo: false
-  warning: false
-  cache: false
-knitr:
-  opts_chunk:
-    R.options:
-      knitr.kable.NA: ""
-      knitr.table.format: "latex"
+  - id: elsewhere
+    name: Another Institution
+    country: Another country
 abstract: |
   **Abstract**
   
@@ -56,15 +28,11 @@ abstract: |
   *Results*
   
   *Conclusion*
+format:
+  cmor-typst: default
 ---
 
 {{< include _setup.qmd >}}
-
-<br>
-
-<!-- Anything else to go on the title page below title/author/abstract -->
-
-{{< pagebreak >}}
 
 # Introduction
 
@@ -96,8 +64,10 @@ Reference tables with @tbl-1 and figures with @fig-1.
 
 # References
 
-::: {#refs}
-:::
+<!-- To be updated with lua filter -->
+```{=typst}
+#bibliography("references.bib")
+```
 
 <!-- So that appendix tables/figures are numbered independently -->
 \newcounter{appendixsection}
@@ -109,6 +79,12 @@ Reference tables with @tbl-1 and figures with @fig-1.
 
 <!-- the stepcounter command needs to be added before each new appendix -->
 \stepcounter{appendixsection}
+
+```{=typst}
+#counter(heading).update(0)
+#show heading.where(level: 1): set heading(numbering: (..nums) => [Appendix #numbering("A:", nums.pos().at(0))])
+#set figure(numbering: (..nums) => [#context {counter(heading).display("A")}#numbering("1", nums.pos().at(0))])
+```
 # Supplementary material
 
 <!-- {{< include _tables/table-a1.qmd >}} -->

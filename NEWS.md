@@ -2,6 +2,8 @@
 
 * Correct set-up of new project folder when no user .Rprofile is found
 
+* Change tar_render_manuscript() to use Typst instead of LaTeX/docx
+
 # CMORprojects 0.3.5
 
 * Correct identification of linked Quarto source documents in subfolders

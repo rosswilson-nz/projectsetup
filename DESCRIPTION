@@ -30,6 +30,5 @@ Suggests:
     testthat (>= 3.0.0),
     rprojroot,
     here,
-    kableExtra,
     tibble
 Config/testthat/edition: 3
