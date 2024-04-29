@@ -2,5 +2,6 @@
 
 export(create_research_project)
 export(tar_render_manuscript)
+export(ttab)
 export(use_cmor_readme)
 export(use_project_directory)

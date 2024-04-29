@@ -1,22 +1,9 @@
-<!--
-If custom column widths used, \tablewidth gives the total available space for all columns
-'\\\\tablewidth' can then be used in `column_spec(width = )` to define proportional column widths
-'X' below should be replaced with ncol(table) + 1
--->
-\setlength{\tablewidth}{\linewidth - X\columnsep}
 
+```{=typst}
 ```{r table-1}
 #| label: tbl-1
 #| tbl-cap: "Table title"
 table_1 %>% 
-  kbl(booktabs = T, linesep = "") %>% 
-  kable_styling(latex_options = c("scale_down")) %>% # or fixed font size with `font_size = `
-  column_spec(1, width = "0.4\\\\tablewidth") %>% # if fixed font size
-  add_header_above(c(" " = 1, "Group 1" = 2, "Group 2" = 2)) %>% # column grouping
-  pack_rows("Group 1", 1, 3, italic = TRUE, bold = FALSE) %>% # row grouping
-  add_indent(5:8) %>% # row grouping, no header
-  footnote(c("Table note 1", "Table note 2"), # can also do number, alphabet, or symbol
-           general_title = "", threeparttable = TRUE) %>% 
-  landscape() # landscape (whole page) tables only
+  ttab("Table title", "tbl-1")
 ```
-
+```
