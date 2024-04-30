@@ -1,3 +1,5 @@
+## To-do: add checks on appropriate input types/sizes/etc in each of these functions
+
 #' Create tables in Typst format
 #'
 #' This is a table generator inspired by the *kableExtra* package. This base
@@ -27,6 +29,8 @@ ttab <- function(x, caption, label, align = "left", widths = "auto", footnotes =
   ## Set display options
   if (identical(widths, "auto")) {
     widths <- nc
+  } else if (identical(widths, "span")) {
+    widths <- rep("1fr", nc)
   } else if (is.numeric(widths)) {
     widths <- paste0(widths, "fr")
   }
@@ -35,12 +39,13 @@ ttab <- function(x, caption, label, align = "left", widths = "auto", footnotes =
   ## Extract header
   header <- colnames(x)
   header[is.na(header)] <- ""
+  header <- paste0("[", header, "]")
 
   ## Extract table body
   body <- lapply(seq_len(nr), \(r) {
     b <- unlist(x[r, ], use.names = FALSE)
     b[is.na(b)] <- ""
-    b
+    paste0("[", b, "]")
   })
 
   structure(list(
@@ -54,11 +59,98 @@ ttab <- function(x, caption, label, align = "left", widths = "auto", footnotes =
   ), class = "typst_table")
 }
 
-print.typst_table <- function(x, ...) {
-  columns <- wrap_paren(x$widths)
+#' @export
+add_footnote <- function(x, footnote) {
+  out <- x
+  out$footnote <- append(out$footnote, footnote)
+  out
+}
+
+#' @export
+add_header <- function(x, header) {
+  out <- x
+  out$header <- append(paste0("[", header, "]"), out$header)
+  out
+}
+
+#' @export
+add_indent <- function(x, rows, indent = 1, columns = 1) {
+  out <- x
+  space <- paste(rep("\u2003", indent), collapse = "")
+  for (r in rows) {
+    out$body[[r]][columns] <- format_contents(out$body[[r]][columns],
+                                              prefix = "\u2003")
+  }
+  out
+}
+
+#' @export
+collapse_rows <- function(x, start, rows, align = "top") {
+  out <- x
+  out$body[[start[[1]]]][[start[[2]]]] <- paste0(
+    "table.cell(
+        rowspan: ", rows, ",
+        align: ", align, ",
+        ", out$body[[start[[1]]]][[start[[2]]]], "
+      )"
+  )
+  for (r in seq_len(rows - 1)) {
+    out$body[[start[[1]] + r]] <- out$body[[start[[1]] + r]][-start[[2]]]
+  }
+  out
+}
+
+#' @export
+add_hline <- function(x, before) {
+  out <- x
+  before <- sort(before, decreasing = TRUE)
+  for (r in before) {
+    out$body <- append(out$body, "table.hline()", r)
+  }
+  out
+}
+
+#' @export
+add_vline <- function(x, before, start = 0, end = "none") {
+  out <- x
+  for (r in before) {
+    out$body <- append(
+      out$body,
+      paste0("table.vline(x: ", r - 1, ", start: ", start, ", end: ", end, "),
+    ")
+    )
+  }
+  out
+}
+
+#' @export
+pack_rows <- function(x, start_row, end_row, label = NULL) {
+  out <- add_indent(x, start_row:end_row, columns = 1)
+  if (!is.null(label)) {
+    label_cell <- paste0("table.cell(
+          colspan: ", ncol_ttab(x), ",
+          [_", label, "_]
+        )")
+    out$body <- append(out$body, label_cell, after = start_row - 1)
+  }
+  out
+}
+
+#' @export
+landscape <- function(x) {
+  out <- x
+  attr(out, "landscape") <- TRUE
+  out
+}
+
+#' @importFrom knitr knit_print
+#' @export
+knit_print.typst_table <- function(x, ...) {
+  columns <- wrap_paren(x$columns)
   align <- wrap_paren(x$align)
-  header <- wrap_paren(sapply(x$header, \(h) wrap_paren(h, "[", "]")), "", "")
-  body <- wrap_paren(sapply(x$body, \(b) wrap_paren(sapply(b, \(bb) wrap_paren(bb, "[", "]")), "", "")), "", "", ",
+  header <- paste0(x$header, collapse = ",")
+  body <- sapply(x$body, \(b) paste0(b, collapse = ","))
+  body <- paste0(body, collapse = ",
       ")
 
   out <- paste0(
@@ -83,9 +175,28 @@ print.typst_table <- function(x, ...) {
 ) <", x$label, ">"
   )
 
-  knitr::asis_output(out)
+  if (!is.null(attr(x, "landscape")) && attr(x, "landscape")) {
+    out <- paste0("#page(flipped: true)[
+  ", out, "
+]")
+  }
+
+  structure(out, class = "knit_asis")
 }
+
 
 wrap_paren <- function(x, open = "(", close = ")", collapse = ",") {
   paste0(open, paste(x, collapse = collapse), close)
+}
+
+format_contents <- function(x, prefix = "", suffix = "") {
+  pattern <- "(^.*?\\[)(.*)(\\].*?$)"
+  replacement <- paste0("\\1", prefix, "\\2", suffix, "\\3")
+  stringr::str_replace_all(x, pattern, replacement)
+}
+
+ncol_ttab <- function(x) {
+  if (is.numeric(x$columns) && length(x$columns) == 1L) {
+    x$columns
+  } else length(x$columns)
 }

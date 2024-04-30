@@ -44,6 +44,7 @@
     indent: 0em
   )
   show footnote.entry: set align(left)
+  set list(indent: 1em, marker: [•])
 
   if title != none {
     align(center)[#block(inset: 2em)[#par(justify: false)[
@@ -102,8 +103,8 @@
   }
 
   show figure: it => {
-    show par: set align(left)
-    set block(spacing: 0.65em)
+    set block(spacing: 0.65em, breakable: true)
+    show block: set align(left)
     set text(size: 0.8 * fontsize)
     set place(clearance: 3em)
     it
@@ -125,9 +126,5 @@
 
   pagebreak()
 
-  if cols == 1 {
-    doc
-  } else {
-    columns(cols, doc)
-  }
+  doc
 }

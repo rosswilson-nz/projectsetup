@@ -17,6 +17,7 @@ Imports:
     fs,
     gert,
     git2r,
+    knitr,
     quarto,
     rlang,
     rmarkdown,
