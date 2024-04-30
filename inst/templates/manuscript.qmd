@@ -62,29 +62,19 @@ Reference tables with @tbl-1 and figures with @fig-1.
 
 # Conflicts of Interest
 
-# References
-
 <!-- To be updated with lua filter -->
 ```{=typst}
 #bibliography("references.bib")
 ```
 
-<!-- So that appendix tables/figures are numbered independently -->
-\newcounter{appendixsection}
-\renewcommand{\thesection}{Appendix~\Alph{appendixsection}}
-\counterwithin*{table}{appendixsection}
-\renewcommand{\thetable}{\Alph{appendixsection}\arabic{table}}
-\counterwithin*{figure}{appendixsection}
-\renewcommand{\thefigure}{\Alph{appendixsection}\arabic{figure}}
-
-<!-- the stepcounter command needs to be added before each new appendix -->
-\stepcounter{appendixsection}
-
 ```{=typst}
 #counter(heading).update(0)
 #show heading.where(level: 1): set heading(numbering: (..nums) => [Appendix #numbering("A:", nums.pos().at(0))])
-#set figure(numbering: (..nums) => [#context {counter(heading).display("A")}#numbering("1", nums.pos().at(0))])
 ```
 # Supplementary material
+
+```{=typst}
+#linebreak()
+```
 
 <!-- {{< include _tables/table-a1.qmd >}} -->
