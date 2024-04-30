@@ -22,7 +22,7 @@
 #'     (as does the corresponding numbering in table cells).
 #'
 #' @export
-ttab <- function(x, caption, label, align = "left", widths = "auto", footnotes = NULL) {
+ttab <- function(x, caption, label, align = "left", widths = "auto", placement = "auto", footnotes = NULL) {
   nc <- ncol(x)
   nr <- nrow(x)
 
@@ -48,15 +48,17 @@ ttab <- function(x, caption, label, align = "left", widths = "auto", footnotes =
     paste0("[", b, "]")
   })
 
-  structure(list(
+  out <- structure(list(
     columns = widths,
     align = align,
+    placement = placement,
     caption = caption,
     label = label,
     header = header,
     body = body,
     footnotes = footnotes
   ), class = "typst_table")
+
 }
 
 #' @export
@@ -143,11 +145,30 @@ landscape <- function(x) {
   out
 }
 
+#' @export
+add_styling <- function(x, style, replace = FALSE) {
+  out <- x
+  if (replace) attr(out, "styling") <- NULL
+  attr(out, "styling") <- style
+  out
+}
+
+#' @export
+supplement <- function(x) {
+  out <- x
+  attr(out, "supplement") <- TRUE
+  out
+}
+
 #' @importFrom knitr knit_print
+#' @export
+knitr::knit_print
+
 #' @export
 knit_print.typst_table <- function(x, ...) {
   columns <- wrap_paren(x$columns)
   align <- wrap_paren(x$align)
+  kind <- if (isTRUE(attr(x, "supplement"))) "\"suppl-table\"" else "table"
   header <- paste0(x$header, collapse = ",")
   body <- sapply(x$body, \(b) paste0(b, collapse = ","))
   body <- paste0(body, collapse = ",
@@ -168,12 +189,17 @@ knit_print.typst_table <- function(x, ...) {
 
   "),
     "],
-  kind: table,
+  kind: ", kind, ",
   caption: figure.caption(position: top)[", x$caption, "],
-  numbering: \"1\",
-  placement: auto
+  placement: ", x$placement, "
 ) <", x$label, ">"
   )
+
+  if (!is.null(attr(x, "styling"))) {
+    out <- paste(paste("#", attr(x, "styling"), sep = "", collapse = "
+"), out, sep = "
+")
+  }
 
   if (!is.null(attr(x, "landscape")) && attr(x, "landscape")) {
     out <- paste0("#page(flipped: true)[

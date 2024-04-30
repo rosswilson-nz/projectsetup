@@ -114,6 +114,28 @@
     set text(size: fontsize)
     strong(it)
   }
+  show figure.where(kind: "suppl-table"): set figure(numbering: (..nums) => [#context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))],
+                                                     supplement: "Table")
+  show figure.where(kind: "suppl-image"): set figure(numbering: (..nums) => [#context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))],
+                                                     supplement: "Figure")
+  show ref: it => {
+    let fig = figure
+    let el = it.element
+    if el != none and el.func() == fig and (el.kind == "suppl-table" or el.kind == "suppl-image") {
+      // Override references for supplementary tables.
+      link(el.location())[#el.supplement #numbering(
+         "A",
+         ..counter(heading).at(el.location())
+       )#numbering(
+         "1",
+         ..counter(fig.where(kind: el.kind)).at(el.location())
+       )]
+    } else {
+      // Other references as usual.
+      it
+    }
+  }
+
   show table.cell.where(y: 0): strong
   show table.cell: set text(size: 0.9 * fontsize)
   set table(

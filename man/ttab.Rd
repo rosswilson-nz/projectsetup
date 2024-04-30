@@ -4,7 +4,15 @@
 \alias{ttab}
 \title{Create tables in Typst format}
 \usage{
-ttab(x, caption, label, align = "left", widths = "auto", footnotes = NULL)
+ttab(
+  x,
+  caption,
+  label,
+  align = "left",
+  widths = "auto",
+  placement = "auto",
+  footnotes = NULL
+)
 }
 \arguments{
 \item{x}{An R data frame.}
