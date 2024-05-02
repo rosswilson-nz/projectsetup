@@ -21,7 +21,9 @@
   paper: "a4",
   lang: "en",
   region: "NZ",
-  font: (),
+  font: ("Wickliffe",),
+  fontsans: ("Wickliffe Sans",),
+  fontmono: ("New Computer Modern Mono",),
   fontsize: 10pt,
   sectionnumbering: none,
   toc: false,
@@ -32,12 +34,16 @@
     margin: margin,
     numbering: "1",
   )
-  set par(justify: true)
+  set par(leading: 0.55em, first-line-indent: 1em, justify: true)
   set text(lang: lang,
            region: region,
-           font: font,
+           font: fontsans,
            size: fontsize)
+  show raw: set text(font: fontmono)
+  show par: set block(spacing: 0.55em)
   set heading(numbering: sectionnumbering)
+  show heading: set block(above: 1.4em, below: 1em)
+  show heading: set text(font: font)
   set bibliography(style: "vancouver.csl", title: "References")
   set footnote.entry(
     separator: line(length: 100%),
@@ -48,7 +54,7 @@
 
   if title != none {
     align(center)[#block(inset: 2em)[#par(justify: false)[
-      #text(weight: "bold", size: 1.5em)[#title]
+      #text(font: font, weight: "bold", size: 2em)[#title]
     ]]]
   }
 
@@ -85,6 +91,8 @@
 
   if abstract != none {
     block(inset: 1em)[
+    #set par(first-line-indent: 0em)
+    #show par: set block(spacing: 1em)
     *Abstract*
 
     #abstract
@@ -107,6 +115,7 @@
     show block: set align(left)
     set text(size: 0.8 * fontsize)
     set place(clearance: 3em)
+    set par(first-line-indent: 0em, justify: false)
     it
   }
   show figure.caption: it => {
@@ -136,15 +145,9 @@
     }
   }
 
-  show table.cell.where(y: 0): strong
   show table.cell: set text(size: 0.9 * fontsize)
-  set table(
-    inset: (x: 6pt, y: 0.3em),
-    stroke: (_, y) => (
-      top: if y <= 1 { 0.5pt } else { 0pt },
-      bottom: 0.5pt
-    )
-  )
+  set table(inset: (x: 6pt, y: 0.3em), stroke: none)
+  set table.hline(stroke: 0.5pt)
 
   pagebreak()
 

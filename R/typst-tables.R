@@ -39,13 +39,13 @@ ttab <- function(x, caption, label, align = "left", widths = "auto", placement =
   ## Extract header
   header <- colnames(x)
   header[is.na(header)] <- ""
-  header <- paste0("[", header, "]")
+  header <- as.list(header)
 
   ## Extract table body
   body <- lapply(seq_len(nr), \(r) {
     b <- unlist(x[r, ], use.names = FALSE)
     b[is.na(b)] <- ""
-    paste0("[", b, "]")
+    as.list(b)
   })
 
   out <- structure(list(
@@ -70,35 +70,81 @@ add_footnote <- function(x, footnote) {
 
 #' @export
 add_header <- function(x, header) {
+  new_header <- header
+  new_header[is.na(new_header)] <- ""
+
   out <- x
-  out$header <- append(paste0("[", header, "]"), out$header)
+  out$header <- append(as.list(new_header), out$header)
   out
 }
 
 #' @export
 add_indent <- function(x, rows, indent = 1, columns = 1) {
   out <- x
-  space <- paste(rep("\u2003", indent), collapse = "")
   for (r in rows) {
-    out$body[[r]][columns] <- format_contents(out$body[[r]][columns],
-                                              prefix = "\u2003")
+    for (c in columns) {
+      if (!is.null(attr(out$body[[r]][[c]], "indent"))) {
+        attr(out$body[[r]][[c]], "indent") <- indent + attr(out$body[[r]][[c]], "indent")
+      } else {
+        attr(out$body[[r]][[c]], "indent") <- indent
+      }
+    }
   }
   out
 }
 
 #' @export
-collapse_rows <- function(x, start, rows, align = "top") {
+span_rows <- function(x, range, cols, align = "top") {
+  r <- range[[1]]
+  replace <- (range[[1]] + 1):range[[2]]
+  n <- length(replace) + 1L
+  cols <- sort(cols, decreasing = TRUE)
+
   out <- x
-  out$body[[start[[1]]]][[start[[2]]]] <- paste0(
-    "table.cell(
-        rowspan: ", rows, ",
-        align: ", align, ",
-        ", out$body[[start[[1]]]][[start[[2]]]], "
-      )"
-  )
-  for (r in seq_len(rows - 1)) {
-    out$body[[start[[1]] + r]] <- out$body[[start[[1]] + r]][-start[[2]]]
+  for (c in cols) {
+    attr(out$body[[r]][[c]], "rowspan") <- n
+    attr(out$body[[r]][[c]], "align") <- align
+    for (rr in replace) {
+      if (!(out$body[[rr]][[c]] %in% c("", NA))) warning(
+        paste0("`span_rows()` will overwrite non-empty cells in row ", rr, ", column ", c)
+      )
+      out$body[[rr]] <- out$body[[rr]][-c]
+    }
   }
+  out
+}
+
+#' @export
+span_cols <- function(x, range, rows, align = "left", stroke = FALSE) {
+  c <- range[[1]]
+  replace <- (range[[1]] + 1):range[[2]]
+  rows <- sort(rows, decreasing = TRUE)
+
+  out <- x
+  for (r in rows) {
+    out$body[[r]] <- make_colspan_row(out$body[[r]], r, c, replace, align, stroke)
+  }
+  out
+}
+
+make_colspan_row <- function(row, r, c, replace, align, stroke) {
+  n <- length(replace) + 1L
+  row[[c]] <- colspan(row[[c]], n, align, stroke)
+  for (cc in replace) {
+    if (!(row[cc] %in% c("", NA))) warning(
+      paste0("`span_cols()` will overwrite non-empty cells in row ", r, ", column ", cc)
+    )
+  }
+  row <- row[-replace]
+  row
+}
+
+#' @export
+colspan <- function(contents, n, align = "center", stroke = TRUE) {
+  out <- contents
+  attr(out, "colspan") <- n
+  attr(out, "align") <- align
+  if (stroke) attr(out, "stroke") <- "(bottom: 0.5pt)"
   out
 }
 
@@ -107,7 +153,7 @@ add_hline <- function(x, before) {
   out <- x
   before <- sort(before, decreasing = TRUE)
   for (r in before) {
-    out$body <- append(out$body, "table.hline()", r)
+    out$body <- append(out$body, "#table.hline()", r)
   }
   out
 }
@@ -118,7 +164,7 @@ add_vline <- function(x, before, start = 0, end = "none") {
   for (r in before) {
     out$body <- append(
       out$body,
-      paste0("table.vline(x: ", r - 1, ", start: ", start, ", end: ", end, "),
+      paste0("#table.vline(x: ", r - 1, ", start: ", start, ", end: ", end, "),
     ")
     )
   }
@@ -126,14 +172,43 @@ add_vline <- function(x, before, start = 0, end = "none") {
 }
 
 #' @export
-pack_rows <- function(x, start_row, end_row, label = NULL) {
-  out <- add_indent(x, start_row:end_row, columns = 1)
+pack_rows <- function(x, start_row, end_row, label = NULL, italic = TRUE, bold = FALSE, indent = TRUE) {
+  out <- x
+  if (indent) out <- add_indent(out, start_row:end_row, columns = 1)
   if (!is.null(label)) {
-    label_cell <- paste0("table.cell(
-          colspan: ", ncol_ttab(x), ",
-          [_", label, "_]
-        )")
-    out$body <- append(out$body, label_cell, after = start_row - 1)
+    label_cell <- list(label)
+    attr(label_cell[[1]], "colspan") <- ncol_ttab(x)
+    if (isTRUE(italic)) attr(label_cell[[1]], "italic") <- TRUE
+    if (isTRUE(bold)) attr(label_cell[[1]], "bold") <- TRUE
+    out$body <- append(out$body, list(label_cell), after = start_row - 1)
+  }
+  out
+}
+
+#' @export
+row_spec <- function(x, rows, italic = FALSE, bold = FALSE) {
+  out <- x
+  for (r in rows) {
+    for (c in seq_along(out$body[[r]])) {
+      if (italic) attr(out$body[[r]][[c]], "italic") <- TRUE
+      if (bold) attr(out$body[[r]][[c]], "bold") <- TRUE
+    }
+  }
+  out
+}
+
+#' @export
+col_spec <- function(x, cols, italic = FALSE, bold = FALSE, header = TRUE) {
+  out <- x
+  for (c in cols) {
+    for (r in seq_along(out$body)) {
+      if (italic) attr(out$body[[r]][[c]], "italic") <- TRUE
+      if (bold) attr(out$body[[r]][[c]], "bold") <- TRUE
+    }
+    if (header) {
+      if (italic) attr(out$header[[c]], "italic") <- TRUE
+      if (bold) attr(out$header[[c]], "bold") <- TRUE
+    }
   }
   out
 }
@@ -169,10 +244,9 @@ knit_print.typst_table <- function(x, ...) {
   columns <- wrap_paren(x$columns)
   align <- wrap_paren(x$align)
   kind <- if (isTRUE(attr(x, "supplement"))) "\"suppl-table\"" else "table"
-  header <- paste0(x$header, collapse = ",")
-  body <- sapply(x$body, \(b) paste0(b, collapse = ","))
-  body <- paste0(body, collapse = ",
-      ")
+  header <- paste0(sapply(x$header, print_contents), collapse = ",")
+  body <- sapply(x$body, \(b) paste0(sapply(b, print_contents), collapse = ","))
+  body <- paste0(body, collapse = ",\n      ")
 
   out <- paste0(
     "#figure(
@@ -180,8 +254,11 @@ knit_print.typst_table <- function(x, ...) {
     #table(
       columns: ", columns, ",
       align: ", align, ",
+      table.hline(),
       table.header(", header, "),
-      ", body, "
+      table.hline(),
+      ", body, ",
+      table.hline()
     )
 
   ",
@@ -189,10 +266,10 @@ knit_print.typst_table <- function(x, ...) {
 
   "),
     "],
-  kind: ", kind, ",
-  caption: figure.caption(position: top)[", x$caption, "],
+  kind: ", kind, if (!is.null(x$caption)) paste0(",
+  caption: figure.caption(position: top)[", x$caption, "]"), ",
   placement: ", x$placement, "
-) <", x$label, ">"
+)", if (!is.null(x$label)) paste0(" <", x$label, ">")
   )
 
   if (!is.null(attr(x, "styling"))) {
@@ -207,18 +284,46 @@ knit_print.typst_table <- function(x, ...) {
 ]")
   }
 
+  out <- paste0(out, "
+")
+
   structure(out, class = "knit_asis")
 }
 
+print_contents <- function(x) {
+  out <- glue::glue(x)
+  if (!is.null(attr(x, "indent"))) out <- glue::glue(
+    "{indent}{out}",
+    indent = paste(rep("\u2003", attr(x, "indent")), collapse = ""),
+    .null = NULL
+  )
+  if (isTRUE(attr(x, "italic")) || isTRUE(attr(x, "bold"))) out <- glue::glue(
+    "#text(",
+      "{if (isTRUE(italic)) 'style: \"italic\",'}",
+      "{if (isTRUE(bold)) 'weight: \"bold\",'}",
+    ")[{out}]",
+    italic = attr(x, "italic"), bold = attr(x, "bold"),
+    .null = NULL
+  )
+  if (!is.null(attr(x, "colspan")) || !is.null(attr(x, "rowspan")) ||
+      !is.null(attr(x, "align")) || !is.null(attr(x, "stroke"))) {
+    out <- glue::glue(
+      "#table.cell(",
+        "{if (!is.null(colspan)) glue::glue('colspan: {colspan},')}",
+        "{if (!is.null(rowspan)) glue::glue('rowspan: {rowspan},')}",
+        "{if (!is.null(align)) glue::glue('align: {align},')}",
+        "{if (!is.null(stroke)) glue::glue('stroke: {stroke},')}",
+      ")[{out}]",
+      colspan = attr(x, "colspan"), rowspan = attr(x, "rowspan"),
+      align = attr(x, "align"), stroke = attr(x, "stroke"),
+      .null = NULL
+    )
+  }
+  glue::glue("[{out}]")
+}
 
 wrap_paren <- function(x, open = "(", close = ")", collapse = ",") {
   paste0(open, paste(x, collapse = collapse), close)
-}
-
-format_contents <- function(x, prefix = "", suffix = "") {
-  pattern <- "(^.*?\\[)(.*)(\\].*?$)"
-  replacement <- paste0("\\1", prefix, "\\2", suffix, "\\3")
-  stringr::str_replace_all(x, pattern, replacement)
 }
 
 ncol_ttab <- function(x) {
