@@ -12,6 +12,7 @@ contributes:
       date-format: "D MMMM YYYY"
       callout-appearance: minimal
       bibliography: references.bib
+      csl: vancouver.csl
       knitr:
         opts_chunk:
           echo: false
@@ -22,3 +23,4 @@ contributes:
       template-partials:
         - typst-template.typ
         - typst-show.typ
+      citeproc: true
