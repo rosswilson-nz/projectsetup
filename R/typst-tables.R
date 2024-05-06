@@ -48,7 +48,7 @@ ttab <- function(x, caption, label, align = "left", widths = "auto", placement =
     as.list(b)
   })
 
-  out <- structure(list(
+  structure(list(
     columns = widths,
     align = align,
     placement = placement,
@@ -58,7 +58,6 @@ ttab <- function(x, caption, label, align = "left", widths = "auto", placement =
     body = body,
     footnotes = footnotes
   ), class = "typst_table")
-
 }
 
 #' @export
@@ -248,10 +247,8 @@ knit_print.typst_table <- function(x, ...) {
   body <- sapply(x$body, \(b) paste0(sapply(b, print_contents), collapse = ","))
   body <- paste0(body, collapse = ",\n      ")
 
-  out <- paste0(
-    "#figure(
-  [
-    #table(
+  out <- paste0( # table contents & footnotes
+    "#table(
       columns: ", columns, ",
       align: ", align, ",
       table.hline(),
@@ -264,27 +261,36 @@ knit_print.typst_table <- function(x, ...) {
   ",
     paste(x$footnotes, collapse = "
 
-  "),
-    "],
+  ")
+  )
+
+  if (!is.null(attr(x, "styling"))) { # additional table styling, if needed
+    out <- paste(paste("#", attr(x, "styling"), sep = "", collapse = "
+"), out, sep = "
+")
+  }
+
+  out <- paste0( # wrap in figure(), with metadata
+    "#figure(
+  [
+    ", out, "
+  ],
   kind: ", kind, if (!is.null(x$caption)) paste0(",
   caption: figure.caption(position: top)[", x$caption, "]"), ",
   placement: ", x$placement, "
 )", if (!is.null(x$label)) paste0(" <", x$label, ">")
   )
 
-  if (!is.null(attr(x, "styling"))) {
-    out <- paste(paste("#", attr(x, "styling"), sep = "", collapse = "
-"), out, sep = "
-")
-  }
-
+  # put on its own landscape page, if needed
   if (!is.null(attr(x, "landscape")) && attr(x, "landscape")) {
     out <- paste0("#page(flipped: true)[
   ", out, "
 ]")
   }
 
-  out <- paste0(out, "
+  # wrap in blank lines to separate from surrounding content
+  out <- paste0("
+", out, "
 ")
 
   structure(out, class = "knit_asis")
