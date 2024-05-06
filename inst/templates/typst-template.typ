@@ -23,7 +23,7 @@
   region: "NZ",
   font: ("Wickliffe",),
   fontsans: ("Wickliffe Sans",),
-  fontmono: ("New Computer Modern Mono",),
+  fontmono: ("Consolas", "Cascadia Mono", "CMU Typewriter Text", "Lucida Console",),
   fontsize: 10pt,
   sectionnumbering: none,
   toc: false,
@@ -39,7 +39,9 @@
            region: region,
            font: fontsans,
            size: fontsize)
-  show raw: set text(font: fontmono)
+  show raw: set text(font: fontmono,
+                     size: 0.9 * fontsize,
+                     weight: "medium")
   show par: set block(spacing: 0.55em)
   set heading(numbering: sectionnumbering)
   show heading: set block(above: 1.4em, below: 1em)

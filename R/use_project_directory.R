@@ -126,6 +126,8 @@ add_templates <- function(package, workflow = "targets") {
             fs::path_wd(prefix, "reports", "_extensions", "cmor"))
   file.copy(system.file("templates", "typst-show.typ", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports", "_extensions", "cmor"))
+  file.copy(system.file("templates", "definitions.typ", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_extensions", "cmor"))
   ### A temporary workaround for a bug in Quarto [#9478]
   file.create(fs::path_wd(prefix, "reports", "_quarto.yml"))
   ## manuscript templates:
