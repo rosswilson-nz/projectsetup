@@ -67,6 +67,11 @@ Reference tables with @tbl-1 and figures with @fig-1.
 #bibliography("references.bib")
 ```
 
+:::{#refs}
+:::
+
+{{< pagebreak >}}
+
 ```{=typst}
 #counter(heading).update(0)
 #show heading.where(level: 1): set heading(numbering: (..nums) => [Appendix #numbering("A:", nums.pos().at(0))])
