@@ -16,7 +16,6 @@
   date: none,
   abstract: none,
   keywords: none,
-  cols: 1,
   margin: (x: 2.5cm, y: 2.5cm),
   paper: "a4",
   lang: "en",
