@@ -18,6 +18,7 @@ contributes:
           echo: false
           warning: false
           cache: false
+          output: asis
     typst:
       template: template.typ
       template-partials:
