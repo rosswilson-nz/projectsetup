@@ -73,6 +73,7 @@ add_directories <- function(package) {
   usethis::use_directory(paste0(prefix, "reports/_tables"))
   usethis::use_directory(paste0(prefix, "reports/_figures"))
   usethis::use_directory(paste0(prefix, "reports/_extensions/cmor"))
+  usethis::use_directory(paste0(prefix, "reports/_extensions/cmor-appendix"))
   usethis::use_directory(paste0(prefix, "output"))
   usethis::use_directory(paste0(prefix, "output/figures"))
   usethis::use_directory(paste0(prefix, "R"))
@@ -128,6 +129,16 @@ add_templates <- function(package, workflow = "targets") {
             fs::path_wd(prefix, "reports", "_extensions", "cmor"))
   file.copy(system.file("templates", "definitions.typ", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports", "_extensions", "cmor"))
+  file.copy(system.file("templates", "_extension-appendix.yml", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_extensions", "cmor-appendix", "_extension.yml"))
+  file.copy(system.file("templates", "template-appendix.typ", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_extensions", "cmor-appendix", "template.typ"))
+  file.copy(system.file("templates", "typst-template-appendix.typ", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_extensions", "cmor-appendix", "typst-template.typ"))
+  file.copy(system.file("templates", "typst-show-appendix.typ", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_extensions", "cmor-appendix", "typst-show.typ"))
+  file.copy(system.file("templates", "definitions.typ", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_extensions", "cmor-appendix"))
   ### A temporary workaround for a bug in Quarto [#9478]
   file.create(fs::path_wd(prefix, "reports", "_quarto.yml"))
   ## manuscript templates:

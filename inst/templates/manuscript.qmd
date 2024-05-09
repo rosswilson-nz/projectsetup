@@ -17,8 +17,6 @@ affiliations:
     name: Another Institution
     country: Another country
 abstract: |
-  **Abstract**
-  
   *Background*
   
   *Aim*
@@ -29,7 +27,9 @@ abstract: |
   
   *Conclusion*
 format:
-  cmor-typst: default
+  cmor-typst:
+    include-after-body:
+      - text: '#include "appendix.typ"'
 ---
 
 {{< include _setup.qmd >}}
@@ -61,25 +61,3 @@ Reference tables with @tbl-1 and figures with @fig-1.
 # Funding
 
 # Conflicts of Interest
-
-<!-- To be updated with lua filter -->
-```{=typst}
-#bibliography("references.bib")
-```
-
-:::{#refs}
-:::
-
-{{< pagebreak >}}
-
-```{=typst}
-#counter(heading).update(0)
-#show heading.where(level: 1): set heading(numbering: (..nums) => [Appendix #numbering("A:", nums.pos().at(0))])
-```
-# Supplementary material
-
-```{=typst}
-#linebreak()
-```
-
-<!-- {{< include _tables/table-a1.qmd >}} -->

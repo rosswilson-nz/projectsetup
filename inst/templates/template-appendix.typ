@@ -15,3 +15,7 @@ $endfor$
 $body$
 
 $notes.typ()$
+
+$for(include-after)$
+$include-after$
+$endfor$

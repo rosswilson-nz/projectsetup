@@ -1,45 +1,14 @@
 ---
-title: "Appendix A: Supplementary material"
-subtitle: '*For:* Paper title'
-date: last-modified
-date-format: "D MMMM YYYY"
 format:
-  pdf:
-    number-sections: true
-    papersize: a4
-    geometry:
-      - margin=1in
-    fontsize: 10pt
-  docx:
-    reference-doc: "word-styles-reference-01.docx"
-    fig-dpi: 300
-fig-width: 6
-fig-height: 8
-callout-appearance: minimal
-bibliography: references.bib
-csl: vancouver.csl
-prefer-html: true
-execute:
-  echo: false
-  warning: false
-  cache: false
-knitr:
-  opts_chunk:
-    R.options:
-      knitr.kable.NA: ""
-      knitr.table.format: "latex"
+  cmor-appendix-typst: default
 ---
 
 {{< include _setup.qmd >}}
 
-\renewcommand{\thetable}{A\arabic{table}}
+# Supplementary material
 
-<br>
+```{=typst}
+#linebreak()
+```
 
-<!-- {{< include _tables/table-a1.qmd >}} -->
-
-<br>
-
-<!-- {{< include _tables/figure-a1.qmd >}} -->
-
-<br>
+Supplementary material content
