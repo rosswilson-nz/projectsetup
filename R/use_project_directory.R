@@ -40,8 +40,8 @@ use_project_directory <- function(package = FALSE, workflow = "targets", git = T
       paste0(prefix, "misc"),
       paste0(prefix, "reports/*.pdf"),
       paste0(prefix, "reports/*_files"),
-      paste0(prefix, "reports/*.tex"),
-      paste0(prefix, "reports/*.log")
+      paste0(prefix, "reports/*.typ"),
+      paste0(prefix, "reports/*.svg")
     ))
     if (!data_in_git) usethis::use_git_ignore(c(
       paste0(prefix, "derived_data/*"),
@@ -144,10 +144,6 @@ add_templates <- function(package, workflow = "targets") {
   ## manuscript templates:
   file.copy(system.file("templates", "manuscript.qmd", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports"))
-  file.copy(system.file("templates", "tables.qmd", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd(prefix, "reports"))
-  file.copy(system.file("templates", "figures.qmd", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd(prefix, "reports"))
   file.copy(system.file("templates", "appendix.qmd", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports"))
   ## separate manuscript module templates
@@ -169,24 +165,6 @@ add_templates <- function(package, workflow = "targets") {
                 mustWork = TRUE),
     fs::path_wd(prefix, "reports")
   )
-  ## Reference .docx styles file
-  file.copy(
-    system.file("templates", "word-styles-reference-01.docx", package = "CMORprojects",
-                mustWork = TRUE),
-    fs::path_wd(prefix, "reports")
-  )
-  ## Reference .docx styles file for Medical Care
-  file.copy(
-    system.file("templates", "word-styles-reference-med-care.docx", package = "CMORprojects",
-                mustWork = TRUE),
-    fs::path_wd(prefix, "reports")
-  )
-  ## Reference .docx styles file for Journal of Health Economics
-  file.copy(
-    system.file("templates", "word-styles-reference-jhe.docx", package = "CMORprojects",
-                mustWork = TRUE),
-    fs::path_wd(prefix, "reports")
-  )
 
   # Template 'packages' file to load required packages (for _drake.R)
   if (workflow == "drake") {
@@ -202,7 +180,7 @@ add_templates <- function(package, workflow = "targets") {
                                           list(is_package = package, package = basename(getwd())))
   writeLines(template_out, fs::path_wd(prefix, "parameters.R"))
 
-  # Placefolder files in output and data folders (so they are added to Git repo)
+  # Placeholder files in output and data folders (so they are added to Git repo)
   file.copy(system.file("templates", "output", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "output", "output"))
   file.copy(system.file("templates", "figures", package = "CMORprojects", mustWork = TRUE),

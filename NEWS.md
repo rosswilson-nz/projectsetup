@@ -2,9 +2,13 @@
 
 * Correct set-up of new project folder when no user .Rprofile is found
 
-* Change tar_render_manuscript() to use Typst instead of LaTeX/docx
+* Change `tar_render_manuscript()` to use Typst instead of LaTeX/docx
+
+* Add `appendix` option to `tar_render_manuscript()`
 
 * Add `ttab()` for creating Typst tables in output
+
+* Add `tfig()` for creating Typst figures in output
 
 # CMORprojects 0.3.5
 
