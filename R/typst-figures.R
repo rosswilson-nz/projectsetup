@@ -1,3 +1,16 @@
+#' Create figures in Typst format
+#'
+#' This wraps the path to a saved image in a Typst figure environment with caption and label.
+#'
+#' @param x Path to a saved image in SVG, PNG, JPEG, or GIF format.
+#' @param caption The figure caption.
+#' @param label Figure label, used for cross-referencing
+#' @param placement (optional) Figure placement. As in Typst's #figure() function.
+#' @param width,height (optional) Image width and height. As in Typst's #image() function.
+#' @param footnotes Footnotes to add below the table. Pass a vector for multiple
+#'     footnotes. At this stage, footnote numbering needs to be added manually
+#'     (as does the corresponding numbering in table cells).
+#'
 #' @export
 tfig <- function(x, caption, label, placement = "auto",
                  width = NULL, height = NULL, footnotes = NULL) {
@@ -7,6 +20,12 @@ tfig <- function(x, caption, label, placement = "auto",
   } else {
     stop("`x` must be the path to an image file in format SVG (preferred), PNG, JPEG, or GIF")
   }
+  if (!is.null(caption) && (!is.character(caption) || length(caption) > 1)) stop("'caption' must be a character scalar")
+  if (!is.null(label) && (!is.character(label) || length(label) > 1)) stop("'label' must be a character scalar")
+  if (!is.null(placement) && (!is.character(placement) || length(placement) > 1)) stop("'placement' must be a character scalar")
+  if (!(is.null(width) || is.character(width) || is.numeric(width)) || length(width) != 1) stop("'width' must be a character or numeric scalar")
+  if (!(is.null(height) || is.character(height) || is.numeric(height)) || length(height) != 1) stop("'height' must be a character or numeric scalar")
+  if (!is.null(footnotes) && !is.character(footnotes)) stop("'footnotes' must be a character vector")
 
   structure(list(
     image = image,
@@ -19,7 +38,6 @@ tfig <- function(x, caption, label, placement = "auto",
   ), class = "typst_figure")
 }
 
-#' @export
 knit_print.typst_figure <- function(x, ...) {
   kind <- if (isTRUE(attr(x, "supplement"))) "\"suppl-image\"" else "image"
 
