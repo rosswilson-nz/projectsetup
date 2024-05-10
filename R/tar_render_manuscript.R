@@ -25,7 +25,7 @@
 #' @param packages,library,error,memory,garbage_collection,deployment,priority,resources,retrieval,cue,quiet
 #'     See [tarchetypes::tar_render_raw()] and [tarchetypes::tar_quarto_raw()].
 #' @export
-tar_render_manuscript <- function(name, path, output_file, include = character(),
+tar_render_manuscript <- function(name, path, output_file, appendix = FALSE, include = character(),
                                   file_reference_docx = NULL, file_csl = NULL, file_bib = NULL,
                                   pandoc_args = NULL, render_args = NULL,
                                   packages = c("rmarkdown"),
@@ -113,7 +113,7 @@ tar_render_manuscript <- function(name, path, output_file, include = character()
         fs::path(basedir, details$formats$docx$metadata$csl)
       ))
       command <- tar_quarto_command(
-        path = path, sources = sources, output = output, input = extra_files,
+        path = path, sources = sources, output = output, input = extra_files, appendix = appendix,
         execute = TRUE, execute_params = quote(list()), cache = NULL, cache_refresh = FALSE,
         debug = FALSE, quiet = quiet, pandoc_args = pandoc_args
       )
@@ -126,7 +126,7 @@ tar_render_manuscript <- function(name, path, output_file, include = character()
   )
 }
 
-tar_quarto_command <- function (path, sources, output, input, execute, execute_params,
+tar_quarto_command <- function (path, sources, output, input, appendix, execute, execute_params,
                                 cache, cache_refresh, debug, quiet, pandoc_args) {
   args <- substitute(list(input = path, execute = execute, execute_params = execute_params,
                           execute_daemon = 0, execute_daemon_restart = FALSE, execute_debug = FALSE,
@@ -139,17 +139,22 @@ tar_quarto_command <- function (path, sources, output, input, execute, execute_p
   deps <- as.call(c(as.symbol("list"), lapply(deps, as.symbol)))
   fun <- as.call(c(as.symbol(":::"), lapply(c("CMORprojects", "tar_quarto_run"), as.symbol)))
   expr <- list(fun, args = args, deps = deps, sources = sources,
-               output = output, input = input)
+               output = output, input = input, appendix = appendix)
   as.expression(as.call(expr))
 }
 
-tar_quarto_run <- function (args, deps, sources, output, input) {
+tar_quarto_run <- function (args, deps, sources, output, input, appendix) {
   rm(deps)
   gc()
   assert_quarto()
   args <- args[!vapply(args, is.null, logical(1))]
   do.call(what = quarto::quarto_render, args = args)
-  fs::file_move(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output)), output)
+  if (appendix) {
+    fs::file_delete(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output)))
+    output <- fs::path_ext_set(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output)), "typ")
+  } else {
+    fs::file_move(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output)), output)
+  }
   out <- unique(c(sort(output), sort(sources), sort(input)))
   as.character(fs::path_rel(out))
 }

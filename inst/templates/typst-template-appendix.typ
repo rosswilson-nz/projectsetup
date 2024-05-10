@@ -11,13 +11,6 @@
 //   - https://github.com/typst/templates
 
 #let article(
-  title: none,
-  authors: none,
-  date: none,
-  abstract: none,
-  keywords: none,
-  margin: (x: 2.5cm, y: 2.5cm),
-  paper: "a4",
   lang: "en",
   region: "NZ",
   font: ("Wickliffe",),
@@ -26,15 +19,8 @@
   fontsize: 10pt,
   bib: "references.bib",
   bibliographystyle: "vancouver-superscript",
-  sectionnumbering: none,
-  appendix: [],
   doc,
 ) = {
-  set page(
-    paper: paper,
-    margin: margin,
-    numbering: "1",
-  )
   set par(leading: 0.55em, first-line-indent: 1em, justify: true)
   set text(lang: lang,
            region: region,
@@ -44,74 +30,19 @@
                      size: 0.9 * fontsize,
                      weight: "medium")
   show par: set block(spacing: 0.55em)
-  set heading(numbering: sectionnumbering)
   show heading: set block(above: 1.4em, below: 1em)
   show heading: set text(font: font)
-  set bibliography(style: "vancouver.csl", title: "References")
+  show heading.where(level: 1): {
+    set heading(numbering: (..nums) => [Appendix #numbering("A:", nums.pos().at(0))])
+    set block(above: 0em, below: 2em)
+  }
+  set bibliography(style: bibliographystyle, title: "References")
   set footnote.entry(
     separator: line(length: 100%),
     indent: 0em
   )
   show footnote.entry: set align(left)
   set list(indent: 1em, marker: [•])
-
-  if title != none {
-    align(center)[#block(inset: 2em)[#par(justify: false)[
-      #text(font: font, weight: "bold", size: 2em)[#title]
-    ]]]
-  }
-
-  if authors != none {
-    let affiliations = ()
-    for author in authors {
-      for affiliation in author.affiliation {
-        if affiliation not in affiliations {
-          affiliations.push(affiliation)
-        }
-      }
-    }
-    let affiliations_fn = affiliations.map(it => {
-      let idx = affiliations.position(i => it == i) + 1
-      [#super[#idx] #it]
-    })
-    footnote(numbering: x => [#sym.zws])[#affiliations_fn.join(linebreak())#linebreak()#linebreak()]
-    counter(footnote).update(0)
-    let names = authors.map(author => {
-      let affiliation = author.affiliation.map(aff =>
-        str(affiliations.position(i => aff == i) + 1)).join(",")
-      [#author.name#if author.email != "" {
-        [#footnote(numbering: "*")[Corresponding author.#linebreak()_Email_: #link("mailto:" + author.email.replace("\\", ""))]]
-      }#super[#affiliation]]
-    }).join(", ")
-    align(center)[#par(justify: false)[#names]]
-  }
-
-  if date != none {
-    align(center)[#block(inset: 1em)[
-      #date
-    ]]
-  }
-
-  if abstract != none {
-    block(inset: 1em)[
-    #set par(first-line-indent: 0em)
-    #show par: set block(spacing: 1em)
-    *Abstract*
-
-    #abstract
-
-    #if keywords != none {[*Keywords:* #keywords.join("; ")]}
-    ]
-  }
-
-  if toc {
-    block(above: 0em, below: 2em)[
-    #outline(
-      title: auto,
-      depth: none
-    );
-    ]
-  }
 
   show figure: it => {
     set block(spacing: 0.65em, breakable: true)
@@ -152,11 +83,5 @@
   set table(inset: (x: 6pt, y: 0.3em), stroke: none)
   set table.hline(stroke: 0.5pt)
 
-  pagebreak()
-
   block(doc)
-
-  bibliography(bib)
-
-  appendix
 }

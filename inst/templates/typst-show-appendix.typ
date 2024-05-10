@@ -13,43 +13,11 @@
 //   - https://github.com/typst/templates
 
 #show: doc => article(
-$if(title)$
-  title: [$title$],
-$endif$
-$if(by-author)$
-  authors: (
-$for(by-author)$
-$if(it.name.literal)$
-    ( name: [$it.name.literal$],
-      affiliation: ($for(it.affiliations)$[$if(it.department)$$it.department$,$endif$ $if(it.name)$$it.name$,$endif$ $if(it.city)$$it.city$,$endif$ $if(it.country)$$it.country$$endif$], $endfor$),
-      email: "$it.email$" ),
-$endif$
-$endfor$
-    ),
-$endif$
-$if(date)$
-  date: [$date$],
-$endif$
 $if(lang)$
   lang: "$lang$",
 $endif$
 $if(region)$
   region: "$region$",
-$endif$
-$if(abstract)$
-  abstract: [$abstract$],
-$endif$
-$if(keywords)$
-  keywords: (
-    $for(keywords/allbutlast)$[$keywords$], $endfor$
-    $for(keywords/last)$[$keywords$]$endfor$
-  ),
-$endif$
-$if(margin)$
-  margin: ($for(margin/pairs)$$margin.key$: $margin.value$,$endfor$),
-$endif$
-$if(papersize)$
-  paper: "$papersize$",
 $endif$
 $if(mainfont)$
   font: ("$mainfont$",),
@@ -57,22 +25,11 @@ $endif$
 $if(fontsize)$
   fontsize: $fontsize$,
 $endif$
-$if(section-numbering)$
-  sectionnumbering: "$section-numbering$",
-$endif$
 $if(bibliography)$
   bib: "$bibliography$",
 $endif$
 $if(bibliographystyle)$
   bibliographystyle: "$bibliographystyle$",
-$endif$
-$if(include-after)$
-  appendix: [
-    $for(include-after)$
-      #pagebreak()
-      $include-after$
-    $endfor$
-  ],
 $endif$
   doc,
 )

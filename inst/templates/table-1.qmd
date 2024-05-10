@@ -1,8 +1,6 @@
 
 ```{=typst}
 ```{r table-1}
-#| label: tbl-1
-#| tbl-cap: "Table title"
 table_1 %>% 
   ttab("Table title", "tbl-1")
 ```
