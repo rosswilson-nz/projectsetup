@@ -38,6 +38,7 @@ tfig <- function(x, caption, label, placement = "auto",
   ), class = "typst_figure")
 }
 
+#' @export
 knit_print.typst_figure <- function(x, ...) {
   kind <- if (isTRUE(attr(x, "supplement"))) "\"suppl-image\"" else "image"
 

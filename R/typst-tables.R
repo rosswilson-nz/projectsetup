@@ -295,10 +295,11 @@ add_vline <- function(x, before, start = 0, end = "none") {
 #' @param x A `typst_table` object
 #' @param start_row,end_row The first and last rows to be combined
 #' @param label Label to add above `start_row`
-#' @param italic,bold Formatting to apply to `label`. Defaults to upright/bold.
-#' @param indent Whether to indent the grouped rows. Defaults to `TRUE`.
+#' @param italic,bold (optional) Formatting to apply to `label`. Defaults to upright/bold.
+#' @param align (optional) Cell alignment for the `label`. Defaults to the same as the first column.
+#' @param indent (optional) Whether to indent the grouped rows. Defaults to `TRUE`.
 #' @export
-pack_rows <- function(x, start_row, end_row, label = NULL, italic = TRUE, bold = FALSE, indent = TRUE) {
+pack_rows <- function(x, start_row, end_row, label = NULL, italic = TRUE, bold = FALSE, align = NULL, indent = TRUE) {
   if (!inherits(x, "typst_table")) stop("'x' must be a `typst_table` object")
   if (!is.numeric(start_row) || length(start_row) != 1 || start_row > length(x$body)) stop("'start_row' must be a numeric scalar indexing rows of 'x'")
   if (!is.numeric(end_row) || length(end_row) != 1 || end_row < start_row) stop("'end_row' must be a numeric scalar indexing rows of 'x'")
@@ -434,6 +435,7 @@ supplement <- function(x) {
 #' @export
 knitr::knit_print
 
+#' @export
 knit_print.typst_table <- function(x, ...) {
   columns <- wrap_paren(x$columns)
   align <- wrap_paren(x$align)

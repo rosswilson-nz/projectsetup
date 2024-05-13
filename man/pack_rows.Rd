@@ -11,6 +11,7 @@ pack_rows(
   label = NULL,
   italic = TRUE,
   bold = FALSE,
+  align = NULL,
   indent = TRUE
 )
 }
@@ -21,9 +22,11 @@ pack_rows(
 
 \item{label}{Label to add above \code{start_row}}
 
-\item{italic, bold}{Formatting to apply to \code{label}. Defaults to upright/bold.}
+\item{italic, bold}{(optional) Formatting to apply to \code{label}. Defaults to upright/bold.}
 
-\item{indent}{Whether to indent the grouped rows. Defaults to \code{TRUE}.}
+\item{align}{(optional) Cell alignment for the \code{label}. Defaults to the same as the first column.}
+
+\item{indent}{(optional) Whether to indent the grouped rows. Defaults to \code{TRUE}.}
 }
 \description{
 Based on the \code{kableExtra} function of the same name

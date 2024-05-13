@@ -8,6 +8,7 @@ tar_render_manuscript(
   name,
   path,
   output_file,
+  appendix = FALSE,
   include = character(),
   file_reference_docx = NULL,
   file_csl = NULL,

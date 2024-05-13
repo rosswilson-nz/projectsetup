@@ -7,7 +7,7 @@
 add_styling(x, style, replace = FALSE)
 }
 \arguments{
-\item{x}{A \code{typst_table} object}
+\item{x}{A \code{typst_table} or \code{typst_figure} object}
 
 \item{style}{Character vector of Typst styling commands (or anything else)}
 
