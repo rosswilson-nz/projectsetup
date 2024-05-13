@@ -10,6 +10,8 @@
 
 * Add `tfig()` for creating Typst figures in output
 
+* Add Typst table and figure formatting functions.
+
 # CMORprojects 0.3.5
 
 * Correct identification of linked Quarto source documents in subfolders

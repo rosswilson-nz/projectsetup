@@ -315,21 +315,60 @@ pack_rows <- function(x, start_row, end_row, label = NULL, italic = TRUE, bold =
     attr(label_cell[[1]], "colspan") <- ncol_ttab(x)
     if (isTRUE(italic)) attr(label_cell[[1]], "italic") <- TRUE
     if (isTRUE(bold)) attr(label_cell[[1]], "bold") <- TRUE
+    if (!is.null(align)) attr(label_cell[[1]], "align") <- align
     out$body <- append(out$body, list(label_cell), after = start_row - 1)
   }
   out
 }
 
+#' Apply formatting to table cells
+#'
+#' More formatting options will be added in a later version. All formatting
+#'     arguments default to `NULL`, keeping the current cell formatting.
+#'
+#' @param x A `typst_table` object.
+#' @param row,col Which cell to apply formatting to
+#' @param italic,bold (optional) Logical scalars. Apply italic or bold formatting.
+#' @param align (optional) Align cell contents. Specified as in Typst's
+#'     `#table.cell()`.
+#'
+#' @export
+cell_spec <- function(x, row, col, italic = NULL, bold = NULL, align = NULL) {
+  if (!inherits(x, "typst_table")) stop("'x' must be a `typst_table` object")
+  if (!is.numeric(row) || length(row) != 1 || row > length(x$body) || row <= 0) stop("'row' must be a numeric scalar indexing rows of 'x'")
+  if (!is.numeric(col) || length(col) != 1 || col > length(x$body[[row]] || col <= 0)) stop("'col' must be a numeric scalar indexing columns of 'x'")
+  if (!is.null(italic) && (!is.logical(italic) || length(italic) != 1)) stop("'italic' must be a logical scalar")
+  if (!is.null(bold) && (!is.logical(bold) || length(bold) != 1)) stop("'bold' must be a logical scalar")
+  if (!is.null(align) && (!is.logical(character) || length(align) != 1)) stop("'align' must be a character string")
+
+  out <- x
+  out$body[[row]][[cell]] <- apply_cell_spec(out$body[[row]][[cell]], italic, bold, align)
+
+  out
+}
+
+apply_cell_spec <- function(cell, italic, bold, align) {
+  out <- cell
+  if (!is.null(italic)) attr(out, "italic") <- italic
+  if (!is.null(bold)) attr(out, "bold") <- bold
+  if (!is.null(align)) attr(out, "align") <- align
+
+  out
+}
+
 #' Apply formatting to table rows
 #'
-#' More formatting options will be added in a later version.
+#' More formatting options will be added in a later version. All formatting
+#'     arguments default to `NULL`, keeping the current cell formatting.
 #'
 #' @param x A `typst_table` object.
 #' @param rows Which rows to apply the formatting to
-#' @param italic,bold (optional) Which formatting to apply. Defaults to none.
+#' @param italic,bold (optional) Logical scalars. Apply italic or bold formatting.
+#' @param align (optional) Align cell contents. Specified as in Typst's
+#'     `#table.cell()`.
 #'
 #' @export
-row_spec <- function(x, rows, italic = FALSE, bold = FALSE) {
+row_spec <- function(x, rows, italic = NULL, bold = NULL, align = NULL) {
   if (!inherits(x, "typst_table")) stop("'x' must be a `typst_table` object")
   if (!is.numeric(rows) || !all(rows <= length(x$body))) stop("'rows' must be a numeric vector indexing rows of 'x'")
   if (!is.logical(italic) || length(italic) != 1) stop("'italic' must be a logical scalar")
@@ -338,8 +377,7 @@ row_spec <- function(x, rows, italic = FALSE, bold = FALSE) {
   out <- x
   for (r in rows) {
     for (c in seq_along(out$body[[r]])) {
-      if (italic) attr(out$body[[r]][[c]], "italic") <- TRUE
-      if (bold) attr(out$body[[r]][[c]], "bold") <- TRUE
+      out <- cell_spec(out, r, c, italic, bold, align)
     }
   }
   out
@@ -355,7 +393,7 @@ row_spec <- function(x, rows, italic = FALSE, bold = FALSE) {
 #' @param header Also apply formatting to header rows? Defaults to `TRUE`.
 #'
 #' @export
-col_spec <- function(x, cols, italic = FALSE, bold = FALSE, header = TRUE) {
+col_spec <- function(x, cols, italic = NULL, bold = NULL, align = NULL, header = TRUE) {
   if (!inherits(x, "typst_table")) stop("'x' must be a `typst_table` object")
   if (!is.numeric(cols)) stop("'cols' must be a numeric vector indexing columns of 'x'")
   if (!is.logical(italic) || length(italic) != 1) stop("'italic' must be a logical scalar")
@@ -365,12 +403,10 @@ col_spec <- function(x, cols, italic = FALSE, bold = FALSE, header = TRUE) {
   out <- x
   for (c in cols) {
     for (r in seq_along(out$body)) {
-      if (italic) attr(out$body[[r]][[c]], "italic") <- TRUE
-      if (bold) attr(out$body[[r]][[c]], "bold") <- TRUE
+      out <- cell_spec(out, r, c, italic, bold, align)
     }
     if (header) {
-      if (italic) attr(out$header[[c]], "italic") <- TRUE
-      if (bold) attr(out$header[[c]], "bold") <- TRUE
+      out$header[[c]] <- apply_cell_spec(out$header[[c]], italic, bold, align)
     }
   }
   out

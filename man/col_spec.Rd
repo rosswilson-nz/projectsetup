@@ -4,7 +4,7 @@
 \alias{col_spec}
 \title{Apply formatting to table columns}
 \usage{
-col_spec(x, cols, italic = FALSE, bold = FALSE, header = TRUE)
+col_spec(x, cols, italic = NULL, bold = NULL, align = NULL, header = TRUE)
 }
 \arguments{
 \item{x}{A \code{typst_table} object.}
