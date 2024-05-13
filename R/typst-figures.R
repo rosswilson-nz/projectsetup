@@ -23,8 +23,8 @@ tfig <- function(x, caption, label, placement = "auto",
   if (!is.null(caption) && (!is.character(caption) || length(caption) > 1)) stop("'caption' must be a character scalar")
   if (!is.null(label) && (!is.character(label) || length(label) > 1)) stop("'label' must be a character scalar")
   if (!is.null(placement) && (!is.character(placement) || length(placement) > 1)) stop("'placement' must be a character scalar")
-  if (!(is.null(width) || is.character(width) || is.numeric(width)) || length(width) != 1) stop("'width' must be a character or numeric scalar")
-  if (!(is.null(height) || is.character(height) || is.numeric(height)) || length(height) != 1) stop("'height' must be a character or numeric scalar")
+  if (!is.null(width) && (!(is.character(width) || is.numeric(width)) || length(width) != 1)) stop("'width' must be a character or numeric scalar")
+  if (!is.null(height) && (!(is.character(height) || is.numeric(height)) || length(height) != 1)) stop("'height' must be a character or numeric scalar")
   if (!is.null(footnotes) && !is.character(footnotes)) stop("'footnotes' must be a character vector")
 
   structure(list(
