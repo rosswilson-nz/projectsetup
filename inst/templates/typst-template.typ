@@ -104,15 +104,6 @@
     ]
   }
 
-  if toc {
-    block(above: 0em, below: 2em)[
-    #outline(
-      title: auto,
-      depth: none
-    );
-    ]
-  }
-
   show figure: it => {
     set block(spacing: 0.65em, breakable: true)
     show block: set align(left)
