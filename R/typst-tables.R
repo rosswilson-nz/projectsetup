@@ -301,7 +301,7 @@ add_vline <- function(x, before, start = 0, end = "none") {
 pack_rows <- function(x, start_row, end_row, label = NULL, italic = TRUE, bold = FALSE, indent = TRUE) {
   if (!inherits(x, "typst_table")) stop("'x' must be a `typst_table` object")
   if (!is.numeric(start_row) || length(start_row) != 1 || start_row > length(x$body)) stop("'start_row' must be a numeric scalar indexing rows of 'x'")
-  if (!is.numeric(end_row) || length(end_row) != 1 || end_row > start_row) stop("'end_row' must be a numeric scalar indexing rows of 'x'")
+  if (!is.numeric(end_row) || length(end_row) != 1 || end_row < start_row) stop("'end_row' must be a numeric scalar indexing rows of 'x'")
   if (!is.null(label) && (!is.character(label) || length(label) != 1)) stop("'label' must be a character scalar")
   if (!is.logical(italic) || length(italic) != 1) stop("'italic' must be a logical scalar")
   if (!is.logical(bold) || length(bold) != 1) stop("'bold' must be a logical scalar")
