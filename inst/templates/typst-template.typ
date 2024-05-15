@@ -108,6 +108,7 @@
     ]
   }
 
+  set figure(placement: auto)
   show figure: it => {
     set block(spacing: 0.65em, breakable: true)
     show block: set align(left)

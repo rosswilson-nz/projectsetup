@@ -133,6 +133,8 @@ add_templates <- function(package, workflow = "targets") {
             fs::path_wd(prefix, "reports", "_extensions", "cmor"))
   file.copy(system.file("templates", "typst-ref.lua", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports", "_extensions", "cmor"))
+  file.copy(system.file("templates", "typst.lua", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_extensions", "cmor"))
   file.copy(system.file("templates", "_extension-appendix.yml", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports", "_extensions", "cmor-appendix", "_extension.yml"))
   file.copy(system.file("templates", "template-appendix.typ", package = "CMORprojects", mustWork = TRUE),
@@ -146,6 +148,8 @@ add_templates <- function(package, workflow = "targets") {
   file.copy(system.file("templates", "typst-math.lua", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports", "_extensions", "cmor-appendix"))
   file.copy(system.file("templates", "typst-ref.lua", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports", "_extensions", "cmor-appendix"))
+  file.copy(system.file("templates", "typst.lua", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports", "_extensions", "cmor-appendix"))
   ## manuscript templates:
   file.copy(system.file("templates", "manuscript.qmd", package = "CMORprojects", mustWork = TRUE),
