@@ -32,10 +32,10 @@
   show par: set block(spacing: 0.55em)
   show heading: set block(above: 1.4em, below: 1em)
   show heading: set text(font: font)
-  show heading.where(level: 1): {
-    set heading(numbering: (..nums) => [Appendix #numbering("A:", nums.pos().at(0))])
-    set block(above: 0em, below: 2em)
-  }
+  show heading.where(level: 1): set heading(numbering: (..nums) => [
+    Appendix #numbering("A:", nums.pos().at(0))
+  ])
+  show heading.where(level: 1): set block(above: 0em, below: 2em)
   set bibliography(style: bibliographystyle, title: "References")
   set footnote.entry(
     separator: line(length: 100%),
@@ -57,10 +57,12 @@
     set text(size: fontsize)
     strong(it)
   }
-  show figure.where(kind: "suppl-table"): set figure(numbering: (..nums) => [#context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))],
-                                                     supplement: "Table")
-  show figure.where(kind: "suppl-image"): set figure(numbering: (..nums) => [#context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))],
-                                                     supplement: "Figure")
+  show figure.where(kind: "suppl-table"): set figure(numbering: (..nums) => [
+    #context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))
+  ], supplement: "Table")
+  show figure.where(kind: "suppl-image"): set figure(numbering: (..nums) => [
+    #context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))
+  ], supplement: "Figure")
   show ref: it => {
     let fig = figure
     let el = it.element

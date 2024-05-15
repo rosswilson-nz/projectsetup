@@ -10,7 +10,7 @@
 
 * Add `tfig()` for creating Typst figures in output
 
-* Add Typst table and figure formatting functions.
+* Add Typst table and figure formatting functions
 
 # CMORprojects 0.3.5
 

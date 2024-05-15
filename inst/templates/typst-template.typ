@@ -74,13 +74,17 @@
       let idx = affiliations.position(i => it == i) + 1
       [#super[#idx] #it]
     })
-    footnote(numbering: x => [#sym.zws])[#affiliations_fn.join(linebreak())#linebreak()#linebreak()]
+    footnote(numbering: x => [#sym.zws])[
+      #affiliations_fn.join(linebreak())#linebreak()#linebreak()
+    ]
     counter(footnote).update(0)
     let names = authors.map(author => {
       let affiliation = author.affiliation.map(aff =>
         str(affiliations.position(i => aff == i) + 1)).join(",")
       [#author.name#if author.email != "" {
-        [#footnote(numbering: "*")[Corresponding author.#linebreak()_Email_: #link("mailto:" + author.email.replace("\\", ""))]]
+        [#footnote(numbering: "*")[Corresponding author.#linebreak()_Email_: #link(
+          "mailto:" + author.email.replace("\\", "")
+        )]]
       }#super[#affiliation]]
     }).join(", ")
     align(center)[#par(justify: false)[#names]]
@@ -117,10 +121,12 @@
     set text(size: fontsize)
     strong(it)
   }
-  show figure.where(kind: "suppl-table"): set figure(numbering: (..nums) => [#context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))],
-                                                     supplement: "Table")
-  show figure.where(kind: "suppl-image"): set figure(numbering: (..nums) => [#context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))],
-                                                     supplement: "Figure")
+  show figure.where(kind: "suppl-table"): set figure(numbering: (..nums) => [
+    #context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))
+  ], supplement: "Table")
+  show figure.where(kind: "suppl-image"): set figure(numbering: (..nums) => [
+    #context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))
+  ], supplement: "Figure")
   show ref: it => {
     let fig = figure
     let el = it.element

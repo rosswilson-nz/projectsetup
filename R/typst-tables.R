@@ -336,13 +336,13 @@ pack_rows <- function(x, start_row, end_row, label = NULL, italic = TRUE, bold =
 cell_spec <- function(x, row, col, italic = NULL, bold = NULL, align = NULL) {
   if (!inherits(x, "typst_table")) stop("'x' must be a `typst_table` object")
   if (!is.numeric(row) || length(row) != 1 || row > length(x$body) || row <= 0) stop("'row' must be a numeric scalar indexing rows of 'x'")
-  if (!is.numeric(col) || length(col) != 1 || col > length(x$body[[row]] || col <= 0)) stop("'col' must be a numeric scalar indexing columns of 'x'")
+  if (!is.numeric(col) || length(col) != 1 || col > length(x$body[[row]]) || col <= 0) stop("'col' must be a numeric scalar indexing columns of 'x'")
   if (!is.null(italic) && (!is.logical(italic) || length(italic) != 1)) stop("'italic' must be a logical scalar")
   if (!is.null(bold) && (!is.logical(bold) || length(bold) != 1)) stop("'bold' must be a logical scalar")
   if (!is.null(align) && (!is.logical(character) || length(align) != 1)) stop("'align' must be a character string")
 
   out <- x
-  out$body[[row]][[cell]] <- apply_cell_spec(out$body[[row]][[cell]], italic, bold, align)
+  out$body[[row]][[col]] <- apply_cell_spec(out$body[[row]][[col]], italic, bold, align)
 
   out
 }
