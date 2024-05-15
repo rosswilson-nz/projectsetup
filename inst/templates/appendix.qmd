@@ -7,8 +7,4 @@ format:
 
 # Supplementary material
 
-```{=typst}
-#linebreak()
-```
-
 Supplementary material content
