@@ -44,6 +44,7 @@
   show footnote.entry: set align(left)
   set list(indent: 1em, marker: [•])
 
+  set figure(placement: none)
   show figure: it => {
     set block(spacing: 0.65em, breakable: true)
     show block: set align(left)

@@ -1,5 +1,5 @@
-```{=typst}
 ```{r figure-1}
-tfig(figure_1, "Figure title", "fig-1")
-```
+
+#tfig(figure_1, "Figure title", "fig-1")
+
 ```

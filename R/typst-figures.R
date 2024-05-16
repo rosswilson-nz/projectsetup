@@ -12,7 +12,7 @@
 #'     (as does the corresponding numbering in table cells).
 #'
 #' @export
-tfig <- function(x, caption, label, placement = "auto",
+tfig <- function(x, caption = NULL, label = NULL, placement = NULL,
                  width = NULL, height = NULL, footnotes = NULL) {
   if (is.character(x) && length(x) == 1 &&
       tolower(fs::path_ext(x)) %in% c("png", "jpeg", "jpg", "gif", "svg")) {
@@ -60,10 +60,10 @@ knit_print.typst_figure <- function(x, ...) {
 
   # wrap in (inner) figure(), with metadata, and (outer) figure(), with footnotes
   out <- paste0(
-    "#figure(placement: ", x$placement, ", kind: \"none\", supplement: none)[
-  #figure(caption: [", x$caption, "],
-          kind: ", kind, ",
-          [", content, "]) <", x$label, ">
+    "#figure(", if(!is.null(x$placement)) paste0("placement: ", x$placement, ", "), "kind: \"none\", supplement: none)[
+  #figure(", if (!is.null(x$caption)) paste0("caption: [", x$caption, "],
+          "),  "kind: ", kind, ",
+          [", content, "])", if (!is.null(x$label)) paste0(" <", x$label, ">"), "
 
   ",
     paste(x$footnotes, collapse = "

@@ -23,7 +23,7 @@
 #'     (as does the corresponding numbering in table cells).
 #'
 #' @export
-ttab <- function(x, caption, label, align = "left", widths = "auto", placement = "auto", footnotes = NULL) {
+ttab <- function(x, caption = NULL, label = NULL, align = "left", widths = "auto", placement = NULL, footnotes = NULL) {
   if (!is.data.frame(x)) stop("'x' must be a data frame")
   if (!is.null(caption) && (!is.character(caption) || length(caption) > 1)) stop("'caption' must be a character scalar")
   if (!is.null(label) && (!is.character(label) || length(label) > 1)) stop("'label' must be a character scalar")
@@ -509,8 +509,8 @@ knit_print.typst_table <- function(x, ...) {
     ", out, "
   ],
   kind: ", kind, if (!is.null(x$caption)) paste0(",
-  caption: figure.caption(position: top)[", x$caption, "]"), ",
-  placement: ", x$placement, "
+  caption: figure.caption(position: top)[", x$caption, "]"), if(!is.null(x$placement)) paste0(",
+  placement: ", x$placement), "
 )", if (!is.null(x$label)) paste0(" <", x$label, ">")
   )
 
