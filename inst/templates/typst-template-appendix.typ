@@ -74,10 +74,15 @@
     let el = it.element
     if el != none and el.func() == fig and (el.kind == "suppl-table" or el.kind == "suppl-image") {
       // Override references for supplementary tables.
-      link(el.location())[#el.supplement #numbering(
+      link(el.location())[#el.supplement~#numbering(
          "A",
          ..counter(heading).at(el.location())
        )#numbering(
+         "1",
+         ..counter(fig.where(kind: el.kind)).at(el.location())
+       )]
+    } else if el != none and el.func() == fig and (el.kind == "table" or el.kind == "image"){
+      link(el.location())[#el.supplement~#numbering(
          "1",
          ..counter(fig.where(kind: el.kind)).at(el.location())
        )]
