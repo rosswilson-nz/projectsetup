@@ -6,7 +6,7 @@ author:
       - ref: cmor
   - name: Author 2
     affiliations:
-      -ref: elsewhere
+      - ref: elsewhere
 affiliations:
   - id: cmor
     name: University of Otago

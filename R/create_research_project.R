@@ -62,7 +62,7 @@ create_research_project <- function(
           readLines(fs::path_home_r(".Rprofile"))
         },
         ## Remove this temporary Rprofile once it's done what it needs to do
-        ".Last <- function() invisible(fs::file_delete('.Rprofile'))",
+        ".Last <- function() if(fs::file_exists('.Rprofile')) invisible(fs::file_delete('.Rprofile'))",
         ## Continue project setup
         "",
         "cli::cli_text('{.strong Initial project setup:}')",
@@ -106,7 +106,10 @@ create_research_project <- function(
                  "to specify the analysis workflow.')"),
           paste0("cli::cli_alert_info('(See {.url https://books.ropensci.org/targets/} for more ",
                  "information on the {.pkg targets} package.)')")
-        )
+        ),
+        "cli::cli_text()",
+        "cli::cli_text('{.strong A restart is required to finalise project set-up}')",
+        "if (usethis::ui_yeah('Is it ok to restart now?')) rstudioapi::openProject()"
       ),
       fileConn
     )

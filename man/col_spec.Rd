@@ -11,10 +11,14 @@ col_spec(x, cols, italic = NULL, bold = NULL, align = NULL, header = TRUE)
 
 \item{cols}{Which columns to apply the formatting to}
 
-\item{italic, bold}{(optional) Which formatting to apply. Defaults to none.}
+\item{italic, bold}{(optional) Logical scalars. Apply italic or bold formatting.}
+
+\item{align}{(optional) Align cell contents. Specified as in Typst's
+\verb{#table.cell()}.}
 
 \item{header}{Also apply formatting to header rows? Defaults to \code{TRUE}.}
 }
 \description{
-More formatting options will be added in a later version.
+More formatting options will be added in a later version. All formatting
+arguments default to \code{NULL}, keeping the current cell formatting.
 }

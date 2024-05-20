@@ -385,11 +385,14 @@ row_spec <- function(x, rows, italic = NULL, bold = NULL, align = NULL) {
 
 #' Apply formatting to table columns
 #'
-#' More formatting options will be added in a later version.
+#' More formatting options will be added in a later version. All formatting
+#'     arguments default to `NULL`, keeping the current cell formatting.
 #'
 #' @param x A `typst_table` object.
 #' @param cols Which columns to apply the formatting to
-#' @param italic,bold (optional) Which formatting to apply. Defaults to none.
+#' @param italic,bold (optional) Logical scalars. Apply italic or bold formatting.
+#' @param align (optional) Align cell contents. Specified as in Typst's
+#'     `#table.cell()`.
 #' @param header Also apply formatting to header rows? Defaults to `TRUE`.
 #'
 #' @export

@@ -122,12 +122,16 @@
     set text(size: fontsize)
     strong(it)
   }
-  show figure.where(kind: "suppl-table"): set figure(numbering: (..nums) => [
-    #context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))
-  ], supplement: "Table")
-  show figure.where(kind: "suppl-image"): set figure(numbering: (..nums) => [
-    #context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))
-  ], supplement: "Figure")
+  show figure.where(kind: "suppl-table"): set figure(
+    numbering: (..nums) =>
+      [#context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))],
+    supplement: "Table"
+  )
+  show figure.where(kind: "suppl-image"): set figure(
+    numbering: (..nums) =>
+      [#context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))],
+    supplement: "Figure"
+  )
   show ref: it => {
     let fig = figure
     let el = it.element

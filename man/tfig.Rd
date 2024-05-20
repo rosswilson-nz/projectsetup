@@ -6,9 +6,9 @@
 \usage{
 tfig(
   x,
-  caption,
-  label,
-  placement = "auto",
+  caption = NULL,
+  label = NULL,
+  placement = NULL,
   width = NULL,
   height = NULL,
   footnotes = NULL

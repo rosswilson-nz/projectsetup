@@ -7,6 +7,9 @@
 #'     have length 1.
 #' @param output_file Character string, file path to the docx output file to
 #'     create.
+#' @param appendix Logical scalar. Whether the file should be treated as an
+#'     appendix, in which case the raw Typst output is kept instead of the
+#'     rendered PDF.
 #' @param include (optional) Character vector, file paths to other source files
 #'     (e.g. included via Quarto includes in `path`).
 #' @param file_reference_docx (optional) Symbol, existing target containing the

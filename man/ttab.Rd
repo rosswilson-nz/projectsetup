@@ -6,11 +6,11 @@
 \usage{
 ttab(
   x,
-  caption,
-  label,
+  caption = NULL,
+  label = NULL,
   align = "left",
   widths = "auto",
-  placement = "auto",
+  placement = NULL,
   footnotes = NULL
 )
 }

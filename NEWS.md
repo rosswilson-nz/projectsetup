@@ -1,4 +1,4 @@
-# CMORprojects 0.3.5.9000
+# CMORprojects 0.4.0
 
 * Correct set-up of new project folder when no user .Rprofile is found
 

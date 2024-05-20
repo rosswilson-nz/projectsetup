@@ -1,7 +1,7 @@
 # This file defines the targets in the project analysis plan
 
 # Simple skeleton outline of analysis plan - revise as required
-targets <- list(
+targets <- rlang::list2(
 #   tar_file(data_file, "raw_data/data.csv"),
 # 	tar_target(data, read_raw_data(data_file)),
 # 	tar_target(clean, process_data(data)),
