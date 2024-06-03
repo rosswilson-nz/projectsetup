@@ -63,6 +63,7 @@ knit_print.typst_figure <- function(x, ...) {
     "#figure(", if(!is.null(x$placement)) paste0("placement: ", x$placement, ", "), "kind: \"none\", supplement: none)[
   #figure(", if (!is.null(x$caption)) paste0("caption: [", x$caption, "],
           "),  "kind: ", kind, ",
+          placement: none,
           [", content, "])", if (!is.null(x$label)) paste0(" <", x$label, ">"), "
 
   ",
