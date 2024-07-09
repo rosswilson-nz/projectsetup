@@ -1,6 +1,6 @@
 Package: CMORprojects
 Title: Implement CMOR Data Analysis Project Workflow
-Version: 0.4.0
+Version: 0.4.0.9000
 Authors@R: 
     person("Ross", "Wilson", , "ross.wilson@otago.ac.nz", role = c("aut", "cre"))
 Description: CMORprojects provides tools to optimise a research project data
@@ -34,5 +34,6 @@ Suggests:
     here,
     formattr,
     tidyverse,
-    tibble
+    tibble,
+    ggplot2
 Config/testthat/edition: 3

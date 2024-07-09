@@ -1,3 +1,7 @@
+# CMORprojects 0.4.0.9000
+
+* Add `save_plots()` to save plots to SVG figure files
+
 # CMORprojects 0.4.0
 
 * Correct set-up of new project folder when no user .Rprofile is found
