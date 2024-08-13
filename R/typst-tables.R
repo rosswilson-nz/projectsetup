@@ -1,6 +1,19 @@
+#' @export
+knit_print.ttables_tbl <- function(x, ...) {
+  structure(print_typst(x), class = "knit_asis")
+}
+print_typst <- function(x) glue::glue("\n```{{=typst}}\n{ttables::as_typst(x)}```\n", .trim = FALSE)
+
+
 ## To-do: add checks on appropriate input types/sizes/etc in each of these functions
 
 #' Create tables in Typst format
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is deprecated in favour of the new versions provided by the
+#' `ttables` package.
 #'
 #' This is a table generator inspired by the *kableExtra* package. This base
 #' function takes an R data frame and sets up a basic Typst table. Auxiliary
@@ -22,8 +35,11 @@
 #'     footnotes. At this stage, footnote numbering needs to be added manually
 #'     (as does the corresponding numbering in table cells).
 #'
+#' @keywords internal
 #' @export
 ttab <- function(x, caption = NULL, label = NULL, align = "left", widths = "auto", placement = NULL, footnotes = NULL) {
+  lifecycle::deprecate_warn("0.5.0", "ttab()", "ttables::ttab()")
+
   if (!is.data.frame(x)) stop("'x' must be a data frame")
   if (!is.null(caption) && (!is.character(caption) || length(caption) > 1)) stop("'caption' must be a character scalar")
   if (!is.null(label) && (!is.character(label) || length(label) > 1)) stop("'label' must be a character scalar")

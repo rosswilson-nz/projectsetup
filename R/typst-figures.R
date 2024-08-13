@@ -1,4 +1,15 @@
+#' @export
+knit_print.ttables_fig <- function(x, ...) {
+  structure(print_typst(x), class = "knit_asis")
+}
+
 #' Create figures in Typst format
+
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is deprecated in favour of the new versions provided by the
+#' `ttables` package.
 #'
 #' This wraps the path to a saved image in a Typst figure environment with caption and label.
 #'
@@ -14,6 +25,8 @@
 #' @export
 tfig <- function(x, caption = NULL, label = NULL, placement = NULL,
                  width = NULL, height = NULL, footnotes = NULL) {
+  lifecycle::deprecate_warn("0.5.0", "tfig()", "ttables::tfig()")
+
   if (is.character(x) && length(x) == 1 &&
       tolower(fs::path_ext(x)) %in% c("png", "jpeg", "jpg", "gif", "svg")) {
     image <- fs::path_rel(x, "reports")

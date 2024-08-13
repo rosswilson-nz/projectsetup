@@ -30,5 +30,10 @@ footnotes. At this stage, footnote numbering needs to be added manually
 (as does the corresponding numbering in table cells).}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is deprecated in favour of the new versions provided by the
+\code{ttables} package.
+
 This wraps the path to a saved image in a Typst figure environment with caption and label.
 }

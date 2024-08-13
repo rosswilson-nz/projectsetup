@@ -1,3 +1,7 @@
+# CMORprojects 0.5.0
+
+* Deprecate `ttab()` and friends in favour of the new functions in the `ttables` package.
+
 # CMORprojects 0.4.0
 
 * Correct set-up of new project folder when no user .Rprofile is found
