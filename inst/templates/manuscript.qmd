@@ -29,15 +29,17 @@ abstract: |
 format:
   cmor-typst:
     include-after-body:
-      - text: '#include "appendix.typ"'
+      - text: '// #include "appendix.typ"'
 ---
 
 {{< include _setup.qmd >}}
 
 <!-- Load any appendices etc. so targets can track dependencies -->
 <!-- The resulting Typst file is included in the output via the metadata -->
+<!-- Remove the leading // in the #include line in 'include-after-body' above -->
+<!-- Add additional '- text: #include ...' as needed for multiple appendices -->
 ```{r}
-tar_load(c(appendix), store = store)
+#tar_load(c(appendix), store = store)
 ```
 
 
@@ -64,7 +66,7 @@ Add callout blocks like this
 
 <br>
 
-<!-- Reference tables with @tbl-1 and figures with @fig-1, and cite bibliography references with @Wilson2024. -->
+<!-- Reference tables with e.g. @tbl-1 and figures with @fig-1, and cite bibliography references with @zhang08 -->
 
 # Discussion
 
