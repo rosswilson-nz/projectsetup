@@ -3,6 +3,14 @@ knit_print.ttables_fig <- function(x, ...) {
   structure(print_typst(x), class = "knit_asis")
 }
 
+#' @export
+typst_figure <- function(x, caption = NULL, label = NULL, placement = "auto",
+                         width = "auto", height = "auto", footnotes = NULL) {
+  x <- fs::path_rel(x, "reports")
+  ttables::tfig(x, caption = caption, label = label, placement = placement,
+                width = width, height = height, footnotes = footnotes)
+}
+
 #' Create figures in Typst format
 
 #' @description
