@@ -1,3 +1,7 @@
+# CMORprojects 0.5.1
+
+* Add `typst_figure()` wrapper around `ttables::tfig()`.
+
 # CMORprojects 0.5.0
 
 * Deprecate `ttab()` and friends in favour of the new functions in the `ttables` package.
