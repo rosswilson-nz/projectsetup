@@ -147,6 +147,9 @@ add_templates <- function(package, workflow = "targets") {
             fs::path_wd(prefix, "reports", "_extensions", "cmor-appendix"))
   file.copy(system.file("templates", "typst-ref.lua", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports", "_extensions", "cmor-appendix"))
+  ## Word template styles
+  file.copy(system.file("templates", "word-styles-reference-01.docx", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd(prefix, "reports"))
   ## manuscript templates:
   file.copy(system.file("templates", "manuscript.qmd", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd(prefix, "reports"))

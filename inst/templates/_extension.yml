@@ -24,3 +24,5 @@ contributes:
         - typst-ref.lua
       citeproc: false
       keep-typ: true
+    docx:
+      reference-doc: word-styles-reference-01.docx

@@ -1,12 +1,24 @@
 #' @export
-knit_print.ttables_tbl <- function(x, ...) {
-  structure(print_typst(x), class = "knit_asis")
+knit_print.ttables_tbl <- function(x, options, ...) {
+  format <- get_output_format(options)
+  out <- switch(format,
+                typst = print_typst(x),
+                docx = print_docx(x),
+                default = print_default(x, ...))
+  structure(out, class = "knit_asis")
 }
-print_typst <- function(x) glue::glue("\n```{{=typst}}\n{ttables::as_typst(x)}```\n", .trim = FALSE)
-
-
-## To-do: add checks on appropriate input types/sizes/etc in each of these functions
-
+print_typst <- function(x) glue::glue("\n```{{=typst}}\n{ttables::as_typst(x)}\n```\n", .trim = FALSE)
+print_docx <- function(x) glue::glue("\n```{{=openxml}}\n{ttables::as_docx(x)}\n```\n", .trim = FALSE)
+print_default <- function(x, ...) {
+  out <- x$`_body`
+  colnames(out) <- unlist(x$`_header`[nrow(x$`_header`), ])
+  knit_print(out, ...)
+}
+get_output_format <- function(options) {
+  if (grepl("typst", options$cache.path)) return("typst")
+  if (grepl("docx", options$cache.path)) return("docx")
+  "default"
+}
 #' Create tables in Typst format
 #'
 #' @description

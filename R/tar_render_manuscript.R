@@ -153,8 +153,10 @@ tar_quarto_run <- function (args, deps, sources, output, input, appendix) {
   args <- args[!vapply(args, is.null, logical(1))]
   do.call(what = quarto::quarto_render, args = args)
   if (appendix) {
-    fs::file_delete(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output)))
-    output <- fs::path_ext_set(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output)), "typ")
+    formats <- fs::path_ext(output)
+    fs::file_delete(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output[formats == "pdf"])))
+    output[formats == "pdf"] <- fs::path_ext_set(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output[formats == "pdf"])), "typ")
+    fs::file_move(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output[formats != "pdf"])), output[formats != "pdf"])
   } else {
     fs::file_move(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output)), output)
   }
