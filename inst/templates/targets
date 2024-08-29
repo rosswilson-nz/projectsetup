@@ -8,7 +8,7 @@ library(CMORprojects)
 options(tidyverse.quiet = TRUE)
 
 # Define fixed parameters
-source("{{#is_package}}inst/{{/is_package}}parameters.R")
+source("parameters.R")
 
 # Load functions
 tar_source()

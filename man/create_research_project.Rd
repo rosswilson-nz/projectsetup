@@ -6,7 +6,6 @@
 \usage{
 create_research_project(
   path,
-  workflow = "targets",
   git = TRUE,
   raw_data_in_git = TRUE,
   github = TRUE,
@@ -18,9 +17,6 @@ create_research_project(
 }
 \arguments{
 \item{path}{Path to the new project.}
-
-\item{workflow}{Character string: \code{"targets"}, \code{"drake"} or
-\code{"make"}, to create corresponding workflow template files.}
 
 \item{git}{Logical (default = \code{TRUE}). Whether to create a git
 repository.}

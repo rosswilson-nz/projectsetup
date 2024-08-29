@@ -4,7 +4,7 @@
 \alias{use_cmor_readme}
 \title{Create a skeleton README file for CMOR research projects}
 \usage{
-use_cmor_readme(data, open = rlang::is_interactive())
+use_cmor_readme(data)
 }
 \arguments{
 \item{data}{List of variables used by \code{cmor-readme} template.}

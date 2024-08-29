@@ -1,3 +1,7 @@
+# CMORprojects 0.7.0
+
+* Redesign `create_research_project()`
+
 # CMORprojects 0.6.0
 
 * Move all `typst_figure()` code from `ttables`.

@@ -8,19 +8,13 @@
 #' @param open Whether to open the new README.Rmd file for editing.
 #'
 #' @export
-use_cmor_readme <- function(data, open = rlang::is_interactive()) {
+use_cmor_readme <- function(data) {
   template <- system.file("templates", "cmor-readme", package = "CMORprojects", mustWork = TRUE)
 
   template_out <- whisker::whisker.render(readLines(template), data)
   writeLines(template_out, "README.Rmd")
 
-  if (data$is_package) usethis::use_build_ignore("README.Rmd")
-
   cli::cli_alert_success("Basic README file created")
-
-  if (rstudioapi::isAvailable()) rstudioapi::navigateToFile("README.Rmd")
-
-  if (data$is_package) usethis::use_build_ignore("^README-.*\\.png$", escape = FALSE)
 
   invisible(TRUE)
 }
