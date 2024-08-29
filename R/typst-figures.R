@@ -1,23 +1,76 @@
 #' @export
-knit_print.ttables_fig <- function(x, ...) {
-  structure(print_typst(x), class = "knit_asis")
+knit_print.CMORprojects_fig <- function(x, options, ...) {
+  format <- get_output_format(options)
+  out <- switch(format,
+                typst = print_figure_typst(x),
+                default = print_figure_default(x, ...))
+  knitr::asis_output(out)
+}
+print_figure_default <- function(x, ...) {
+  image <- x$`_image`
+  opts <- x$`_opts`
+  footnotes <- x$`_footnotes`
+
+  attrs <- glue::glue("{label}{width}{height}",
+                      label = if (!is.null(opts$label)) glue::glue("#{opts$label}"),
+                      width = if (!is.null(opts$width) && opts$width != "auto") glue::glue(" width={opts$width}"),
+                      height = if (!is.null(opts$height) && opts$height != "auto") glue::glue(" height={opts$height}"),
+                      .null = NULL)
+  fns <- if (!is.null(footnotes)) glue::glue_collapse(footnotes, sep = "  \n")
+
+  glue::glue("\n\n![{caption}]({image}){attrs}{footnotes}\n\n",
+             caption = opts$caption,
+             attrs = if (length(attrs)) glue::glue("{{{attrs}}}"),
+             footnotes = if (!is.null(footnotes)) glue::glue("  \n{fns}"),
+             .null = NULL)
 }
 
-#' @export
-typst_figure <- function(x, caption = NULL, label = NULL, placement = "auto",
-                         width = "auto", height = "auto", footnotes = NULL) {
-  x <- fs::path_rel(x, "reports")
-  ttables::tfig(x, caption = caption, label = label, placement = placement,
-                width = width, height = height, footnotes = footnotes)
+print_figure_typst <- function(x, ...) {
+  opts <- x$`_opts`
+  footnotes <- x$`_footnotes`
+  image <- print_image_typst(x$`_image`, opts)
+  kind <- if (opts$supplement) "\"suppl-image\"" else "image"
+
+  inner <- glue::glue(
+    "  #figure({caption}kind: {kind}, placement: none,\n  [{image}]){label}{footer}",
+    caption = glue::glue("caption: [{opts$caption}], "),
+    label = glue::glue(" <{opts$label}>"),
+    footer = glue::glue("\n\n  {footnotes}",
+                        footnotes = glue::glue_collapse(footnotes, ",\n\n  "),
+                        .trim = FALSE),
+    .null = NULL, .trim = FALSE
+  )
+  glue::glue(
+    '\n```{{=typst}}\n\n#figure({placement}kind: "none", supplement: none)[\n{inner}\n]\n\n```\n',
+    placement = glue::glue("placement: {opts$placement}, "),
+    .null = NULL, .trim = FALSE
+  )
+}
+
+print_image_typst <- function(image, opts) {
+  image <- get_image_typst(image)
+  glue::glue('#image("{image}"{width}{height})',
+             width = glue::glue(", width: {opts$width}"),
+             height = glue::glue(", height: {opts$height}"),
+             .null = NULL,
+             .trim = FALSE)
+}
+
+get_image_typst <- function(path) {
+  if (fs::file_access(fs::path_ext_set(path, "svg"), "read")) return(fs::path_ext_set(path, "svg"))
+  if (fs::file_access(fs::path_ext_set(path, "png"), "read")) return(fs::path_ext_set(path, "png"))
+  if (fs::file_access(fs::path_ext_set(path, "jpg"), "read")) return(fs::path_ext_set(path, "jpg"))
+  if (fs::file_access(fs::path_ext_set(path, "jpeg"), "read")) return(fs::path_ext_set(path, "jpeg"))
+  if (fs::file_access(fs::path_ext_set(path, "gif"), "read")) return(fs::path_ext_set(path, "gif"))
+  stop("Suitable image not found at", path)
 }
 
 #' Create figures in Typst format
-
+#'
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' This function is deprecated in favour of the new versions provided by the
-#' `ttables` package.
+#' This function is deprecated in favour of `typst_figure()`.
 #'
 #' This wraps the path to a saved image in a Typst figure environment with caption and label.
 #'
@@ -26,79 +79,178 @@ typst_figure <- function(x, caption = NULL, label = NULL, placement = "auto",
 #' @param label Figure label, used for cross-referencing
 #' @param placement (optional) Figure placement. As in Typst's #figure() function.
 #' @param width,height (optional) Image width and height. As in Typst's #image() function.
-#' @param footnotes Footnotes to add below the table. Pass a vector for multiple
-#'     footnotes. At this stage, footnote numbering needs to be added manually
-#'     (as does the corresponding numbering in table cells).
+#' @param footnotes Footnotes to add below the table.
 #'
 #' @export
 tfig <- function(x, caption = NULL, label = NULL, placement = NULL,
                  width = NULL, height = NULL, footnotes = NULL) {
-  lifecycle::deprecate_warn("0.5.0", "tfig()", "ttables::tfig()")
+  lifecycle::deprecate_warn("0.6.0", "tfig()", "typst_figure()")
+  typst_figure(x, caption, label, placement %||% "auto",
+               width %||% "auto", height %||% "auto", footnotes)
+}
 
+#' Create figures in Typst format
+#'
+#' This wraps the path to a saved image in a Typst figure environment with caption and label.
+#'
+#' @param x Path to a saved image in SVG, PNG, JPEG, or GIF format.
+#' @param caption The figure caption.
+#' @param label Figure label, used for cross-referencing
+#' @param placement (optional) Figure placement. As in Typst's #figure() function.
+#' @param width,height (optional) Image width and height. As in Typst's #image() function.
+#' @param footnotes Footnotes to add below the table.
+#'
+#' @export
+typst_figure <- function(x, caption = NULL, label = NULL, placement = "auto",
+                         width = "auto", height = "auto", footnotes = NULL) {
+  `_image` <- check_image_path(fs::path_rel(x, "reports"))
+
+  `_opts` <- collate_initial_figure_opts(caption = caption,
+                                         label = label,
+                                         placement = placement,
+                                         width = width,
+                                         height = height)
+  `_footnotes` <- check_footnotes(footnotes)
+
+  structure(list(
+    `_image` = `_image`,
+    `_opts` = `_opts`,
+    `_footnotes` = `_footnotes`
+  ), class = "CMORprojects_fig")
+}
+
+check_image_path <- function(x) {
   if (is.character(x) && length(x) == 1 &&
-      tolower(fs::path_ext(x)) %in% c("png", "jpeg", "jpg", "gif", "svg")) {
-    image <- fs::path_rel(x, "reports")
+      tolower(fs::path_ext(x)) %in% c("png", "jpeg", "jpg", "gif", "svg", "")) {
+    `_image` <- fs::path(x)
   } else {
     stop("`x` must be the path to an image file in format SVG (preferred), PNG, JPEG, or GIF")
   }
-  if (!is.null(caption) && (!is.character(caption) || length(caption) > 1)) stop("'caption' must be a character scalar")
-  if (!is.null(label) && (!is.character(label) || length(label) > 1)) stop("'label' must be a character scalar")
-  if (!is.null(placement) && (!is.character(placement) || length(placement) > 1)) stop("'placement' must be a character scalar")
-  if (!is.null(width) && (!(is.character(width) || is.numeric(width)) || length(width) != 1)) stop("'width' must be a character or numeric scalar")
-  if (!is.null(height) && (!(is.character(height) || is.numeric(height)) || length(height) != 1)) stop("'height' must be a character or numeric scalar")
-  if (!is.null(footnotes) && !is.character(footnotes)) stop("'footnotes' must be a character vector")
+}
 
-  structure(list(
-    image = image,
-    placement = placement,
-    width = width,
-    height = height,
-    caption = caption,
-    label = label,
-    footnotes = footnotes
-  ), class = "typst_figure")
+check_footnotes <- function(x) {
+  if (!is.null(x) && !is.character(x)) stop("'footnotes' must be a character vector")
+  x
+}
+
+new_figure_opts <- function(width, height, placement, caption, label, supplement, landscape) {
+  if (missing(width)) width <- auto()
+  if (missing(height)) height <- auto()
+  if (missing(placement)) placement <- auto()
+  if (missing(caption)) caption <- character()
+  if (missing(label)) label <- character()
+  if (missing(supplement)) supplement <- FALSE
+  if (missing(landscape)) landscape <- FALSE
+
+  structure(
+    list(width = width,
+         height = height,
+         placement = placement,
+         caption = caption,
+         label = label,
+         supplement = supplement,
+         landscape = landscape),
+    class = "ttables_figure_opts"
+  )
 }
 
 #' @export
-knit_print.typst_figure <- function(x, ...) {
-  kind <- if (isTRUE(attr(x, "supplement"))) "\"suppl-image\"" else "image"
+print.ttables_figure_opts <- function(x, ...) {
+  NextMethod()
+}
 
-  # inner content (image)
-  content <- paste0(
-    "#image(\"", x$image, "\"",
-    if (!is.null(x$width)) paste0(",
-            width: ", x$width),
-    if (!is.null(x$height)) paste0(",
-            height: ", x$height), ")"
-  )
+#' Set Typst figure options
+#'
+#' @param x A Typst figure
+#' @param width,height Figure width and height. Either `"auto"` or a Typst
+#'     [length](https://typst.app/docs/reference/visualize/image/#parameters-width)
+#'     specification.
+#' @param placement Figure placement. Either `"none"`, `"auto"`, `"top"`,
+#'     `"bottom"`. The default is `"auto"`.
+#' @param caption The figure caption.
+#' @param label Figure label, used for cross-referencing
+#' @param supplement Whether the figure is to be placed in supplementary material
+#'     in the output. This only changes the Typst 'kind' parameter to
+#'     `"suppl-image"` instead of `"image"`. Typst templates may make use of
+#'     this to format the figure differently. Default is `FALSE.`
+#' @param landscape Whether the figure should be placed on its own landscape
+#'     page. Default is `FALSE`.
+#'
+#' @returns A Typst figure with the specified options set.
+set_figure_options <- function(x, width, height, placement, caption, label,
+                               supplement, landscape) {
+  stopifnot(inherits(x, "ttables_fig"))
 
-  # additional styling, if needed
-  if (!is.null(attr(x, "styling"))) { # additional styling, if needed
-    content <- paste(paste("#", attr(x, "styling"), sep = "", collapse = "
-"), content, sep = "
-")
+  opts <- x$`_opts`
+
+  if (!missing(width)) opts$width <- check_width(width)
+  if (!missing(height)) opts$height <- check_height(height)
+  if (!missing(placement)) opts$placement <- check_placement(placement)
+  if (!missing(caption)) opts$caption <- check_caption(caption)
+  if (!missing(label)) opts$label <- check_label(label)
+  if (!missing(supplement)) opts$supplement <- check_supplement(supplement)
+  if (!missing(landscape)) opts$landscape <- check_landscape(landscape)
+
+  x$`_opts` <- opts
+  x
+}
+
+check_caption <- function(x) {
+  if (is.null(x) || rlang::is_scalar_character(x)) return(x)
+  rlang::abort("'caption' must be a character string")
+}
+
+check_label <- function(x) {
+  if (is.null(x) || (rlang::is_scalar_character(x) && !grepl("[^[:alnum:]_:.-]", x))) return(x)
+  rlang::abort("'label' must be a character string representing a valid Typst label")
+}
+
+check_placement <- function(x) {
+  if (rlang::is_scalar_character(x)) {
+    if (x == "auto") return(ttables::auto())
+    if (x == "none") return(ttables::none())
+    x <- ttables::as_vert_alignment(x)
+    if (x != "horizon") return(x)
   }
+  rlang::abort("Invalid placement")
+}
 
-  # wrap in (inner) figure(), with metadata, and (outer) figure(), with footnotes
-  out <- paste0(
-    "#figure(", if(!is.null(x$placement)) paste0("placement: ", x$placement, ", "), "kind: \"none\", supplement: none)[
-  #figure(", if (!is.null(x$caption)) paste0("caption: [", x$caption, "],
-          "),  "kind: ", kind, ",
-          placement: none,
-          [", content, "])", if (!is.null(x$label)) paste0(" <", x$label, ">"), "
+check_width <- function(x) {
+  if (rlang::is_scalar_character(x)) {
+    switch(x,
+           auto = ttables::auto(),
+           ttables::as_relative(x))
+  } else rlang::abort("Invalid width")
+}
 
-  ",
-    paste(x$footnotes, collapse = "
+check_height <- function(x) {
+  if (rlang::is_scalar_character(x)) {
+    switch(x,
+           auto = ttables::auto(),
+           ttables::as_relative(x))
+  } else rlang::abort("Invalid height")
+}
 
-  "),
-    "
-]"
-  )
+check_supplement <- function(x) {
+  if (rlang::is_scalar_logical(x)) return(x)
+  rlang::abort("'supplement' must be a logical scalar")
+}
 
-  # wrap in blank lines to separate from surrounding content
-  out <- paste0("
-", out, "
-")
+check_landscape <- function(x) {
+  if (rlang::is_scalar_logical(x)) return(x)
+  rlang::abort("'landscape' must be a logical scalar")
+}
 
-  structure(out, class = "knit_asis")
+collate_initial_figure_opts <- function(caption, label, placement, width, height) {
+  caption <- check_caption(caption)
+  label <- check_label(label)
+  placement <- check_placement(placement)
+  width <- check_width(width)
+  height <- check_height(height)
+
+  new_figure_opts(caption = caption,
+                  label = label,
+                  placement = placement,
+                  width = width,
+                  height = height)
 }

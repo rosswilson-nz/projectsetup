@@ -4,14 +4,16 @@ knit_print.ttables_tbl <- function(x, options, ...) {
   out <- switch(format,
                 typst = print_typst(x),
                 docx = print_docx(x),
-                default = print_default(x, ...))
-  structure(out, class = "knit_asis")
+                default = print_table_default(x, ...))
+  knitr::asis_output(out, attr(out, "knit_meta"), attr(out, "knit_cacheable") %||% NA)
 }
 print_typst <- function(x) glue::glue("\n```{{=typst}}\n{ttables::as_typst(x)}\n```\n", .trim = FALSE)
 print_docx <- function(x) glue::glue("\n```{{=openxml}}\n{ttables::as_docx(x)}\n```\n", .trim = FALSE)
-print_default <- function(x, ...) {
-  out <- x$`_body`
-  colnames(out) <- unlist(x$`_header`[nrow(x$`_header`), ])
+print_table_default <- function(x, ...) {
+  out <- knitr::kable(x$`_body`,
+                      caption = x$`_opts`$caption,
+                      label = x$`_opts`$label,
+                      col.names = unlist(x$`_header`[nrow(x$`_header`), ]))
   knit_print(out, ...)
 }
 get_output_format <- function(options) {

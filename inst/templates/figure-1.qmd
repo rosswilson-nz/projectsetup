@@ -1,5 +1,5 @@
 ```{r figure-1}
 
-#tfig(figure_1, "Figure title", "fig-1")
+#typst_figure(figure_1, "Figure title", "fig-1")
 
 ```

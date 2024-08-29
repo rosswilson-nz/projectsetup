@@ -1,3 +1,7 @@
+# CMORprojects 0.6.0
+
+* Move all `typst_figure()` code from `ttables`.
+
 # CMORprojects 0.5.1
 
 * Add `typst_figure()` wrapper around `ttables::tfig()`.
