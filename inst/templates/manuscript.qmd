@@ -40,7 +40,7 @@ format:
 <!-- Remove the leading // in the #include line in 'include-after-body' above -->
 <!-- Add additional '- text: #include ...' as needed for multiple appendices -->
 ```{r}
-#tar_load(c(appendix), store = store)
+tar_load(c(appendix), store = store)
 ```
 
 

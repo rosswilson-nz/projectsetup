@@ -32,8 +32,8 @@ create_research_project <- function(
   use_project_directory(git = git, raw_data_in_git = raw_data_in_git)
   if (git) {
     use_git()
-    if (github) if (ui_yeah("Is it ok to push this repository to GitHub?"))
-      use_github(private = private, organisation = organisation)
+    if (github) if (usethis::ui_yeah("Is it ok to push this repository to GitHub?"))
+      usethis::use_github(private = private, organisation = organisation)
   } else {
     github <- FALSE
   }
@@ -48,16 +48,16 @@ create_research_project <- function(
     )
   }
   use_cmor_readme(data)
-  cli::cli_alert_success("DONE!")
-  cli::cli_rule()
-  cli::cli_bullets(c(
+  cli_alert_success("DONE!")
+  cli_rule()
+  cli_bullets(c(
     "In the new project:",
     "*" = "Edit {.file README.Rmd} to provide an introduction to the project",
     "*" =if (github)  "Render {.file README.Rmd} to {.file README.md} for GitHub",
     "*" = "Use {.file _targets.R}, {.file _plan.R}, and {.file parameters.R} to specify the analysis workflow",
     "i" = "See {.url https://books.ropensci.org/targets/} for more information on the {.pkg targets} package."
   ))
-  cli::cli_rule()
+  cli_rule()
 
-  if (open) if (ui_yeah("Open the new project now?")) proj_activate(path)
+  if (open) if (usethis::ui_yeah("Open the new project now?")) usethis::proj_activate(path)
 }

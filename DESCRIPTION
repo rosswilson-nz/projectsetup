@@ -16,7 +16,7 @@ Imports:
     cli,
     fs,
     gert,
-    git2r,
+    gh,
     glue,
     knitr,
     lifecycle,
@@ -26,6 +26,7 @@ Imports:
     rstudioapi,
     tarchetypes (>= 0.6.0.9000),
     targets,
+    ttables,
     usethis,
     whisker
 Suggests: 

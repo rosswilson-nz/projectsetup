@@ -8,8 +8,6 @@ use_cmor_readme(data)
 }
 \arguments{
 \item{data}{List of variables used by \code{cmor-readme} template.}
-
-\item{open}{Whether to open the new README.Rmd file for editing.}
 }
 \description{
 This function creates a skeleton README.Rmd file with basic project

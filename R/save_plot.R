@@ -10,13 +10,16 @@
 #' @param filename File name to create on disk
 #' @param device (optional) Device to use for SVG output
 #' @param device.pdf (optional) Device to use for PDF output
+#' @param height,width Plot size in inches (by default; use `units = ` to
+#'     alternatively specify `"cm"`, `"mm`", or `"px"`).
 #' @param ... Passed through to `ggplot2::ggsave()`
 #' @param pdf Whether to produce PDF output as well as SVG for inclusion in a
 #'     Typst source document.
+#' @param family Font family, passed through to
 #'
 #' @export
-save_plot <- function(plot, filename, device = NULL, device.pdf = NULL, ...,
-                      pdf = TRUE, family = "Wickliffe Sans") {
+save_plot <- function(plot, filename, device = NULL, device.pdf = NULL, height = NA, width = NA,
+                      ..., pdf = TRUE, family = "Wickliffe Sans") {
   file_svg <- fs::path("reports", "_figures", filename, ext = "svg")
   if (is.null(device)) device <- grDevices::svg
   if (identical(device, grDevices::svg)) {
@@ -28,7 +31,8 @@ save_plot <- function(plot, filename, device = NULL, device.pdf = NULL, ...,
   if (pdf) {
     if (is.null(device.pdf)) device.pdf <- grDevices::cairo_pdf
     file_pdf <- fs::path("output", "figures", filename, ".pdf")
-    ggplot2::ggsave(file_pdf, plot, device.pdf, family = family, ...)
+    ggplot2::ggsave(file_pdf, plot, device.pdf,
+                    family = family, height = height, width = width, ...)
   }
 
   file_svg

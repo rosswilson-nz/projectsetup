@@ -9,6 +9,8 @@ save_plot(
   filename,
   device = NULL,
   device.pdf = NULL,
+  height = NA,
+  width = NA,
   ...,
   pdf = TRUE,
   family = "Wickliffe Sans"
@@ -23,10 +25,15 @@ save_plot(
 
 \item{device.pdf}{(optional) Device to use for PDF output}
 
+\item{height, width}{Plot size in inches (by default; use \verb{units = } to
+alternatively specify \code{"cm"}, \verb{"mm}", or \code{"px"}).}
+
 \item{...}{Passed through to \code{ggplot2::ggsave()}}
 
 \item{pdf}{Whether to produce PDF output as well as SVG for inclusion in a
 Typst source document.}
+
+\item{family}{Font family, passed through to}
 }
 \description{
 A wrapper around \code{ggplot2::ggsave()} to save plots to SVG file for inclusion

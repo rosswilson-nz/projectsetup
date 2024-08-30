@@ -27,6 +27,8 @@ typst_figure(
 \item{width, height}{(optional) Image width and height. As in Typst's #image() function.}
 
 \item{footnotes}{Footnotes to add below the table.}
+
+\item{supplement}{Whether the figure should be marked as supplementary material.}
 }
 \description{
 This wraps the path to a saved image in a Typst figure environment with caption and label.

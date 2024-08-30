@@ -121,6 +121,7 @@ tfig <- function(x, caption = NULL, label = NULL, placement = NULL,
 #' @param placement (optional) Figure placement. As in Typst's #figure() function.
 #' @param width,height (optional) Image width and height. As in Typst's #image() function.
 #' @param footnotes Footnotes to add below the table.
+#' @param supplement Whether the figure should be marked as supplementary material.
 #'
 #' @export
 typst_figure <- function(x, caption = NULL, label = NULL, placement = "auto",
@@ -157,9 +158,9 @@ check_footnotes <- function(x) {
 }
 
 new_figure_opts <- function(width, height, placement, caption, label, supplement, landscape) {
-  if (missing(width)) width <- auto()
-  if (missing(height)) height <- auto()
-  if (missing(placement)) placement <- auto()
+  if (missing(width)) width <- ttables::auto()
+  if (missing(height)) height <- ttables::auto()
+  if (missing(placement)) placement <- ttables::auto()
   if (missing(caption)) caption <- character()
   if (missing(label)) label <- character()
   if (missing(supplement)) supplement <- FALSE

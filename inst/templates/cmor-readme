@@ -36,34 +36,9 @@ Please cite this work as:
 -->
 
 {{#github}}
-### How to download{{#is_package}} or install{{/is_package}}
+### How to download
 
 You can download the repository as a zip from from this URL: <{{{url}}}/archive/master.zip>
-{{#is_package}}
 
-Or you can install as an R package, {{{ name }}}, from GitHub with:
-
-```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
-remotes::install_github("{{{username}}}/{{{repo}}}")
-```
-
-If you install the package, run `build_project(<path>)` to recreate the project folder as an R project, then `run_analysis()` to re-run the analyses and produce the final report.
-{{/is_package}}
 {{/github}}
 
-{{#is_package}}
-<!--
-
-### Licenses
-
-If appropriate, describe the licences governing use of the package: e.g.
-
-**Text and figures :**  [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)
-
-**Code :** See the [DESCRIPTION](DESCRIPTION) file
-
-**Data :** [CC-0](http://creativecommons.org/publicdomain/zero/1.0/) attribution requested in reuse
-
--->
-{{/is_package}}

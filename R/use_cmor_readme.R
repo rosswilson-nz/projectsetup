@@ -5,7 +5,6 @@
 #'     be automatically added to `.Rbuildignore`.
 #'
 #' @param data List of variables used by `cmor-readme` template.
-#' @param open Whether to open the new README.Rmd file for editing.
 #'
 #' @export
 use_cmor_readme <- function(data) {
@@ -14,7 +13,7 @@ use_cmor_readme <- function(data) {
   template_out <- whisker::whisker.render(readLines(template), data)
   writeLines(template_out, "README.Rmd")
 
-  cli::cli_alert_success("Basic README file created")
+  cli_alert_success("Basic README file created")
 
   invisible(TRUE)
 }
