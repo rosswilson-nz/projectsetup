@@ -11,7 +11,8 @@ typst_figure(
   placement = "auto",
   width = "auto",
   height = "auto",
-  footnotes = NULL
+  footnotes = NULL,
+  supplement = FALSE
 )
 }
 \arguments{

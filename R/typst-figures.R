@@ -3,26 +3,48 @@ knit_print.CMORprojects_fig <- function(x, options, ...) {
   format <- get_output_format(options)
   out <- switch(format,
                 typst = print_figure_typst(x),
+                docx = ,
                 default = print_figure_default(x, ...))
   knitr::asis_output(out)
 }
 print_figure_default <- function(x, ...) {
-  image <- x$`_image`
+  image <- fs::path_ext_remove(x$`_image`)
   opts <- x$`_opts`
   footnotes <- x$`_footnotes`
 
+  width <- if (!is.null(opts$width) && opts$width != "auto") extract_width(opts$width)
+  height <- if (!is.null(opts$height) && opts$height != "auto") extract_height(opts$height)
+
   attrs <- glue::glue("{label}{width}{height}",
                       label = if (!is.null(opts$label)) glue::glue("#{opts$label}"),
-                      width = if (!is.null(opts$width) && opts$width != "auto") glue::glue(" width={opts$width}"),
-                      height = if (!is.null(opts$height) && opts$height != "auto") glue::glue(" height={opts$height}"),
+                      width = if (!is.null(width)) glue::glue(" width={width}"),
+                      height = if (!is.null(height)) glue::glue(" height={height}"),
                       .null = NULL)
-  fns <- if (!is.null(footnotes)) glue::glue_collapse(footnotes, sep = "  \n")
+  fns <- if (!is.null(footnotes)) glue::glue_collapse(glue::glue("> ", footnotes), sep = "  \n")
 
   glue::glue("\n\n![{caption}]({image}){attrs}{footnotes}\n\n",
              caption = opts$caption,
-             attrs = if (length(attrs)) glue::glue("{{{attrs}}}"),
-             footnotes = if (!is.null(footnotes)) glue::glue("  \n{fns}"),
-             .null = NULL)
+             attrs = if (length(attrs)) glue::glue("{{{attrs}}}", .trim = FALSE),
+             footnotes = if (!is.null(footnotes)) glue::glue("\n\n{fns}", .trim = FALSE),
+             .null = NULL, .trim = FALSE)
+}
+
+extract_width <- function(width) {
+  relative <- unclass(width)
+  ratio <- as.numeric(relative$ratio) / 100 * 159 # in mm, assuming a4 with 1in margins (approx)
+  length <- unclass(relative$length)
+  abs <- ttables::as_unit(length$abs, "mm")
+  em <- as.numeric(length$em) * 10 * (25.4 / 72) # in mm
+  glue::glue("{ratio + abs + em}mm")
+}
+
+extract_height <- function(height) {
+  relative <- unclass(height)
+  ratio <- as.numeric(relative$ratio) / 100 * 246 # in mm, assuming a4 with 1in margins (approx)
+  length <- unclass(relative$length)
+  abs <- ttables::as_unit(length$abs, "mm")
+  em <- as.numeric(length$em) * 10 * (25.4 / 72) # in mm
+  glue::glue("{ratio + abs + em}mm")
 }
 
 print_figure_typst <- function(x, ...) {
@@ -102,14 +124,15 @@ tfig <- function(x, caption = NULL, label = NULL, placement = NULL,
 #'
 #' @export
 typst_figure <- function(x, caption = NULL, label = NULL, placement = "auto",
-                         width = "auto", height = "auto", footnotes = NULL) {
+                         width = "auto", height = "auto", footnotes = NULL, supplement = FALSE) {
   `_image` <- check_image_path(fs::path_rel(x, "reports"))
 
   `_opts` <- collate_initial_figure_opts(caption = caption,
                                          label = label,
                                          placement = placement,
                                          width = width,
-                                         height = height)
+                                         height = height,
+                                         supplement = supplement)
   `_footnotes` <- check_footnotes(footnotes)
 
   structure(list(
@@ -241,16 +264,18 @@ check_landscape <- function(x) {
   rlang::abort("'landscape' must be a logical scalar")
 }
 
-collate_initial_figure_opts <- function(caption, label, placement, width, height) {
+collate_initial_figure_opts <- function(caption, label, placement, width, height, supplement) {
   caption <- check_caption(caption)
   label <- check_label(label)
   placement <- check_placement(placement)
   width <- check_width(width)
   height <- check_height(height)
+  supplement <- check_supplement(supplement)
 
   new_figure_opts(caption = caption,
                   label = label,
                   placement = placement,
                   width = width,
-                  height = height)
+                  height = height,
+                  supplement = supplement)
 }
