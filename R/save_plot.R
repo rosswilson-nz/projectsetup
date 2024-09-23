@@ -30,7 +30,7 @@ save_plot <- function(plot, filename, device = NULL, device.pdf = NULL, height =
 
   if (pdf) {
     if (is.null(device.pdf)) device.pdf <- grDevices::cairo_pdf
-    file_pdf <- fs::path("output", "figures", filename, ".pdf")
+    file_pdf <- fs::path("output", "figures", filename, ext = "pdf")
     ggplot2::ggsave(file_pdf, plot, device.pdf,
                     family = family, height = height, width = width, ...)
   }
