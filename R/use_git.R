@@ -2,38 +2,34 @@ use_git <- function(message = "Initial commit") {
   if (uses_git()) {
     return(invisible(NULL))
   }
-  cli::cli_alert_success("Initialising Git repo")
-  git2r::init(getwd())
-  usethis::use_git_ignore(c(".Rhistory", ".RData", ".Rproj.user", ".Rprofile",
-                            ".httr-oauth", ".DS_Store", "_targets/"))
-  git_ask_commit(message, untracked = TRUE)
+  gert::git_init(getwd())
+  cli_alert_success("Initialising Git repo")
+  usethis::use_git_ignore(c(".Rhistory", ".RData", ".Rproj.user", ".httr-oauth", ".DS_Store",
+                            "_targets/", ".quarto"))
+  git_ask_commit(message)
   invisible(TRUE)
 }
 
-git_ask_commit <- function(message, untracked = FALSE) {
-  if (!interactive() || !uses_git()) return(invisible(NULL))
-  paths <- unlist(
-    git2r::status(untracked = untracked, repo = git2r::repository(getwd())),
-    use.names = FALSE
-  )
-  if (length(paths) == 0) return(invisible(NULL))
+git_ask_commit <- function(message) {
+  if (!interactive() || !uses_git()) return(invisible())
+  paths <- gert::git_status(repo = getwd())$file
+  n <- length(paths)
+  if (n == 0) return(invisible())
   paths <- sort(paths)
   ui_paths <- fs::path_norm(paths)
-  n <- length(ui_paths)
-  if (n > 20) ui_paths <- c(ui_paths[1:20], "...")
-  cli::cli_text("There are {n} uncommitted files:")
-  cli::cli_ul(ui_paths)
-  if (usethis::ui_yeah("Is it ok to commit them?")) {
-    cli::cli_alert_success("Adding files")
-    repo <- git2r::repository(getwd())
-    git2r::add(repo, paths)
-    cli::cli_alert_success("Commit with message {.val {message}}")
-    git2r::commit(repo, message)
-    if (rstudioapi::hasFun("executeCommand")) {
-      rstudioapi::executeCommand("vcsRefresh")
-    }
+  cli_text("There {?is/are} {n} uncommitted file{?s}:")
+  if (n > 9) {
+    ui_paths <- cli_vec(ui_paths[1:9], list("vec-last" = ", "))
+    cli_text("{.file {ui_paths}}, and {.val n - 9} other{?s}")
+  } else cli_text("{.file {ui_paths}}")
+  ask <- pluralize("Is it ok to commit {qty(n)} {?it/them}?")
+  if (usethis::ui_yeah(ask)) {
+    gert::git_add(paths, repo = getwd())
+    cli_alert_success("Adding files")
+    gert::git_commit(message, repo = getwd())
+    cli_alert_success("Making a commit with message {.val message}")
   }
-  invisible(NULL)
+  invisible()
 }
 
 uses_git <- function() {

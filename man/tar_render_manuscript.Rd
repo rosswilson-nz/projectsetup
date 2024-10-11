@@ -37,6 +37,10 @@ have length 1.}
 \item{output_file}{Character string, file path to the docx output file to
 create.}
 
+\item{appendix}{Logical scalar. Whether the file should be treated as an
+appendix, in which case the raw Typst output is kept instead of the
+rendered PDF.}
+
 \item{include}{(optional) Character vector, file paths to other source files
 (e.g. included via Quarto includes in \code{path}).}
 

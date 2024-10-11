@@ -1,6 +1,6 @@
 Package: CMORprojects
 Title: Implement CMOR Data Analysis Project Workflow
-Version: 0.3.5.9000
+Version: 0.7.0
 Authors@R: 
     person("Ross", "Wilson", , "ross.wilson@otago.ac.nz", role = c("aut", "cre"))
 Description: CMORprojects provides tools to optimise a research project data
@@ -9,22 +9,24 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 URL: https://github.com/uo-cmor/CMORprojects
 BugReports: https://github.com/uo-cmor/CMORprojects/issues
 Imports: 
     cli,
     fs,
     gert,
-    git2r,
+    gh,
     glue,
     knitr,
+    lifecycle,
     quarto,
     rlang,
     rmarkdown,
     rstudioapi,
     tarchetypes (>= 0.6.0.9000),
     targets,
+    ttables,
     usethis,
     whisker
 Suggests: 
@@ -32,5 +34,8 @@ Suggests:
     testthat (>= 3.0.0),
     rprojroot,
     here,
-    tibble
+    formattr,
+    tidyverse,
+    tibble,
+    ggplot2
 Config/testthat/edition: 3

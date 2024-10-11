@@ -1,11 +1,14 @@
 # This file defines the targets in the project analysis plan
 
 # Simple skeleton outline of analysis plan - revise as required
-targets <- list(
+targets <- rlang::list2(
 #   tar_file(data_file, "raw_data/data.csv"),
 # 	tar_target(data, read_raw_data(data_file)),
 # 	tar_target(clean, process_data(data)),
 # 	tar_target(results, analyse_data(clean)),
+#   tar_target(table_1, create_table(results)),
+#   tar_target(plot, create_plot(results)),
+#   tar_file(figure_1, save_plot(plot, "my-plot")),
 # 	tar_render_manuscript(manuscript, "reports/manuscript.qmd"),
 # 	tar_render_manuscript(appendix, "reports/appendix.qmd", appendix = TRUE)
 )

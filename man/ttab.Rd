@@ -6,11 +6,11 @@
 \usage{
 ttab(
   x,
-  caption,
-  label,
+  caption = NULL,
+  label = NULL,
   align = "left",
   widths = "auto",
-  placement = "auto",
+  placement = NULL,
   footnotes = NULL
 )
 }
@@ -37,8 +37,14 @@ footnotes. At this stage, footnote numbering needs to be added manually
 (as does the corresponding numbering in table cells).}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is deprecated in favour of the new versions provided by the
+\code{ttables} package.
+
 This is a table generator inspired by the \emph{kableExtra} package. This base
 function takes an R data frame and sets up a basic Typst table. Auxiliary
 functions allow the adding of additional formatting features in a manner
 similar to that of the \emph{kableExtra} formatting functions.
 }
+\keyword{internal}

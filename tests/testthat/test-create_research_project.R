@@ -33,5 +33,4 @@ test_that("create_research_project works", {
 
 test_that("create_research_project generates appropriate error messages", {
   expect_error(local_create_project("."))
-  expect_warning(local_create_project(git = FALSE, github = TRUE))
 })

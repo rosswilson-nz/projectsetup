@@ -1,6 +1,7 @@
 ---
 format:
   cmor-appendix-typst: default
+  cmor-appendix-docx: default
 ---
 
 {{< include _setup.qmd >}}

@@ -58,8 +58,7 @@
     set text(size: fontsize)
     strong(it)
   }
-  show figure.where(kind: "suppl-table"):
-    set figure(
+  show figure.where(kind: "suppl-table"): set figure(
     numbering: (..nums) =>
       [#context {numbering("A", counter(heading).get().at(0))}#numbering("1", nums.pos().at(0))],
     supplement: "Table"

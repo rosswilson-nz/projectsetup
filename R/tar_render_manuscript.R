@@ -7,6 +7,9 @@
 #'     have length 1.
 #' @param output_file Character string, file path to the docx output file to
 #'     create.
+#' @param appendix Logical scalar. Whether the file should be treated as an
+#'     appendix, in which case the raw Typst output is kept instead of the
+#'     rendered PDF.
 #' @param include (optional) Character vector, file paths to other source files
 #'     (e.g. included via Quarto includes in `path`).
 #' @param file_reference_docx (optional) Symbol, existing target containing the
@@ -150,8 +153,10 @@ tar_quarto_run <- function (args, deps, sources, output, input, appendix) {
   args <- args[!vapply(args, is.null, logical(1))]
   do.call(what = quarto::quarto_render, args = args)
   if (appendix) {
-    fs::file_delete(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output)))
-    output <- fs::path_ext_set(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output)), "typ")
+    formats <- fs::path_ext(output)
+    fs::file_delete(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output[formats == "pdf"])))
+    output[formats == "pdf"] <- fs::path_ext_set(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output[formats == "pdf"])), "typ")
+    fs::file_move(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output[formats != "pdf"])), output[formats != "pdf"])
   } else {
     fs::file_move(fs::path(fs::path_dir(sources[[1]]), fs::path_file(output)), output)
   }

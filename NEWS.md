@@ -1,4 +1,22 @@
-# CMORprojects 0.3.5.9000
+# CMORprojects 0.7.0
+
+* Redesign `create_research_project()`
+
+# CMORprojects 0.6.0
+
+* Move all `typst_figure()` code from `ttables`.
+
+# CMORprojects 0.5.1
+
+* Add `typst_figure()` wrapper around `ttables::tfig()`.
+
+# CMORprojects 0.5.0
+
+* Deprecate `ttab()` and friends in favour of the new functions in the `ttables` package.
+
+* Add `save_plots()` to save plots to SVG figure files
+
+# CMORprojects 0.4.0
 
 * Correct set-up of new project folder when no user .Rprofile is found
 

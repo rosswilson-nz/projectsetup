@@ -1,6 +1,33 @@
-## To-do: add checks on appropriate input types/sizes/etc in each of these functions
-
+#' @export
+knit_print.ttables_tbl <- function(x, options, ...) {
+  format <- get_output_format(options)
+  out <- switch(format,
+                typst = print_typst(x),
+                docx = print_docx(x),
+                default = print_table_default(x, ...))
+  knitr::asis_output(out, attr(out, "knit_meta"), attr(out, "knit_cacheable") %||% NA)
+}
+print_typst <- function(x) glue::glue("\n```{{=typst}}\n{ttables::as_typst(x)}\n```\n", .trim = FALSE)
+print_docx <- function(x) glue::glue("\n```{{=openxml}}\n{ttables::as_docx(x)}\n```\n", .trim = FALSE)
+print_table_default <- function(x, ...) {
+  out <- knitr::kable(x$`_body`,
+                      caption = x$`_opts`$caption,
+                      label = x$`_opts`$label,
+                      col.names = unlist(x$`_header`[nrow(x$`_header`), ]))
+  knit_print(out, ...)
+}
+get_output_format <- function(options) {
+  if (grepl("typst", options$cache.path)) return("typst")
+  if (grepl("docx", options$cache.path)) return("docx")
+  "default"
+}
 #' Create tables in Typst format
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is deprecated in favour of the new versions provided by the
+#' `ttables` package.
 #'
 #' This is a table generator inspired by the *kableExtra* package. This base
 #' function takes an R data frame and sets up a basic Typst table. Auxiliary
@@ -22,8 +49,11 @@
 #'     footnotes. At this stage, footnote numbering needs to be added manually
 #'     (as does the corresponding numbering in table cells).
 #'
+#' @keywords internal
 #' @export
 ttab <- function(x, caption = NULL, label = NULL, align = "left", widths = "auto", placement = NULL, footnotes = NULL) {
+  lifecycle::deprecate_warn("0.5.0", "ttab()", "ttables::ttab()")
+
   if (!is.data.frame(x)) stop("'x' must be a data frame")
   if (!is.null(caption) && (!is.character(caption) || length(caption) > 1)) stop("'caption' must be a character scalar")
   if (!is.null(label) && (!is.character(label) || length(label) > 1)) stop("'label' must be a character scalar")
@@ -385,11 +415,14 @@ row_spec <- function(x, rows, italic = NULL, bold = NULL, align = NULL) {
 
 #' Apply formatting to table columns
 #'
-#' More formatting options will be added in a later version.
+#' More formatting options will be added in a later version. All formatting
+#'     arguments default to `NULL`, keeping the current cell formatting.
 #'
 #' @param x A `typst_table` object.
 #' @param cols Which columns to apply the formatting to
-#' @param italic,bold (optional) Which formatting to apply. Defaults to none.
+#' @param italic,bold (optional) Logical scalars. Apply italic or bold formatting.
+#' @param align (optional) Align cell contents. Specified as in Typst's
+#'     `#table.cell()`.
 #' @param header Also apply formatting to header rows? Defaults to `TRUE`.
 #'
 #' @export
