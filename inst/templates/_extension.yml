@@ -8,6 +8,7 @@ contributes:
       callout-appearance: minimal
       bibliography: references.bib
       csl: vancouver.csl
+      date: last-modified
       execute:
         echo: false
         warning: false
