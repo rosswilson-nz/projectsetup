@@ -39,6 +39,7 @@ format:
 <!-- The resulting Typst file is included in the output via the metadata -->
 <!-- Remove the leading // in the #include line in 'include-after-body' above -->
 <!-- Add additional '- text: #include ...' as needed for multiple appendices -->
+<!-- If not including any appendices, remove the whole `include-after-body' block -->
 ```{r}
 tar_load(c(appendix), store = store)
 ```

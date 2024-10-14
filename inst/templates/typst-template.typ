@@ -161,7 +161,7 @@
 
   pagebreak()
 
-  block(doc)
+  doc
 
   bibliography(bib)
 
