@@ -55,9 +55,9 @@ print_figure_typst <- function(x, ...) {
 
   inner <- glue::glue(
     "  #figure({caption}kind: {kind}, placement: none,\n  [{image}]){label}{footer}",
-    caption = glue::glue("caption: [{opts$caption}], "),
-    label = glue::glue(" <{opts$label}>"),
-    footer = glue::glue("\n\n  {footnotes}",
+    caption = if (length(opts$caption)) glue::glue("caption: [{opts$caption}], "),
+    label = if (length(opts$label)) glue::glue(" <{opts$label}>"),
+    footer = if (length(footnotes)) glue::glue("\n\n  {footnotes}",
                         footnotes = glue::glue_collapse(footnotes, ",\n\n  "),
                         .trim = FALSE),
     .null = NULL, .trim = FALSE
