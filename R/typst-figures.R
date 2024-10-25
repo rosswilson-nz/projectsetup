@@ -20,7 +20,7 @@ print_figure_default <- function(x, ...) {
                       width = if (!is.null(width)) glue::glue(" width={width}"),
                       height = if (!is.null(height)) glue::glue(" height={height}"),
                       .null = NULL)
-  fns <- if (!is.null(footnotes)) glue::glue_collapse(glue::glue("> ", footnotes), sep = "  \n")
+  fns <- if (!is.null(footnotes)) glue::glue("> ", glue::glue_collapse(footnotes, sep = "  \n> "))
 
   glue::glue("\n\n![{caption}]({image}){attrs}{footnotes}\n\n",
              caption = opts$caption,
