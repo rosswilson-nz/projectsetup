@@ -1,3 +1,8 @@
 library(tidyverse)
 
+parallel <- list(
+  enabled = FALSE,
+  max_cores = Inf
+)
+
 # Define any analysis parameters or parameter grids in here

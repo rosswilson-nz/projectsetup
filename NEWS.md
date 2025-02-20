@@ -1,3 +1,13 @@
+# CMORprojects 0.7.1
+
+* Update default .gitignore
+
+* Add `create.dir` argument to `save_plot()`
+
+* Rename `parameters.R` to `_config.R`
+
+* Use `crew` for parallel/distributed computing
+
 # CMORprojects 0.7.0
 
 * Redesign `create_research_project()`

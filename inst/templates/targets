@@ -7,31 +7,33 @@ library(tarchetypes)
 library(CMORprojects)
 options(tidyverse.quiet = TRUE)
 
-# Define fixed parameters
-source("parameters.R")
+# Set options
+tar_option_set(
+  packages = c("tidyverse"), # add other required packages in here
+  format = "qs",
+  error = "trim",
+  memory = "transient",
+  garbage_collection = TRUE,
+  workspace_on_error = TRUE
+)
+
+# Define analysis configuration parameters etc
+source("_config.R")
 
 # Load functions
 tar_source()
 
-# Set options
-tar_option_set(
-  packages = c("tidyverse"), # add other required packages in here
-  format = "qs"
-)
-tar_config_set(
-  reporter_make = "timestamp_positives"
-)
+##########################################################
+### For parallel (or distributed) computing (optional) ###
+##########################################################
 
-###################################################
-### Futures (for tar_make_future() only)        ###
-### (or for parallel processing within targets) ###
-###################################################
+# See https://books.ropensci.org/targets/crew.html for further discussion
+# This default runs up to `parallel::detectCores() - 1` workers in parallel
+# as local R processes
 
-if (FALSE) {
-	max_cores <- Inf # change as required
-	n_cores <- min(future::availableCores() - 1, max_cores)
-  future::plan(future::tweak(future::multiprocess, workers = n_cores))
-	jobs <- n_cores
+if (parallel$enabled && rlang::is_installed("crew")) { # option set in _config.R
+	n_cores <- min(parallel::detectCores() - 1, parallel$max_cores)
+	tar_option_set(controller = crew::crew_controller_local(workers = n_cores))
 }
 
 ######################

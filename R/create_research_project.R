@@ -54,7 +54,7 @@ create_research_project <- function(
     "In the new project:",
     "*" = "Edit {.file README.Rmd} to provide an introduction to the project",
     "*" =if (github)  "Render {.file README.Rmd} to {.file README.md} for GitHub",
-    "*" = "Use {.file _targets.R}, {.file _plan.R}, and {.file parameters.R} to specify the analysis workflow",
+    "*" = "Use {.file _targets.R}, {.file _plan.R}, and {.file _config.R} to specify the analysis workflow",
     "i" = "See {.url https://books.ropensci.org/targets/} for more information on the {.pkg targets} package."
   ))
   cli_rule()

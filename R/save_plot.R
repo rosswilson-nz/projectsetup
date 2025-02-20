@@ -10,36 +10,41 @@
 #' @param filename File name to create on disk
 #' @param device (optional) Device to use for SVG output
 #' @param device.pdf (optional) Device to use for PDF output
+#' @param device.png (optional) Device to use for PNG output
 #' @param height,width Plot size in inches (by default; use `units = ` to
 #'     alternatively specify `"cm"`, `"mm`", or `"px"`).
 #' @param ... Passed through to `ggplot2::ggsave()`
 #' @param pdf Whether to produce PDF output (as well as SVG).
 #' @param png Whether to produce PNG output (as well as SVG).
-#' @param family Font family, passed through to
+#' @param family Font family, passed through to `ggplot2::ggsave()`.
+#' @param create.dir Whether to create the output directory if it doesn't exist.
 #'
 #' @export
-save_plot <- function(plot, filename, device = NULL, device.pdf = NULL, device.png = NULL, height = NA, width = NA,
-                      ..., pdf = TRUE, png = TRUE, family = "Wickliffe Sans") {
+save_plot <- function(plot, filename, device = NULL, device.pdf = NULL, device.png = NULL,
+                      height = NA, width = NA, ..., pdf = TRUE, png = TRUE,
+                      family = "Wickliffe Sans", create.dir = TRUE) {
   file_svg <- fs::path("reports", "_figures", filename, ext = "svg")
   if (is.null(device)) device <- grDevices::svg
   if (identical(device, grDevices::svg)) {
-    ggplot2::ggsave(file_svg, plot, device, height = height, width = width, family = family, ...)
+    ggplot2::ggsave(file_svg, plot, device, height = height, width = width, family = family,
+                    create.dir = create.dir, ...)
   } else {
-    ggplot2::ggsave(file_svg, plot, device, height = height, width = width, ...)
+    ggplot2::ggsave(file_svg, plot, device, height = height, width = width,
+                    create.dir = create.dir, ...)
   }
 
   if (pdf) {
     if (is.null(device.pdf)) device.pdf <- grDevices::cairo_pdf
     file_pdf <- fs::path("output", "figures", filename, ext = "pdf")
     ggplot2::ggsave(file_pdf, plot, device.pdf,
-                    family = family, height = height, width = width, ...)
+                    family = family, height = height, width = width, create.dir = create.dir, ...)
   }
 
   if (png) {
     if (is.null(device.png)) device.png <- grDevices::png
     file_png <- fs::path("reports", "_figures", filename, ext = "png")
     ggplot2::ggsave(file_png, plot, device.png,
-                    family = family, height = height, width = width, ...)
+                    family = family, height = height, width = width, create.dir = create.dir, ...)
   }
 
   file_svg

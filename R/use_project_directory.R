@@ -28,8 +28,9 @@ use_project_directory <- function(git = TRUE, raw_data_in_git = TRUE, data_in_gi
                               "/reports/*.svg"))
     if (!data_in_git) usethis::use_git_ignore(c("/derived_data/*", "!/derived_data/derived_data"))
     if (!raw_data_in_git) usethis::use_git_ignore(c("/raw_data/*", "!/raw_data/raw_data"))
-    if (!output_in_git) usethis::use_git_ignore(c("/output/*", "!/output/output",
-                                                  "!/output/figures/figures"))
+    if (!output_in_git) usethis::use_git_ignore(c(
+      "/output/*.*", "!/output/output", "!/output/figures/.*.", "!/output/figures/figures"
+    ))
 
     usethis::git_vaccinate()
   }
@@ -61,8 +62,8 @@ add_templates <- function() {
             fs::path_wd("_targets.R"))
   file.copy(system.file("templates", "targets_plan", package = "CMORprojects", mustWork = TRUE),
             fs::path_wd("_plan.R"))
-  file.copy(system.file("templates", "parameters", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("parameters.R"))
+  file.copy(system.file("templates", "config", package = "CMORprojects", mustWork = TRUE),
+            fs::path_wd("_config.R"))
 
   # Manuscript templates and functions
   ## Typst format templates
