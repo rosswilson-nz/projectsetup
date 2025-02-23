@@ -1,14 +1,26 @@
 # This file defines the targets in the project analysis plan
 
+# Common prefixes, for easy reference to different targets:
+#
+# file_: Input files
+# raw_: Raw data frames imported from input files
+# dta_: Cleaned data frames
+# res_: Analysis results (regression, etc.)
+# msc_: Miscellaneous objects not included elsewhere
+# tbl_: Table (e.g. to be passed to `ttables::ttab()`)
+# plt_: Plots (as R objects, e.g. `ggplot`)
+# fig_: Saved figures (as files)
+# rpt_: Output reports (as files, usually with `tar_render_manuscript()`)
+
 # Simple skeleton outline of analysis plan - revise as required
 targets <- rlang::list2(
-#   tar_file(data_file, "raw_data/data.csv"),
-# 	tar_target(data, read_raw_data(data_file)),
-# 	tar_target(clean, process_data(data)),
-# 	tar_target(results, analyse_data(clean)),
-#   tar_target(table_1, create_table(results)),
-#   tar_target(plot, create_plot(results)),
-#   tar_file(figure_1, save_plot(plot, "my-plot")),
-# 	tar_render_manuscript(manuscript, "reports/manuscript.qmd"),
-# 	tar_render_manuscript(appendix, "reports/appendix.qmd", appendix = TRUE)
+  #   tar_file(file_data, "raw_data/data.csv"),
+  # 	tar_target(raw_data, read_raw_data(file_data)),
+  # 	tar_target(dta_cleaned, process_data(raw_data)),
+  # 	tar_target(res_primary.analysis, analyse_data(dta_cleaned)),
+  #   tar_target(tbl_primary.results, create_table(res_primary.analysis)),
+  #   tar_target(plt_primary.results, create_plot(res_primary.analysis)),
+  #   tar_file(fig_primary.results, save_plot(plt_primary.results, "my-plot")),
+  # 	tar_render_manuscript(rpt_manuscript, "reports/manuscript.qmd"),
+  # 	tar_render_manuscript(rpt_appendix, "reports/appendix.qmd", appendix = TRUE)
 )
