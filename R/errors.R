@@ -30,7 +30,10 @@ stop_not_number <- function(arg) {
 }
 
 stop_not_numeric <- function(arg, matrix = TRUE) {
-  x <- paste0("{.arg {arg}} must be a numeric vector", if (matrix) " or matrix.")
+  x <- paste0(
+    "{.arg {arg}} must be a numeric vector",
+    if (matrix) " or matrix."
+  )
   cli_abort(x, "CMORprojects_error_not_numeric", arg = arg, matrix = matrix)
 }
 
@@ -60,7 +63,9 @@ stop_invalid_render_args <- function() {
 }
 
 stop_invalid_ci <- function(conf.level) {
-  x <- c("{.arg conf.level} must be a numeric scalar between 0 and 1.",
-         x = "You've provided {.val {conf.level}}.")
+  x <- c(
+    "{.arg conf.level} must be a numeric scalar between 0 and 1.",
+    x = "You've provided {.val {conf.level}}."
+  )
   cli_abort(x, "CMORprojects_error_invalid_ci", conf.level = conf.level)
 }

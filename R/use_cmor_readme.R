@@ -8,7 +8,12 @@
 #'
 #' @export
 use_cmor_readme <- function(data) {
-  template <- system.file("templates", "cmor-readme", package = "CMORprojects", mustWork = TRUE)
+  template <- system.file(
+    "templates",
+    "cmor-readme",
+    package = "CMORprojects",
+    mustWork = TRUE
+  )
 
   template_out <- whisker::whisker.render(readLines(template), data)
   writeLines(template_out, "README.Rmd")
@@ -17,4 +22,3 @@ use_cmor_readme <- function(data) {
 
   invisible(TRUE)
 }
-

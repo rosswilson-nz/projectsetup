@@ -14,8 +14,12 @@
 #'     `output/` directory will be excluded from the git repository.
 #'
 #' @export
-use_project_directory <- function(git = TRUE, raw_data_in_git = TRUE, data_in_git = FALSE,
-                                  output_in_git = FALSE) {
+use_project_directory <- function(
+  git = TRUE,
+  raw_data_in_git = TRUE,
+  data_in_git = FALSE,
+  output_in_git = FALSE
+) {
   # Create directory structure
   add_directories()
 
@@ -24,13 +28,27 @@ use_project_directory <- function(git = TRUE, raw_data_in_git = TRUE, data_in_gi
 
   # Populate .gitignore
   if (git) {
-    usethis::use_git_ignore(c("/misc", "/reports/*.pdf", "/reports/*_files", "/reports/*.typ",
-                              "/reports/*.svg"))
-    if (!data_in_git) usethis::use_git_ignore(c("/derived_data/*", "!/derived_data/derived_data"))
-    if (!raw_data_in_git) usethis::use_git_ignore(c("/raw_data/*", "!/raw_data/raw_data"))
-    if (!output_in_git) usethis::use_git_ignore(c(
-      "/output/*.*", "!/output/output", "!/output/figures/.*.", "!/output/figures/figures"
+    usethis::use_git_ignore(c(
+      "/misc",
+      "/reports/*.pdf",
+      "/reports/*_files",
+      "/reports/*.typ",
+      "/reports/*.svg"
     ))
+    if (!data_in_git)
+      usethis::use_git_ignore(c(
+        "/derived_data/*",
+        "!/derived_data/derived_data"
+      ))
+    if (!raw_data_in_git)
+      usethis::use_git_ignore(c("/raw_data/*", "!/raw_data/raw_data"))
+    if (!output_in_git)
+      usethis::use_git_ignore(c(
+        "/output/*.*",
+        "!/output/output",
+        "!/output/figures/.*.",
+        "!/output/figures/figures"
+      ))
 
     usethis::git_vaccinate()
   }
@@ -58,42 +76,153 @@ add_directories <- function() {
 ##     _drake.R, etc) to the appropriate directories.
 add_templates <- function() {
   # Skeleton targets workflow files
-  file.copy(system.file("templates", "targets", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("_targets.R"))
-  file.copy(system.file("templates", "targets_plan", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("_plan.R"))
-  file.copy(system.file("templates", "config", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("_config.R"))
+  file.copy(
+    system.file(
+      "templates",
+      "targets",
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("_targets.R")
+  )
+  file.copy(
+    system.file(
+      "templates",
+      "targets_plan",
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("_plan.R")
+  )
+  file.copy(
+    system.file(
+      "templates",
+      "config",
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("_config.R")
+  )
 
   # Manuscript templates and functions
   ## Typst format templates
-  extension_files <- c("_extension.yml", "template.typ", "typst-template.typ", "typst-show.typ", "definitions.typ", "typst-math.lua", "typst-ref.lua")
-  appendix_extension_files <- c("_extension-appendix.yml", "template-appendix.typ", "typst-template-appendix.typ", "typst-show-appendix.typ", "definitions.typ", "typst-math.lua", "typst-ref.lua")
-  file.copy(system.file("templates", extension_files, package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("reports", "_extensions", "cmor"))
-  file.copy(system.file("templates", appendix_extension_files, package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("reports", "_extensions", "cmor-appendix", extension_files))
+  extension_files <- c(
+    "_extension.yml",
+    "template.typ",
+    "typst-template.typ",
+    "typst-show.typ",
+    "definitions.typ",
+    "typst-math.lua",
+    "typst-ref.lua"
+  )
+  appendix_extension_files <- c(
+    "_extension-appendix.yml",
+    "template-appendix.typ",
+    "typst-template-appendix.typ",
+    "typst-show-appendix.typ",
+    "definitions.typ",
+    "typst-math.lua",
+    "typst-ref.lua"
+  )
+  file.copy(
+    system.file(
+      "templates",
+      extension_files,
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("reports", "_extensions", "cmor")
+  )
+  file.copy(
+    system.file(
+      "templates",
+      appendix_extension_files,
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("reports", "_extensions", "cmor-appendix", extension_files)
+  )
   ## manuscript templates:
-  file.copy(system.file("templates", c("manuscript.qmd", "appendix.qmd", "_setup.qmd"), package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("reports"))
+  file.copy(
+    system.file(
+      "templates",
+      c("manuscript.qmd", "appendix.qmd", "_setup.qmd"),
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("reports")
+  )
   ## separate manuscript module templates
-  file.copy(system.file("templates", "table-1.qmd", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("reports", "_tables"))
-  file.copy(system.file("templates", "figure-1.qmd", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("reports", "_figures"))
+  file.copy(
+    system.file(
+      "templates",
+      "table-1.qmd",
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("reports", "_tables")
+  )
+  file.copy(
+    system.file(
+      "templates",
+      "figure-1.qmd",
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("reports", "_figures")
+  )
   ## Word/bibtex/CSL templates
-  template_files <- c("word-styles-reference-01.docx", "references.bib", "vancouver.csl",
-                      "journal-of-health-economics.csl")
-  file.copy(system.file("templates", template_files, package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("reports"))
+  template_files <- c(
+    "word-styles-reference-01.docx",
+    "references.bib",
+    "vancouver.csl",
+    "journal-of-health-economics.csl"
+  )
+  file.copy(
+    system.file(
+      "templates",
+      template_files,
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("reports")
+  )
 
   # Placeholder files in output and data folders (so they are added to Git repo)
-  file.copy(system.file("templates", "output", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("output", "output"))
-  file.copy(system.file("templates", "figures", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("output", "figures", "figures"))
-  file.copy(system.file("templates", "raw_data", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("raw_data", "raw_data"))
-  file.copy(system.file("templates", "derived_data", package = "CMORprojects", mustWork = TRUE),
-            fs::path_wd("derived_data", "derived_data"))
+  file.copy(
+    system.file(
+      "templates",
+      "output",
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("output", "output")
+  )
+  file.copy(
+    system.file(
+      "templates",
+      "figures",
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("output", "figures", "figures")
+  )
+  file.copy(
+    system.file(
+      "templates",
+      "raw_data",
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("raw_data", "raw_data")
+  )
+  file.copy(
+    system.file(
+      "templates",
+      "derived_data",
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("derived_data", "derived_data")
+  )
 }

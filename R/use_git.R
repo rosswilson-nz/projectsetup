@@ -4,8 +4,15 @@ use_git <- function(message = "Initial commit") {
   }
   gert::git_init(getwd())
   cli_alert_success("Initialising Git repo")
-  usethis::use_git_ignore(c(".Rhistory", ".RData", ".Rproj.user", ".httr-oauth", ".DS_Store",
-                            "_targets/", ".quarto"))
+  usethis::use_git_ignore(c(
+    ".Rhistory",
+    ".RData",
+    ".Rproj.user",
+    ".httr-oauth",
+    ".DS_Store",
+    "_targets/",
+    ".quarto"
+  ))
   git_ask_commit(message)
   invisible(TRUE)
 }
