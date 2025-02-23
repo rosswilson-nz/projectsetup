@@ -13,10 +13,14 @@ knit_print.ttables_tbl <- function(x, options, ...) {
     attr(out, "knit_cacheable") %||% NA
   )
 }
-print_typst <- function(x)
+print_typst <- function(x) {
   glue::glue("\n```{{=typst}}\n{ttables::as_typst(x)}\n```\n", .trim = FALSE)
-print_docx <- function(x)
+}
+
+print_docx <- function(x) {
   glue::glue("\n```{{=openxml}}\n{ttables::as_docx(x)}\n```\n", .trim = FALSE)
+}
+
 print_table_default <- function(x, ...) {
   out <- knitr::kable(
     x$`_body`,
@@ -54,7 +58,8 @@ get_output_format <- function(options) {
 #'     column widths, a vector of numeric values (for relative widths), or a
 #'     vector of Typst track sizes ('auto' or Typst fixed, relative, or
 #'     fractional lengths).
-#' @param placement (optional) Table placement. As in Typst's #figure() function.
+#' @param placement (optional) Table placement. As in Typst's #figure()
+#'     function.
 #' @param footnotes Footnotes to add below the table. Pass a vector for multiple
 #'     footnotes. At this stage, footnote numbering needs to be added manually
 #'     (as does the corresponding numbering in table cells).
@@ -133,7 +138,8 @@ ttab <- function(
 
 #' Add footnotes to Typst table
 #'
-#' This is equivalent to specifying the footnotes in the original call to `ttab()`.
+#' This is equivalent to specifying the footnotes in the original call to
+#'     `ttab()`.
 #'
 #' @param x A `typst_table` object.
 #' @param footnote Character vector of footnotes to add to `x`
@@ -151,12 +157,14 @@ add_footnote <- function(x, footnote) {
 
 #' Add header row above existing header
 #'
-#' Similar to `kableExtra::add_header_above()`. Can be useful for grouped columns.
+#' Similar to `kableExtra::add_header_above()`. Can be useful for grouped
+#'     columns.
 #'
 #' @param x A `typst_table` object.
-#' @param header List or character vector of column headings to add. Must have one element per
-#'    column of x (after expansion of any multi-column cells). Must be a list (not a character
-#'    vector) if any elements contain custom formatting commands (e.g. `colspan()`).
+#' @param header List or character vector of column headings to add. Must have
+#'     one element per column of x (after expansion of any multi-column cells).
+#'     Must be a list (not a character vector) if any elements contain custom
+#'     formatting commands (e.g. `colspan()`).
 #'
 #' @export
 add_header <- function(x, header) {
@@ -174,19 +182,20 @@ add_header <- function(x, header) {
 
 #' Add indent to Typst table cells
 #'
-#' Useful for example to indicate grouped rows below a total. See also `pack_rows()` (which
-#'     additionally adds a group label).
+#' Useful for example to indicate grouped rows below a total. See also
+#'     `pack_rows()` (which additionally adds a group label).
 #'
 #' @param x A `typst_table` object.
-#' @param rows Rows to indent. For now, these are rows of the current state of the table, not the
-#'     original data frame (i.e., unlike `kableExtra`); this will likely be changed in a later
-#'     version.
-#' @param indent (optional) Level of indent. Will be added to any existing indent. Defaults to 1
-#'     (i.e. adding a space of 1em).
-#' @param columns (optional) Which column(s) to apply indent to. Defaults to the first column only.
-#'     For now, these are columns of the current state of the table, not the original data frame,
-#'     so will probably not work as expected if multicolumn cells have been defined in any included
-#'     rows; this will likely be changed in a later version.
+#' @param rows Rows to indent. For now, these are rows of the current state of
+#'     the table, not the original data frame (i.e., unlike `kableExtra`); this
+#'     will likely be changed in a later version.
+#' @param indent (optional) Level of indent. Will be added to any existing
+#'     indent. Defaults to 1 (i.e. adding a space of 1em).
+#' @param columns (optional) Which column(s) to apply indent to. Defaults to the
+#'     first column only. For now, these are columns of the current state of the
+#'     table, not the original data frame, so will probably not work as expected
+#'     if multicolumn cells have been defined in any included rows; this will
+#'     likely be changed in a later version.
 #'
 #' @export
 add_indent <- function(x, rows, indent = 1, columns = 1) {
@@ -213,12 +222,14 @@ add_indent <- function(x, rows, indent = 1, columns = 1) {
 
 #' Make cells span multiple rows
 #'
-#' If any cells below the top one are non-empty, they will be overwritten with a warning.
+#' If any cells below the top one are non-empty, they will be overwritten with a
+#'     warning.
 #'
 #' @param x A `typst_table` object.
 #' @param range The range (`c(<min>, <max>)`) of rows to include in the span.
 #' @param cols The columns in which to apply the span
-#' @param align (optional) Alignment of the new multirow cell. Defaults to `"top"`.
+#' @param align (optional) Alignment of the new multirow cell. Defaults to
+#'     `"top"`.
 #'
 #' @export
 span_rows <- function(x, range, cols, align = "top") {
@@ -230,7 +241,10 @@ span_rows <- function(x, range, cols, align = "top") {
       range[[2]] > length(x$body)
   )
     stop(
-      "'range' must be a numeric vector of length 2 specifying a range of rows of 'x'"
+      paste(
+        "'range' must be a numeric vector of length 2 specifying a range",
+        "of rows of 'x'"
+      )
     )
   if (!is.numeric(cols)) stop("'cols' must be a numeric vector")
   if (!is.character(align) || length(align) != 1)
@@ -263,20 +277,26 @@ span_rows <- function(x, range, cols, align = "top") {
 
 #' Make cells span multiple columns
 #'
-#' If any cells to the right of the first one are non-empty, they will be overwritten with a warning.
+#' If any cells to the right of the first one are non-empty, they will be
+#'     overwritten with a warning.
 #'
 #' @param x A `typst_table` object.
 #' @param range The range (`c(<min>, <max>)`) of columns to include in the span.
 #' @param rows The rows in which to apply the span
-#' @param align (optional) Alignment of the new multicolumn cell. Defaults to `"left"`.
-#' @param stroke (optional) Whether to draw a stroke under the merged cells. Defaults to `FALSE`.
+#' @param align (optional) Alignment of the new multicolumn cell. Defaults to
+#'     `"left"`.
+#' @param stroke (optional) Whether to draw a stroke under the merged cells.
+#'     Defaults to `FALSE`.
 #'
 #' @export
 span_cols <- function(x, range, rows, align = "left", stroke = FALSE) {
   if (!inherits(x, "typst_table")) stop("'x' must be a `typst_table` object")
   if (!is.numeric(range) || length(range) != 2 || range[[1]] >= range[[2]])
     stop(
-      "'range' must be a numeric vector of length 2 specifying a range of columns of 'x'"
+      paste(
+        "'range' must be a numeric vector of length 2 specifying a range",
+        "of columns of 'x'"
+      )
     )
   if (!is.numeric(rows) || !all(rows <= length(x$body)))
     stop("'rows' must be a numeric vector indexing rows of 'x'")
@@ -327,8 +347,10 @@ make_colspan_row <- function(row, r, c, replace, align, stroke) {
 #'
 #' @param contents Character string. The contents of the cell.
 #' @param n The number of columns to span
-#' @param align (optional) Alignment of the cell contents. Defaults to `"center"`.
-#' @param stroke (optional) Whether to draw a stroke under the cell. Defaults to `TRUE`.
+#' @param align (optional) Alignment of the cell contents. Defaults to
+#'     `"center"`.
+#' @param stroke (optional) Whether to draw a stroke under the cell. Defaults to
+#'     `TRUE`.
 #'
 #' @export
 colspan <- function(contents, n, align = "center", stroke = TRUE) {
@@ -371,8 +393,8 @@ add_hline <- function(x, before) {
 #'
 #' @param x A `typst_table` object
 #' @param before The table columns before which lines should be drawn
-#' @param start,end The start and end rows of the line. Specified as in Typst's `#table.vline()`
-#'     function.
+#' @param start,end The start and end rows of the line. Specified as in Typst's
+#'     `#table.vline()` function.
 #' @export
 add_vline <- function(x, before, start = 0, end = "none") {
   if (!inherits(x, "typst_table")) stop("'x' must be a `typst_table` object")
@@ -409,9 +431,12 @@ add_vline <- function(x, before, start = 0, end = "none") {
 #' @param x A `typst_table` object
 #' @param start_row,end_row The first and last rows to be combined
 #' @param label Label to add above `start_row`
-#' @param italic,bold (optional) Formatting to apply to `label`. Defaults to upright/bold.
-#' @param align (optional) Cell alignment for the `label`. Defaults to the same as the first column.
-#' @param indent (optional) Whether to indent the grouped rows. Defaults to `TRUE`.
+#' @param italic,bold (optional) Formatting to apply to `label`. Defaults to
+#'     upright/bold.
+#' @param align (optional) Cell alignment for the `label`. Defaults to the same
+#'     as the first column.
+#' @param indent (optional) Whether to indent the grouped rows. Defaults to
+#'     `TRUE`.
 #' @export
 pack_rows <- function(
   x,
@@ -461,7 +486,8 @@ pack_rows <- function(
 #'
 #' @param x A `typst_table` object.
 #' @param row,col Which cell to apply formatting to
-#' @param italic,bold (optional) Logical scalars. Apply italic or bold formatting.
+#' @param italic,bold (optional) Logical scalars. Apply italic or bold
+#'     formatting.
 #' @param align (optional) Align cell contents. Specified as in Typst's
 #'     `#table.cell()`.
 #'
@@ -511,7 +537,8 @@ apply_cell_spec <- function(cell, italic, bold, align) {
 #'
 #' @param x A `typst_table` object.
 #' @param rows Which rows to apply the formatting to
-#' @param italic,bold (optional) Logical scalars. Apply italic or bold formatting.
+#' @param italic,bold (optional) Logical scalars. Apply italic or bold
+#'     formatting.
 #' @param align (optional) Align cell contents. Specified as in Typst's
 #'     `#table.cell()`.
 #'
@@ -541,7 +568,8 @@ row_spec <- function(x, rows, italic = NULL, bold = NULL, align = NULL) {
 #'
 #' @param x A `typst_table` object.
 #' @param cols Which columns to apply the formatting to
-#' @param italic,bold (optional) Logical scalars. Apply italic or bold formatting.
+#' @param italic,bold (optional) Logical scalars. Apply italic or bold
+#'     formatting.
 #' @param align (optional) Align cell contents. Specified as in Typst's
 #'     `#table.cell()`.
 #' @param header Also apply formatting to header rows? Defaults to `TRUE`.
@@ -598,8 +626,8 @@ landscape <- function(x) {
 #'
 #' @param x A `typst_table` or `typst_figure` object
 #' @param style Character vector of Typst styling commands (or anything else)
-#' @param replace Whether to replace any styles previously specified. Default is `FALSE` (new styles
-#'     are added to any previous specifications).
+#' @param replace Whether to replace any styles previously specified. Default is
+#'     `FALSE` (new styles are added to any previous specifications).
 #'
 #' @export
 add_styling <- function(x, style, replace = FALSE) {
@@ -618,8 +646,8 @@ add_styling <- function(x, style, replace = FALSE) {
 #' Mark a table or figure as supplementary material
 #'
 #' Just specifies the Typst `kind` as `"suppl-table"`/`"suppl-image"` instead of
-#'     `"table"`/`"image"`. The Typst template used needs to do something with this to have any
-#'     effect.
+#'     `"table"`/`"image"`. The Typst template used needs to do something with
+#'     this to have any effect.
 #'
 #' @param x A `typst_table` or `typst_figure` object.
 #'
@@ -790,5 +818,7 @@ wrap_paren <- function(x, open = "(", close = ")", collapse = ",") {
 ncol_ttab <- function(x) {
   if (is.numeric(x$columns) && length(x$columns) == 1L) {
     x$columns
-  } else length(x$columns)
+  } else {
+    length(x$columns)
+  }
 }

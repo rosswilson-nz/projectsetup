@@ -11,7 +11,7 @@ store <- here(tar_path_store())
 ```
 
 ```{r load-data, include=FALSE}
-# Load the previously stored results 
+# Load the previously stored results
 #tar_load(fig_primary.analysis, store = store)
 #tar_load(tbl_primary.analysis, store = store)
 

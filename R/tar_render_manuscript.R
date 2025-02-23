@@ -60,7 +60,9 @@ tar_render_manuscript <- function(
     !(is.null(pandoc_args) ||
       rlang::is_bare_character(pandoc_args) ||
       (rlang::is_bare_list(pandoc_args) &&
-        all(vapply(pandoc_args, rlang::is_bare_character, logical(1)))))
+        all(
+          vapply(pandoc_args, rlang::is_bare_character, logical(1))
+        )))
   )
     stop_invalid_pandoc_args()
   if (
@@ -77,7 +79,10 @@ tar_render_manuscript <- function(
     rmarkdown = {
       rlang::warn(
         c(
-          "Rendering from RMarkdown source files is soft deprecated in this version of `CMORprojects`",
+          paste(
+            "Rendering from RMarkdown source files is soft deprecated in",
+            "this version of `CMORprojects`"
+          ),
           i = "Quarto (`.qmd`) source files are now recommended"
         ),
         .frequency = "once",
@@ -88,7 +93,8 @@ tar_render_manuscript <- function(
       if (!fs::dir_exists(dirname(output_file)))
         stop_file_not_found("Valid output file directory", dirname(output_file))
       if (
-        fs::file_exists(output_file) && !fs::file_access(output_file, "write")
+        fs::file_exists(output_file) &&
+          !fs::file_access(output_file, "write")
       )
         stop_not_writable("Output file", output_file)
       file_reference_docx <- rlang::enexpr(file_reference_docx)
@@ -235,7 +241,10 @@ tar_quarto_command <- function(
   deps <- as.call(c(as.symbol("list"), lapply(deps, as.symbol)))
   fun <- as.call(c(
     as.symbol(":::"),
-    lapply(c("CMORprojects", "tar_quarto_run"), as.symbol)
+    lapply(
+      c("CMORprojects", "tar_quarto_run"),
+      as.symbol
+    )
   ))
   expr <- list(
     fun,
@@ -294,13 +303,11 @@ assert_quarto <- function(debug = FALSE) {
 
 valid_varnames <- function(x) {
   nm <- names(x)
-  if (
+  !(
     is.null(nm) ||
       anyNA(nm) ||
       any(nm == "") || # missing names
       !identical(unique(nm), nm) || # non-unique names
-      !all(grepl("^[.]*[a-zA-Z]+[a-zA-Z0-9._]*$", nm)) # invalid R variable names
+      !all(grepl("^[.]*[a-zA-Z]+[a-zA-Z0-9._]*$", nm)) # invalid variable names
   )
-    return(FALSE)
-  TRUE
 }

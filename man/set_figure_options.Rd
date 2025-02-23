@@ -29,8 +29,8 @@ specification.}
 
 \item{label}{Figure label, used for cross-referencing}
 
-\item{supplement}{Whether the figure is to be placed in supplementary material
-in the output. This only changes the Typst 'kind' parameter to
+\item{supplement}{Whether the figure is to be placed in supplementary
+material in the output. This only changes the Typst 'kind' parameter to
 \code{"suppl-image"} instead of \code{"image"}. Typst templates may make use of
 this to format the figure differently. Default is \code{FALSE.}}
 

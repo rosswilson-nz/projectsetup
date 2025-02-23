@@ -30,7 +30,8 @@ column widths, a vector of numeric values (for relative widths), or a
 vector of Typst track sizes ('auto' or Typst fixed, relative, or
 fractional lengths).}
 
-\item{placement}{(optional) Table placement. As in Typst's #figure() function.}
+\item{placement}{(optional) Table placement. As in Typst's #figure()
+function.}
 
 \item{footnotes}{Footnotes to add below the table. Pass a vector for multiple
 footnotes. At this stage, footnote numbering needs to be added manually

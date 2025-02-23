@@ -11,7 +11,8 @@ col_spec(x, cols, italic = NULL, bold = NULL, align = NULL, header = TRUE)
 
 \item{cols}{Which columns to apply the formatting to}
 
-\item{italic, bold}{(optional) Logical scalars. Apply italic or bold formatting.}
+\item{italic, bold}{(optional) Logical scalars. Apply italic or bold
+formatting.}
 
 \item{align}{(optional) Align cell contents. Specified as in Typst's
 \verb{#table.cell()}.}

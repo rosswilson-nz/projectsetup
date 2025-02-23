@@ -1,3 +1,9 @@
+# CMORprojects 0.7.1.9000
+
+* Reformat codebase with Air and lintr
+
+* Rename example targets with common prefixes
+
 # CMORprojects 0.7.1
 
 * Update default .gitignore

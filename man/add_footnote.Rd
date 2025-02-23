@@ -12,5 +12,6 @@ add_footnote(x, footnote)
 \item{footnote}{Character vector of footnotes to add to \code{x}}
 }
 \description{
-This is equivalent to specifying the footnotes in the original call to \code{ttab()}.
+This is equivalent to specifying the footnotes in the original call to
+\code{ttab()}.
 }

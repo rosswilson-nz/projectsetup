@@ -11,9 +11,11 @@ colspan(contents, n, align = "center", stroke = TRUE)
 
 \item{n}{The number of columns to span}
 
-\item{align}{(optional) Alignment of the cell contents. Defaults to \code{"center"}.}
+\item{align}{(optional) Alignment of the cell contents. Defaults to
+\code{"center"}.}
 
-\item{stroke}{(optional) Whether to draw a stroke under the cell. Defaults to \code{TRUE}.}
+\item{stroke}{(optional) Whether to draw a stroke under the cell. Defaults to
+\code{TRUE}.}
 }
 \description{
 Useful in the specification of grouped header rows. See \code{add_header()}.

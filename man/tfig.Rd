@@ -21,9 +21,11 @@ tfig(
 
 \item{label}{Figure label, used for cross-referencing}
 
-\item{placement}{(optional) Figure placement. As in Typst's #figure() function.}
+\item{placement}{(optional) Figure placement. As in Typst's #figure()
+function.}
 
-\item{width, height}{(optional) Image width and height. As in Typst's #image() function.}
+\item{width, height}{(optional) Image width and height. As in Typst's #image()
+function.}
 
 \item{footnotes}{Footnotes to add below the table.}
 }
@@ -32,5 +34,6 @@ tfig(
 
 This function is deprecated in favour of \code{typst_figure()}.
 
-This wraps the path to a saved image in a Typst figure environment with caption and label.
+This wraps the path to a saved image in a Typst figure environment with
+caption and label.
 }

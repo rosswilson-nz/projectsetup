@@ -64,7 +64,10 @@ print_figure_typst <- function(x, ...) {
   kind <- if (opts$supplement) "\"suppl-image\"" else "image"
 
   inner <- glue::glue(
-    "  #figure({caption}kind: {kind}, placement: none,\n  [{image}]){label}{footer}",
+    paste(
+      "  #figure({caption}kind: {kind}, placement: none,\n ",
+      "[{image}]){label}{footer}"
+    ),
     caption = if (length(opts$caption))
       glue::glue("caption: [{opts$caption}], "),
     label = if (length(opts$label)) glue::glue(" <{opts$label}>"),
@@ -78,7 +81,10 @@ print_figure_typst <- function(x, ...) {
     .trim = FALSE
   )
   glue::glue(
-    '\n```{{=typst}}\n\n#figure({placement}kind: "none", supplement: none)[\n{inner}\n]\n\n```\n',
+    paste(
+      "\n```{{=typst}}\n\n#figure({placement}kind: \"none\", supplement:",
+      "none)[\n{inner}\n]\n\n```\n"
+    ),
     placement = glue::glue("placement: {opts$placement}, "),
     .null = NULL,
     .trim = FALSE
@@ -117,13 +123,16 @@ get_image_typst <- function(path) {
 #'
 #' This function is deprecated in favour of `typst_figure()`.
 #'
-#' This wraps the path to a saved image in a Typst figure environment with caption and label.
+#' This wraps the path to a saved image in a Typst figure environment with
+#'     caption and label.
 #'
 #' @param x Path to a saved image in SVG, PNG, JPEG, or GIF format.
 #' @param caption The figure caption.
 #' @param label Figure label, used for cross-referencing
-#' @param placement (optional) Figure placement. As in Typst's #figure() function.
-#' @param width,height (optional) Image width and height. As in Typst's #image() function.
+#' @param placement (optional) Figure placement. As in Typst's #figure()
+#'     function.
+#' @param width,height (optional) Image width and height. As in Typst's #image()
+#'     function.
 #' @param footnotes Footnotes to add below the table.
 #'
 #' @export
@@ -150,15 +159,19 @@ tfig <- function(
 
 #' Create figures in Typst format
 #'
-#' This wraps the path to a saved image in a Typst figure environment with caption and label.
+#' This wraps the path to a saved image in a Typst figure environment with
+#'     caption and label.
 #'
 #' @param x Path to a saved image in SVG, PNG, JPEG, or GIF format.
 #' @param caption The figure caption.
 #' @param label Figure label, used for cross-referencing
-#' @param placement (optional) Figure placement. As in Typst's #figure() function.
-#' @param width,height (optional) Image width and height. As in Typst's #image() function.
+#' @param placement (optional) Figure placement. As in Typst's #figure()
+#'     function.
+#' @param width,height (optional) Image width and height. As in Typst's #image()
+#'     function.
 #' @param footnotes Footnotes to add below the table.
-#' @param supplement Whether the figure should be marked as supplementary material.
+#' @param supplement Whether the figure should be marked as supplementary
+#'     material.
 #'
 #' @export
 typst_figure <- function(
@@ -171,9 +184,9 @@ typst_figure <- function(
   footnotes = NULL,
   supplement = FALSE
 ) {
-  `_image` <- check_image_path(fs::path_rel(x, "reports"))
+  image <- check_image_path(fs::path_rel(x, "reports"))
 
-  `_opts` <- collate_initial_figure_opts(
+  opts <- collate_initial_figure_opts(
     caption = caption,
     label = label,
     placement = placement,
@@ -181,13 +194,13 @@ typst_figure <- function(
     height = height,
     supplement = supplement
   )
-  `_footnotes` <- check_footnotes(footnotes)
+  footnotes <- check_footnotes(footnotes)
 
   structure(
     list(
-      `_image` = `_image`,
-      `_opts` = `_opts`,
-      `_footnotes` = `_footnotes`
+      `_image` = image,
+      `_opts` = opts,
+      `_footnotes` = footnotes
     ),
     class = "CMORprojects_fig"
   )
@@ -199,10 +212,13 @@ check_image_path <- function(x) {
       length(x) == 1 &&
       tolower(fs::path_ext(x)) %in% c("png", "jpeg", "jpg", "gif", "svg", "")
   ) {
-    `_image` <- fs::path(x)
+    fs::path(x)
   } else {
     stop(
-      "`x` must be the path to an image file in format SVG (preferred), PNG, JPEG, or GIF"
+      paste(
+        "`x` must be the path to an image file in format SVG (preferred),",
+        "PNG, JPEG, or GIF"
+      )
     )
   }
 }
@@ -259,8 +275,8 @@ print.ttables_figure_opts <- function(x, ...) {
 #'     `"bottom"`. The default is `"auto"`.
 #' @param caption The figure caption.
 #' @param label Figure label, used for cross-referencing
-#' @param supplement Whether the figure is to be placed in supplementary material
-#'     in the output. This only changes the Typst 'kind' parameter to
+#' @param supplement Whether the figure is to be placed in supplementary
+#'     material in the output. This only changes the Typst 'kind' parameter to
 #'     `"suppl-image"` instead of `"image"`. Typst templates may make use of
 #'     this to format the figure differently. Default is `FALSE.`
 #' @param landscape Whether the figure should be placed on its own landscape
@@ -321,14 +337,16 @@ check_placement <- function(x) {
 
 check_width <- function(x) {
   if (rlang::is_scalar_character(x)) {
-    switch(x, auto = ttables::auto(), ttables::as_relative(x))
-  } else rlang::abort("Invalid width")
+    return(switch(x, auto = ttables::auto(), ttables::as_relative(x)))
+  }
+  rlang::abort("Invalid width")
 }
 
 check_height <- function(x) {
   if (rlang::is_scalar_character(x)) {
-    switch(x, auto = ttables::auto(), ttables::as_relative(x))
-  } else rlang::abort("Invalid height")
+    return(switch(x, auto = ttables::auto(), ttables::as_relative(x)))
+  }
+  rlang::abort("Invalid height")
 }
 
 check_supplement <- function(x) {
