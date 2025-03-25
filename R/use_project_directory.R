@@ -104,6 +104,17 @@ add_templates <- function() {
     fs::path_wd("_config.R")
   )
 
+  # Air config file
+  file.copy(
+    system.file(
+      "templates",
+      "air",
+      package = "CMORprojects",
+      mustWork = TRUE
+    ),
+    fs::path_wd("air.toml")
+  )
+
   # Manuscript templates and functions
   ## Typst format templates
   extension_files <- c(
