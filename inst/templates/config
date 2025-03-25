@@ -1,7 +1,10 @@
+# fmt: skip file
+
 library(tidyverse)
 
+# Options for parallel processing, if used -------------------------------------
+## Set `tar_config_set(use_crew = <TRUE/FALSE>)` as needed
 parallel <- list(
-  enabled = FALSE,
   max_cores = Inf
 )
 

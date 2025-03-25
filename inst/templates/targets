@@ -31,9 +31,18 @@ tar_source()
 # This default runs up to `parallel::detectCores() - 1` workers in parallel
 # as local R processes
 
-if (parallel$enabled && rlang::is_installed("crew")) { # option set in _config.R
-	n_cores <- min(parallel::detectCores() - 1, parallel$max_cores)
-	tar_option_set(controller = crew::crew_controller_local(workers = n_cores))
+if (rlang::is_installed("crew")) {
+	tar_option_set(
+	  controller = crew::crew_controller_local(
+	    workers = min(parallel::detectCores() - 1, parallel$max_cores)
+	  )
+	)
+} else {
+  rlang::inform(
+    paste("Consider installing the `crew` package to support parallel (or",
+          "distributed) processing of targets"),
+    .frequency = "once"
+  )
 }
 
 ######################
