@@ -1,18 +1,38 @@
+# CMORprojects 0.7.1.9000
+
+* Reformat codebase with Air and lintr
+
+* Rename example targets with common prefixes
+
+* Update targets config templates for `crew` parallel/distributed computing
+
+* Add template `air.toml` to project working directory
+
+# CMORprojects 0.7.1
+
+* Update default .gitignore
+
+* Add `create.dir` argument to `save_plot()`
+
+* Rename `parameters.R` to `_config.R`
+
+* Use `crew` for parallel/distributed computing
+
 # CMORprojects 0.7.0
 
 * Redesign `create_research_project()`
 
 # CMORprojects 0.6.0
 
-* Move all `typst_figure()` code from `ttables`.
+* Move all `typst_figure()` code from `ttables`
 
 # CMORprojects 0.5.1
 
-* Add `typst_figure()` wrapper around `ttables::tfig()`.
+* Add `typst_figure()` wrapper around `ttables::tfig()`
 
 # CMORprojects 0.5.0
 
-* Deprecate `ttab()` and friends in favour of the new functions in the `ttables` package.
+* Deprecate `ttab()` and friends in favour of the new functions in the `ttables` package
 
 * Add `save_plots()` to save plots to SVG figure files
 
@@ -72,4 +92,4 @@
 
 * Moved all functions over from `cmor.tools`
 
-* Added a `NEWS.md` file to track changes to the package.
+* Added a `NEWS.md` file to track changes to the package

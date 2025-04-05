@@ -19,8 +19,8 @@ abstract: |
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
-knitr::opts_chunk$set(  
-	collapse = TRUE,
+knitr::opts_chunk$set(
+  collapse = TRUE,
   warning = FALSE,
   message = FALSE,
   echo = FALSE,
@@ -41,7 +41,8 @@ library(targets)
 #tar_load(figure_1)
 #tar_load(results)
 
-# Any other variables to be loaded/defined in here; extract data from analysis objects if required
+# Any other variables to be loaded/defined in here;
+# extract data from analysis objects if required
 ```
 
 # Introduction

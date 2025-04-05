@@ -9,10 +9,12 @@ add_header(x, header)
 \arguments{
 \item{x}{A \code{typst_table} object.}
 
-\item{header}{List or character vector of column headings to add. Must have one element per
-column of x (after expansion of any multi-column cells). Must be a list (not a character
-vector) if any elements contain custom formatting commands (e.g. \code{colspan()}).}
+\item{header}{List or character vector of column headings to add. Must have
+one element per column of x (after expansion of any multi-column cells).
+Must be a list (not a character vector) if any elements contain custom
+formatting commands (e.g. \code{colspan()}).}
 }
 \description{
-Similar to \code{kableExtra::add_header_above()}. Can be useful for grouped columns.
+Similar to \code{kableExtra::add_header_above()}. Can be useful for grouped
+columns.
 }

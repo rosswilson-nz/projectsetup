@@ -11,8 +11,8 @@ add_vline(x, before, start = 0, end = "none")
 
 \item{before}{The table columns before which lines should be drawn}
 
-\item{start, end}{The start and end rows of the line. Specified as in Typst's \verb{#table.vline()}
-function.}
+\item{start, end}{The start and end rows of the line. Specified as in Typst's
+\verb{#table.vline()} function.}
 }
 \description{
 Add vertical lines in a table

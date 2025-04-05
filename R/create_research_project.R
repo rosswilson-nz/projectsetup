@@ -24,16 +24,25 @@
 #'
 #' @export
 create_research_project <- function(
-  path, git = TRUE, raw_data_in_git = TRUE, github = TRUE, private = TRUE,
-  organisation = NULL, rstudio = rstudioapi::isAvailable(), open = rlang::is_interactive()
+  path,
+  git = TRUE,
+  raw_data_in_git = TRUE,
+  github = TRUE,
+  private = TRUE,
+  organisation = NULL,
+  rstudio = rstudioapi::isAvailable(),
+  open = rlang::is_interactive()
 ) {
   path <- usethis::create_project(path, rstudio = rstudio, open = FALSE)
   usethis::local_project(path)
   use_project_directory(git = git, raw_data_in_git = raw_data_in_git)
   if (git) {
     use_git()
-    if (github) if (usethis::ui_yeah("Is it ok to push this repository to GitHub?"))
+    if (
+      github && usethis::ui_yeah("Is it ok to push this repository to GitHub?")
+    ) {
       usethis::use_github(private = private, organisation = organisation)
+    }
   } else {
     github <- FALSE
   }
@@ -42,9 +51,13 @@ create_research_project <- function(
     data <- append(data, gh::gh_tree_remote(path))
     data <- append(
       data,
-      list(url = gh::gh('GET /repos/:owner/:repo',
-                        owner = gh::gh_tree_remote()$username,
-                        repo = gh::gh_tree_remote()$repo)$html_url)
+      list(
+        url = gh::gh(
+          "GET /repos/:owner/:repo",
+          owner = gh::gh_tree_remote()$username,
+          repo = gh::gh_tree_remote()$repo
+        )$html_url
+      )
     )
   }
   use_cmor_readme(data)
@@ -53,11 +66,16 @@ create_research_project <- function(
   cli_bullets(c(
     "In the new project:",
     "*" = "Edit {.file README.Rmd} to provide an introduction to the project",
-    "*" =if (github)  "Render {.file README.Rmd} to {.file README.md} for GitHub",
-    "*" = "Use {.file _targets.R}, {.file _plan.R}, and {.file parameters.R} to specify the analysis workflow",
-    "i" = "See {.url https://books.ropensci.org/targets/} for more information on the {.pkg targets} package."
+    "*" = if (github) {
+      "Render {.file README.Rmd} to {.file README.md} for GitHub"
+    },
+    "*" = paste("Use {.file _targets.R}, {.file _plan.R}, and",
+                "{.file _config.R} to specify the analysis workflow"),
+    "i" = paste("See {.url https://books.ropensci.org/targets/} for more",
+                "information on the {.pkg targets} package.")
   ))
   cli_rule()
 
-  if (open) if (usethis::ui_yeah("Open the new project now?")) usethis::proj_activate(path)
+  if (open && usethis::ui_yeah("Open the new project now?"))
+    usethis::proj_activate(path)
 }

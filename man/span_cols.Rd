@@ -13,10 +13,13 @@ span_cols(x, range, rows, align = "left", stroke = FALSE)
 
 \item{rows}{The rows in which to apply the span}
 
-\item{align}{(optional) Alignment of the new multicolumn cell. Defaults to \code{"left"}.}
+\item{align}{(optional) Alignment of the new multicolumn cell. Defaults to
+\code{"left"}.}
 
-\item{stroke}{(optional) Whether to draw a stroke under the merged cells. Defaults to \code{FALSE}.}
+\item{stroke}{(optional) Whether to draw a stroke under the merged cells.
+Defaults to \code{FALSE}.}
 }
 \description{
-If any cells to the right of the first one are non-empty, they will be overwritten with a warning.
+If any cells to the right of the first one are non-empty, they will be
+overwritten with a warning.
 }

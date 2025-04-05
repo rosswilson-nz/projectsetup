@@ -4,8 +4,15 @@ use_git <- function(message = "Initial commit") {
   }
   gert::git_init(getwd())
   cli_alert_success("Initialising Git repo")
-  usethis::use_git_ignore(c(".Rhistory", ".RData", ".Rproj.user", ".httr-oauth", ".DS_Store",
-                            "_targets/", ".quarto"))
+  usethis::use_git_ignore(c(
+    ".Rhistory",
+    ".RData",
+    ".Rproj.user",
+    ".httr-oauth",
+    ".DS_Store",
+    "_targets/",
+    ".quarto"
+  ))
   git_ask_commit(message)
   invisible(TRUE)
 }
@@ -21,7 +28,9 @@ git_ask_commit <- function(message) {
   if (n > 9) {
     ui_paths <- cli_vec(ui_paths[1:9], list("vec-last" = ", "))
     cli_text("{.file {ui_paths}}, and {.val n - 9} other{?s}")
-  } else cli_text("{.file {ui_paths}}")
+  } else {
+    cli_text("{.file {ui_paths}}")
+  }
   ask <- pluralize("Is it ok to commit {qty(n)} {?it/them}?")
   if (usethis::ui_yeah(ask)) {
     gert::git_add(paths, repo = getwd())

@@ -13,8 +13,10 @@ span_rows(x, range, cols, align = "top")
 
 \item{cols}{The columns in which to apply the span}
 
-\item{align}{(optional) Alignment of the new multirow cell. Defaults to \code{"top"}.}
+\item{align}{(optional) Alignment of the new multirow cell. Defaults to
+\code{"top"}.}
 }
 \description{
-If any cells below the top one are non-empty, they will be overwritten with a warning.
+If any cells below the top one are non-empty, they will be overwritten with a
+warning.
 }

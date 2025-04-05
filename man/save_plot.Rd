@@ -8,12 +8,15 @@ save_plot(
   plot,
   filename,
   device = NULL,
-  device.pdf = NULL,
+  device_pdf = NULL,
+  device_png = NULL,
   height = NA,
   width = NA,
   ...,
   pdf = TRUE,
-  family = "Wickliffe Sans"
+  png = TRUE,
+  family = "Wickliffe Sans",
+  create_dir = TRUE
 )
 }
 \arguments{
@@ -23,17 +26,22 @@ save_plot(
 
 \item{device}{(optional) Device to use for SVG output}
 
-\item{device.pdf}{(optional) Device to use for PDF output}
+\item{device_pdf}{(optional) Device to use for PDF output}
+
+\item{device_png}{(optional) Device to use for PNG output}
 
 \item{height, width}{Plot size in inches (by default; use \verb{units = } to
 alternatively specify \code{"cm"}, \verb{"mm}", or \code{"px"}).}
 
 \item{...}{Passed through to \code{ggplot2::ggsave()}}
 
-\item{pdf}{Whether to produce PDF output as well as SVG for inclusion in a
-Typst source document.}
+\item{pdf}{Whether to produce PDF output (as well as SVG).}
 
-\item{family}{Font family, passed through to}
+\item{png}{Whether to produce PNG output (as well as SVG).}
+
+\item{family}{Font family, passed through to \code{ggplot2::ggsave()}.}
+
+\item{create_dir}{Whether to create the output directory if it doesn't exist.}
 }
 \description{
 A wrapper around \code{ggplot2::ggsave()} to save plots to SVG file for inclusion

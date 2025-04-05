@@ -11,7 +11,8 @@ cell_spec(x, row, col, italic = NULL, bold = NULL, align = NULL)
 
 \item{row, col}{Which cell to apply formatting to}
 
-\item{italic, bold}{(optional) Logical scalars. Apply italic or bold formatting.}
+\item{italic, bold}{(optional) Logical scalars. Apply italic or bold
+formatting.}
 
 \item{align}{(optional) Align cell contents. Specified as in Typst's
 \verb{#table.cell()}.}

@@ -11,8 +11,8 @@ add_styling(x, style, replace = FALSE)
 
 \item{style}{Character vector of Typst styling commands (or anything else)}
 
-\item{replace}{Whether to replace any styles previously specified. Default is \code{FALSE} (new styles
-are added to any previous specifications).}
+\item{replace}{Whether to replace any styles previously specified. Default is
+\code{FALSE} (new styles are added to any previous specifications).}
 }
 \description{
 Passed verbatim as Typst commands before the table itself

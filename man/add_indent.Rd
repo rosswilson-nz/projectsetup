@@ -9,19 +9,20 @@ add_indent(x, rows, indent = 1, columns = 1)
 \arguments{
 \item{x}{A \code{typst_table} object.}
 
-\item{rows}{Rows to indent. For now, these are rows of the current state of the table, not the
-original data frame (i.e., unlike \code{kableExtra}); this will likely be changed in a later
-version.}
+\item{rows}{Rows to indent. For now, these are rows of the current state of
+the table, not the original data frame (i.e., unlike \code{kableExtra}); this
+will likely be changed in a later version.}
 
-\item{indent}{(optional) Level of indent. Will be added to any existing indent. Defaults to 1
-(i.e. adding a space of 1em).}
+\item{indent}{(optional) Level of indent. Will be added to any existing
+indent. Defaults to 1 (i.e. adding a space of 1em).}
 
-\item{columns}{(optional) Which column(s) to apply indent to. Defaults to the first column only.
-For now, these are columns of the current state of the table, not the original data frame,
-so will probably not work as expected if multicolumn cells have been defined in any included
-rows; this will likely be changed in a later version.}
+\item{columns}{(optional) Which column(s) to apply indent to. Defaults to the
+first column only. For now, these are columns of the current state of the
+table, not the original data frame, so will probably not work as expected
+if multicolumn cells have been defined in any included rows; this will
+likely be changed in a later version.}
 }
 \description{
-Useful for example to indicate grouped rows below a total. See also \code{pack_rows()} (which
-additionally adds a group label).
+Useful for example to indicate grouped rows below a total. See also
+\code{pack_rows()} (which additionally adds a group label).
 }

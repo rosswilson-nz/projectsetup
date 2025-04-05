@@ -11,6 +11,6 @@ supplement(x)
 }
 \description{
 Just specifies the Typst \code{kind} as \code{"suppl-table"}/\code{"suppl-image"} instead of
-\code{"table"}/\code{"image"}. The Typst template used needs to do something with this to have any
-effect.
+\code{"table"}/\code{"image"}. The Typst template used needs to do something with
+this to have any effect.
 }

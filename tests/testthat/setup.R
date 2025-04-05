@@ -1,4 +1,8 @@
-local_create_project <- function(dir = fs::file_temp(), env = parent.frame(), ...) {
+local_create_project <- function(
+  dir = fs::file_temp(),
+  env = parent.frame(),
+  ...
+) {
   withr::local_options(usethis.quiet = TRUE)
   old_project <- getwd()
 
