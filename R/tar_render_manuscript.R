@@ -195,12 +195,6 @@ tar_render_manuscript <- function(
         retrieval = retrieval,
         cue = cue
       )
-<<<<<<< HEAD
-      targets::tar_target_raw(rlang::as_name(rlang::ensym(name)), command, packages = packages,
-                              library = library, format = "file", repository = "local",
-                              error = error, memory = memory, garbage_collection = garbage_collection,
-                              deployment = deployment, priority = priority, resources = resources,
-                              retrieval = retrieval, cue = cue)
     },
     typst = {
       basedir <- fs::path_dir(path)
@@ -213,8 +207,6 @@ tar_render_manuscript <- function(
       sources <- c(path, includes)
       output <- fs::path_ext_set(fs::path(output_dir, fs::path_ext_remove(input)), "pdf")
       command <- rlang::expr(system2("typst", c("compile", !!path, !!output)))
-=======
->>>>>>> 8842c450937537c3bab27c560ce9ee4cead0961d
     }
   )
 }
