@@ -43,9 +43,9 @@ tar_render_manuscript <- function(name, path, output_file, appendix = FALSE, inc
                                   cue = targets::tar_option_get("cue"),
                                   quiet = TRUE) {
   if (!rlang::is_scalar_character(path)) stop_not_string("path")
-  if (!fs::file_exists(path)) stop_file_not_found("RMarkdown or Quarto source file", path)
-  if (!(tolower(fs::path_ext(path)) %in% c("qmd", "rmd", "rmarkdown")))
-    stop_invalid_file("RMarkdown or Quarto source file", path)
+  if (!fs::file_exists(path)) stop_file_not_found("RMarkdown, Quarto, or Typst source file", path)
+  if (!(tolower(fs::path_ext(path)) %in% c("qmd", "rmd", "rmarkdown", "typ", "typst")))
+    stop_invalid_file("RMarkdown, Quarto, or Typst source file", path)
   if (!(
     is.null(pandoc_args) ||
     rlang::is_bare_character(pandoc_args) ||
@@ -58,7 +58,13 @@ tar_render_manuscript <- function(name, path, output_file, appendix = FALSE, inc
      !valid_varnames(names(render_args)))
   ) stop_invalid_render_args()
 
-  frmt <- if (tolower(fs::path_ext(path)) == "qmd") "quarto" else "rmarkdown"
+  frmt <- if (tolower(fs::path_ext(path)) == "qmd") {
+    "quarto"
+  } else if (tolower(fs::path_ext(path)) %in% c("rmd", "rmarkdown")) {
+    "rmarkdown"
+  } else {
+    "typst"
+  }
 
   switch(
     frmt,
@@ -125,6 +131,18 @@ tar_render_manuscript <- function(name, path, output_file, appendix = FALSE, inc
                               error = error, memory = memory, garbage_collection = garbage_collection,
                               deployment = deployment, priority = priority, resources = resources,
                               retrieval = retrieval, cue = cue)
+    },
+    typst = {
+      basedir <- fs::path_dir(path)
+      input <- fs::file(path)
+      output_dir <- "output"
+      includes <- grep("^#include \".*\\.typ(st)?\"", readLines(path), value = TRUE)
+      includes <- sub("#include \"(.*\\.typ(st)?)\"", "\\1", includes)
+      includes <- fs::path(basedir, includes,
+                           "reports/bibliography.bib", "reports/vancouver.csl") # These hard-coded ones need to be changed
+      sources <- c(path, includes)
+      output <- fs::path_ext_set(fs::path(output_dir, fs::path_ext_remove(input)), "pdf")
+      command <- rlang::expr(system2("typst", c("compile", !!path, !!output)))
     }
   )
 }
