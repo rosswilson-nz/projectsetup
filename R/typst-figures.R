@@ -137,13 +137,13 @@ get_image_typst <- function(path) {
 #'
 #' @export
 tfig <- function(
-  x,
-  caption = NULL,
-  label = NULL,
-  placement = NULL,
-  width = NULL,
-  height = NULL,
-  footnotes = NULL
+    x,
+    caption = NULL,
+    label = NULL,
+    placement = NULL,
+    width = NULL,
+    height = NULL,
+    footnotes = NULL
 ) {
   lifecycle::deprecate_warn("0.6.0", "tfig()", "typst_figure()")
   typst_figure(
@@ -175,14 +175,14 @@ tfig <- function(
 #'
 #' @export
 typst_figure <- function(
-  x,
-  caption = NULL,
-  label = NULL,
-  placement = "auto",
-  width = "auto",
-  height = "auto",
-  footnotes = NULL,
-  supplement = FALSE
+    x,
+    caption = NULL,
+    label = NULL,
+    placement = "auto",
+    width = "auto",
+    height = "auto",
+    footnotes = NULL,
+    supplement = FALSE
 ) {
   image <- check_image_path(fs::path_rel(x, "reports"))
 
@@ -207,12 +207,21 @@ typst_figure <- function(
 }
 
 check_image_path <- function(x) {
-  if (
-    is.character(x) &&
-      length(x) == 1 &&
-      tolower(fs::path_ext(x)) %in% c("png", "jpeg", "jpg", "gif", "svg", "")
-  ) {
-    fs::path(x)
+  if (!is.character(x)) stop(
+    paste(
+      "`x` must be the path to an image file in format SVG (preferred),",
+      "PNG, JPEG, or GIF"
+    )
+  )
+
+  if (any(tolower(fs::path_ext(x)) == "svg")) {
+    fs::path(x[tolower(fs::path_ext(x)) == "svg"][[1]])
+  } else if (any(tolower(fs::path_ext(x)) == "png")) {
+    fs::path(x[tolower(fs::path_ext(x)) == "png"][[1]])
+  } else if (any(tolower(fs::path_ext(x)) %in% c("jpeg", "jpg"))) {
+    fs::path(x[tolower(fs::path_ext(x)) %in% c("jpeg", "jpg")][[1]])
+  } else if (any(tolower(fs::path_ext(x)) == "gif")) {
+    fs::path(x[tolower(fs::path_ext(x)) == "gif"][[1]])
   } else {
     stop(
       paste(
@@ -230,13 +239,13 @@ check_footnotes <- function(x) {
 }
 
 new_figure_opts <- function(
-  width,
-  height,
-  placement,
-  caption,
-  label,
-  supplement,
-  landscape
+    width,
+    height,
+    placement,
+    caption,
+    label,
+    supplement,
+    landscape
 ) {
   if (missing(width)) width <- ttables::auto()
   if (missing(height)) height <- ttables::auto()
@@ -284,14 +293,14 @@ print.ttables_figure_opts <- function(x, ...) {
 #'
 #' @returns A Typst figure with the specified options set.
 set_figure_options <- function(
-  x,
-  width,
-  height,
-  placement,
-  caption,
-  label,
-  supplement,
-  landscape
+    x,
+    width,
+    height,
+    placement,
+    caption,
+    label,
+    supplement,
+    landscape
 ) {
   stopifnot(inherits(x, "ttables_fig"))
 
@@ -317,7 +326,7 @@ check_caption <- function(x) {
 check_label <- function(x) {
   if (
     is.null(x) ||
-      (rlang::is_scalar_character(x) && !grepl("[^[:alnum:]_:.-]", x))
+    (rlang::is_scalar_character(x) && !grepl("[^[:alnum:]_:.-]", x))
   )
     return(x)
   rlang::abort(
@@ -360,12 +369,12 @@ check_landscape <- function(x) {
 }
 
 collate_initial_figure_opts <- function(
-  caption,
-  label,
-  placement,
-  width,
-  height,
-  supplement
+    caption,
+    label,
+    placement,
+    width,
+    height,
+    supplement
 ) {
   caption <- check_caption(caption)
   label <- check_label(label)
