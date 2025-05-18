@@ -7,10 +7,10 @@
 # dta_: Cleaned data frames
 # res_: Analysis results (regression, etc.)
 # msc_: Miscellaneous objects not included elsewhere
-# tbl_: Table (e.g. to be passed to `ttables::ttab()`)
+# tbl_: Table (as saved `.typ` file, in `output/_tables/`)
 # plt_: Plots (as R objects, e.g. `ggplot`)
-# fig_: Saved figures (as files)
-# rpt_: Output reports (as files, usually with `tar_render_manuscript()`)
+# fig_: Saved figures (as files, usually `.svg`, in `output/_figures/`)
+# rpt_: Output reports (as files, usually with `render_manuscript()`)
 
 # Simple skeleton outline of analysis plan - revise as required
 targets <- rlang::list2(
@@ -18,9 +18,20 @@ targets <- rlang::list2(
   # 	tar_target(raw_data, read_raw_data(file_data)),
   # 	tar_target(dta_cleaned, process_data(raw_data)),
   # 	tar_target(res_primary.analysis, analyse_data(dta_cleaned)),
-  #   tar_target(tbl_primary.results, create_table(res_primary.analysis)),
+  #   tar_file(tbl_primary.results, create_table(res_primary.analysis)),
   #   tar_target(plt_primary.results, create_plot(res_primary.analysis)),
   #   tar_file(fig_primary.results, save_plot(plt_primary.results, "my-plot")),
+  #   tar_file(
+  #     msc_results,
+  #     export_json(
+  #       r = list(primary_result = extract_result(res_primary.analysis)),
+  #       fig = list(primary = fig_primary.results),
+  #       tbl = list(primary = tbl_primary.results)
+  #     )
+  #   ),
+  #   tar_file(rpt_manuscript,
+  #            render_manuscript("reports/manuscript.typ", list(msc_results, appendix))),
+  #   tar_file(rpt_appendix, c("reports/appendix.typ", "reports/templates/appendix.typ")),
   # 	tar_render_manuscript(rpt_manuscript, "reports/manuscript.qmd"),
   # 	tar_render_manuscript(rpt_appendix, "reports/appendix.qmd", appendix = TRUE)
 )

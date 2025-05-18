@@ -61,31 +61,20 @@ print_figure_typst <- function(x, ...) {
   opts <- x$`_opts`
   footnotes <- x$`_footnotes`
   image <- print_image_typst(x$`_image`, opts)
-  kind <- if (opts$supplement) "\"suppl-image\"" else "image"
 
-  inner <- glue::glue(
-    paste(
-      "  #figure({caption}kind: {kind}, placement: none,\n ",
-      "[{image}]){label}{footer}"
-    ),
-    caption = if (length(opts$caption))
-      glue::glue("caption: [{opts$caption}], "),
-    label = if (length(opts$label)) glue::glue(" <{opts$label}>"),
-    footer = if (length(footnotes))
-      glue::glue(
-        "\n\n  {footnotes}",
-        footnotes = glue::glue_collapse(footnotes, ",\n\n  "),
-        .trim = FALSE
-      ),
-    .null = NULL,
-    .trim = FALSE
-  )
   glue::glue(
-    paste(
-      "\n```{{=typst}}\n\n#figure({placement}kind: \"none\", supplement:",
-      "none)[\n{inner}\n]\n\n```\n"
-    ),
-    placement = glue::glue("placement: {opts$placement}, "),
+    "
+{landscape_head}#figure(
+  [{image}],
+  kind: {kind}{caption}{placement}
+){label}{landscape_tail}
+",
+    caption = if (length(opts$caption)) glue::glue(",\ncaption: figure.caption(position: top)[{opts$caption}]"),
+    placement = if (length(opts$caption)) glue::glue(",\nplacement: {opts$placement}"),
+    label = if (length(opts$label)) glue::glue(" <{opts$label}>"),
+    landscape_head = if (opts$landscape) glue::glue("#page(flipped: true)[\n"),
+    landscape_tail = if (opts$landscape) glue::glue("]"),
+    kind = if (opts$supplement) "\"suppl-image\"" else "image",
     .null = NULL,
     .trim = FALSE
   )
@@ -114,47 +103,6 @@ get_image_typst <- function(path) {
   if (fs::file_access(fs::path_ext_set(path, "gif"), "read"))
     return(fs::path_ext_set(path, "gif"))
   stop("Suitable image not found at", path)
-}
-
-#' Create figures in Typst format
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is deprecated in favour of `typst_figure()`.
-#'
-#' This wraps the path to a saved image in a Typst figure environment with
-#'     caption and label.
-#'
-#' @param x Path to a saved image in SVG, PNG, JPEG, or GIF format.
-#' @param caption The figure caption.
-#' @param label Figure label, used for cross-referencing
-#' @param placement (optional) Figure placement. As in Typst's #figure()
-#'     function.
-#' @param width,height (optional) Image width and height. As in Typst's #image()
-#'     function.
-#' @param footnotes Footnotes to add below the table.
-#'
-#' @export
-tfig <- function(
-    x,
-    caption = NULL,
-    label = NULL,
-    placement = NULL,
-    width = NULL,
-    height = NULL,
-    footnotes = NULL
-) {
-  lifecycle::deprecate_warn("0.6.0", "tfig()", "typst_figure()")
-  typst_figure(
-    x,
-    caption,
-    label,
-    placement %||% "auto",
-    width %||% "auto",
-    height %||% "auto",
-    footnotes
-  )
 }
 
 #' Create figures in Typst format

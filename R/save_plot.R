@@ -34,7 +34,7 @@ save_plot <- function(
   family = "Wickliffe Sans",
   create_dir = TRUE
 ) {
-  file_svg <- fs::path("reports", "_figures", filename, ext = "svg")
+  file_svg <- fs::path("output", "_figures", filename, ext = "svg")
   out <- file_svg
   if (is.null(device)) device <- grDevices::svg
   if (identical(device, grDevices::svg)) {
@@ -78,7 +78,7 @@ save_plot <- function(
 
   if (png) {
     if (is.null(device_png)) device_png <- grDevices::png
-    file_png <- fs::path("reports", "_figures", filename, ext = "png")
+    file_png <- fs::path("output", "_figures", filename, ext = "png")
     out <- c(out, file_png)
     ggplot2::ggsave(
       file_png,

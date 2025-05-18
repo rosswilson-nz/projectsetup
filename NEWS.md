@@ -1,4 +1,6 @@
-# CMORprojects 0.7.1.9000
+# CMORprojects 0.8.0
+
+* Convert manuscripts to Typst source instead of Quarto
 
 * Reformat codebase with Air and lintr
 
