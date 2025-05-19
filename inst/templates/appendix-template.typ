@@ -23,6 +23,7 @@
     Appendix #numbering("A:", nums.pos().at(0))
   ])
   show heading.where(level: 1): set block(above: 0em, below: 2em)
+  set super(typographic: false)
   set bibliography(style: bibliographystyle, title: "References")
   set footnote.entry(
     separator: line(length: 100%),

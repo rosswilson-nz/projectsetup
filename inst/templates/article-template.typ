@@ -35,6 +35,7 @@
   set heading(numbering: sectionnumbering)
   show heading: set block(above: 1.4em, below: 1em)
   show heading: set text(font: font)
+  set super(typographic: false)
   set bibliography(style: bibliographystyle, title: "References")
   set footnote.entry(
     separator: line(length: 100%),
