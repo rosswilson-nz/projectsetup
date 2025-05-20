@@ -35,7 +35,7 @@ save_plot <- function(
   create_dir = TRUE
 ) {
   file_svg <- fs::path("output", "_figures", filename, ext = "svg")
-  out <- file_svg
+  out <- list(svg = file_svg)
   if (is.null(device)) device <- grDevices::svg
   if (identical(device, grDevices::svg)) {
     ggplot2::ggsave(
@@ -62,8 +62,8 @@ save_plot <- function(
 
   if (pdf) {
     if (is.null(device_pdf)) device_pdf <- grDevices::cairo_pdf
-    file_pdf <- fs::path("output", "figures", filename, ext = "pdf")
-    out <- c(out, file_pdf)
+    file_pdf <- fs::path("output", "_figures", filename, ext = "pdf")
+    out <- append(out, list(pdf = file_pdf))
     ggplot2::ggsave(
       file_pdf,
       plot,
@@ -79,7 +79,7 @@ save_plot <- function(
   if (png) {
     if (is.null(device_png)) device_png <- grDevices::png
     file_png <- fs::path("output", "_figures", filename, ext = "png")
-    out <- c(out, file_png)
+    out <- append(out, list(png = file_png))
     ggplot2::ggsave(
       file_png,
       plot,

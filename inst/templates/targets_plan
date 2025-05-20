@@ -22,7 +22,7 @@ targets <- rlang::list2(
   #   tar_target(plt_primary.results, create_plot(res_primary.analysis)),
   #   tar_file(fig_primary.results, save_plot(plt_primary.results, "my-plot")),
   #   tar_file(
-  #     msc_results,
+  #     file_json,
   #     export_json(
   #       r = list(primary_result = extract_result(res_primary.analysis)),
   #       fig = list(primary = fig_primary.results),
@@ -30,7 +30,7 @@ targets <- rlang::list2(
   #     )
   #   ),
   #   tar_file(rpt_manuscript,
-  #            render_manuscript("reports/manuscript.typ", list(msc_results, appendix))),
+  #            render_manuscript("reports/manuscript.typ", list(file_json, appendix))),
   #   tar_file(rpt_appendix, c("reports/appendix.typ", "reports/templates/appendix.typ")),
   # 	tar_render_manuscript(rpt_manuscript, "reports/manuscript.qmd"),
   # 	tar_render_manuscript(rpt_appendix, "reports/appendix.qmd", appendix = TRUE)

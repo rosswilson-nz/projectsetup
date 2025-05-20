@@ -23,7 +23,7 @@
   ]
 )
 
-#let js = json("inputs.json")
+#let js = json("manuscript-inputs.json")
 
 = Introduction <introduction>
 

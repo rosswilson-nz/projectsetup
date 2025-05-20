@@ -11,7 +11,7 @@
   region: "NZ",
   font: ("Wickliffe",),
   fontsans: ("Wickliffe Sans",),
-  fontmono: ("Consolas", "Cascadia Mono", "CMU Typewriter Text", "Lucida Console",),
+  fontmono: ("Cascadia Mono", "Consolas", "DejaVu Sans Mono",),
   fontsize: 10pt,
   bib: "references.yaml",
   bibliographystyle: "vancouver-superscript",

@@ -1,7 +1,7 @@
 #import "_templates/appendix.typ": appendix
 #show: appendix
 
-#let js = json("inputs-appendix.json")
+#let js = json("appendix-inputs.json")
 
 = Appendix Title
 
