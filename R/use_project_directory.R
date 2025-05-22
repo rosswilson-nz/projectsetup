@@ -32,8 +32,6 @@ use_project_directory <- function(
       "/misc",
       "/reports/*.pdf",
       "/reports/*_files",
-      "/reports/*.typ",
-      "/reports/*.svg"
     ))
     if (!data_in_git)
       usethis::use_git_ignore(c(
