@@ -5,14 +5,25 @@
 #'
 #' @param path Path to Typst source file
 #' @param deps List of dependencies (targets from the plan)
-#' @param template Typst template (for dependency tracking)
+#' @param fig,tbl Lists of figures and tables referenced in the manuscript
+#' @param template Typst template
+#' @param bibliography Bibliography file
 #'
 #' @export
-render_manuscript <- function(path, deps,
+render_manuscript <- function(path, deps, fig, tbl,
                               template = "reports/_templates/article.typ",
                               bibliography = "reports/references.yaml") {
-  # Inputs: path to Typst source file
-  #         dependencies (list of plan targets)
+  # Extract preferred image format
+  fig <- purrr::modify_tree(fig, leaf = extract_image,
+                            is_node = ~!(any(c("svg", "png", "jpg", "jpeg", "gif") %in% names(.))))
+
+  # Redefine relative paths for tables and figures
+  fig <- purrr::modify_depth(fig, -1, \(x) fs::path_rel(x, "output"))
+  tbl <- purrr::modify_depth(tbl, -1, \(x) fs::path_rel(x, "output"))
+
+  # Write table and figure sources to JSON for Typst
+  jsonlite::write_json(fig, fs::path("output", "fig.json"), auto_unbox = TRUE)
+  jsonlite::write_json(tbl, fs::path("output", "tbl.json"), auto_unbox = TRUE)
 
   # Temporarily copy Typst source to output directory
   newpath <- fs::path("output", fs::path_rel(path, "reports"))
@@ -43,12 +54,25 @@ render_manuscript <- function(path, deps,
   output_path <- fs::path_ext_set(newpath, "pdf")
 
   # Compile using Typst
-  system2("typst", c("compile", shQuote(newpath)))
+  stderr <- system2("typst", c("compile", shQuote(newpath)), stderr = TRUE)
 
   # Remove temporary files in output directory
+  fs::file_delete(fs::path_ext_set(fs::path("output", c("fig", "tbl")), "json"))
   fs::file_delete(c(newpath, newtemplate, newdeps, newbibliography))
   fs::dir_delete(fs::path_dir(newtemplate))
 
+  # Pass on any errors or warnings from the Typst compiler
+  if (any(vapply(stderr, \(x) stringr::str_detect(x, "^error\\:"), logical(1)))) {
+    stop("Error compiling Typst source at ", path, "\n", paste(stderr, collapse = "\n"))
+  }
+  if (any(vapply(stderr, \(x) stringr::str_detect(x, "^warning\\:"), logical(1)))) {
+    warning("Warning from the Typst compiler\n", paste(stderr, collapse = "\n"))
+  }
+
   # Path to file dependencies (output, input, template)
-  c(output_path, path, template, deps)
+  c(output_path, path, template, bibliography)
+}
+
+extract_image <- function(x) {
+  x$svg %||% x$png %||% x$jpg %||% x$jpeg %||% x$gif
 }

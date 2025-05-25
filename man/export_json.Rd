@@ -4,21 +4,14 @@
 \alias{export_json}
 \title{Write outputs to JSON file for Typst import}
 \usage{
-export_json(
-  r = list(),
-  fig = list(),
-  tbl = list(),
-  path = "output/manuscript-inputs.json",
-  auto_unbox = TRUE,
-  ...
-)
+export_json(x, path = "output/values.json", auto_unbox = TRUE, ...)
 }
 \arguments{
-\item{r}{List of R objects}
+\item{x}{List of R objects}
 
-\item{fig}{List of figure (SVG) files}
+\item{path}{JSON file to write \code{x} to}
 
-\item{tbl}{List of table (TYP) files}
+\item{auto_unbox, ...}{Passed to \code{jsonlite::write_json()}}
 }
 \description{
 Write outputs to JSON file for Typst import

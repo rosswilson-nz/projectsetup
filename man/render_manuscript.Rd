@@ -7,6 +7,8 @@
 render_manuscript(
   path,
   deps,
+  fig,
+  tbl,
   template = "reports/_templates/article.typ",
   bibliography = "reports/references.yaml"
 )
@@ -16,7 +18,11 @@ render_manuscript(
 
 \item{deps}{List of dependencies (targets from the plan)}
 
-\item{template}{Typst template (for dependency tracking)}
+\item{fig, tbl}{Lists of figures and tables referenced in the manuscript}
+
+\item{template}{Typst template}
+
+\item{bibliography}{Bibliography file}
 }
 \description{
 Render a Typst source file to PDF, and return file path dependencies for

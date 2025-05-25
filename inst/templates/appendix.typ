@@ -1,14 +1,16 @@
 #import "_templates/appendix.typ": appendix
 #show: appendix
 
-#let js = json("appendix-inputs.json")
+#let r = json("appendix-inputs.json")
+#let fig = json("fig.json")
+#let tbl = json("tbl.json")
 
 = Appendix Title
 
 Label figures as supplementary like this (so that in-text references refer to e.g. Figure A1 instead of Figure 1):
 
 #figure(
-  image(js.fig.primary),
+  image(fig.primary),
   caption: [Caption for the figure],
   kind: "suppl-image"
 ) <fig-primary-supplement>
@@ -16,7 +18,7 @@ Label figures as supplementary like this (so that in-text references refer to e.
 And tables likewise:
 
 #figure(
-  include js.tbl.primary,
+  include tbl.primary,
   caption: [Caption for the table],
   kind: "suppl-table"
 ) <tbl-primary-supplement>

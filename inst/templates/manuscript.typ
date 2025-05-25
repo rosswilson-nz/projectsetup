@@ -23,7 +23,9 @@
   ]
 )
 
-#let js = json("manuscript-inputs.json")
+#let r = json("manuscript-inputs.json")
+#let fig = json("fig.json")
+#let tbl = json("tbl.json")
 
 = Introduction <introduction>
 
@@ -31,19 +33,19 @@
 
 = Results <results>
 
-Refer to results imported from R inline, e.g. the primary result was #js.r.primary_result.
+Refer to results imported from R inline, e.g. the primary result was #r.primary_result.
 
 Add figures like this:
 
 #figure(
-  image(js.fig.primary),
+  image(fig.primary),
   caption: [Caption for the figure]
 ) <fig-primary>
 
 And tables like this:
 
 #figure(
-  include js.tbl.primary,
+  include tbl.primary,
   caption: [Caption for the table]
 ) <tbl-primary>
 
