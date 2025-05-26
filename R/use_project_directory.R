@@ -31,7 +31,7 @@ use_project_directory <- function(
     usethis::use_git_ignore(c(
       "/misc",
       "/reports/*.pdf",
-      "/reports/*_files",
+      "/reports/*_files"
     ))
     if (!data_in_git)
       usethis::use_git_ignore(c(

@@ -1,0 +1,53 @@
+RACGP18:
+  type: book
+  title: Guideline for the management of knee and hip osteoarthritis
+  author:
+    name: Royal Australian College of General Practitioners
+  publisher:
+    name: RACGP
+    location: East Melbourne, Australia
+  date: 2018,
+  edition: 2
+}
+
+NICE14:
+  type: report
+  title: "Osteoarthritis: Care and management in adults"
+  author:
+    name: National Clinical Guideline Centre
+  organization: National Institute for Health and Care Excellence
+  date: 2014-02,
+  note: Clinical guideline CG177
+}
+
+Zhang08:
+  type: article
+  title: "{OARSI} recommendations for the management of hip and knee osteoarthritis, {Part II}: {OARSI} evidence-based, expert consensus guidelines"
+  author:
+    - Zhang, W.
+    - Moskowitz, R. W.
+    - Nuki, G.
+    - Abramson, S.
+    - Altman, R. D.
+    - Arden, N.
+    - Bierma-Zeinstra, S.
+    - Brandt, K. D.
+    - Croft, P.
+    - Doherty, M.
+    - Dougados, M.
+    - Hochberg, M.
+    - Hunter, D. J.
+    - Kwoh, K.
+    - Lohmander, L. S.
+    - Tugwell, P.
+  parent:
+    title:
+      value: Osteoarthritis and Cartilage
+      short: Osteoarthritis Cartilage
+      volume: 16
+      issue: 2
+  page-range: 137-162
+  date: 2008
+  serial-number:
+    doi: "10.1016/j.joca.2007.12.013"
+}
