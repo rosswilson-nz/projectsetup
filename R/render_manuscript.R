@@ -14,8 +14,7 @@ render_manuscript <- function(path, deps, fig, tbl,
                               template = "reports/_templates/article.typ",
                               bibliography = "reports/references.yaml") {
   # Extract preferred image format
-  fig <- purrr::modify_tree(fig, leaf = extract_image,
-                            is_node = ~!(any(c("svg", "png", "jpg", "jpeg", "gif") %in% names(.))))
+  fig <- purrr::modify_tree(fig, leaf = extract_image)
 
   # Redefine relative paths for tables and figures
   fig <- purrr::modify_depth(fig, -1, \(x) fs::path_rel(x, "output"))

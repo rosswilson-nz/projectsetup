@@ -92,5 +92,5 @@ save_plot <- function(
     )
   }
 
-  out
+  unlist(out)
 }
