@@ -73,5 +73,5 @@ render_manuscript <- function(path, deps, fig, tbl,
 }
 
 extract_image <- function(x) {
-  x$svg %||% x$png %||% x$jpg %||% x$jpeg %||% x$gif
+  x[["svg"]] %||% x[["png"]] %||% x[["jpg"]] %||% x[["jpeg"]] %||% x[["gif"]]
 }
