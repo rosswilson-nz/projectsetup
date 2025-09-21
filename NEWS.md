@@ -1,3 +1,7 @@
+# CMORprojects 0.9.0
+
+* Add `save_table()` to save Typst table to source file
+
 # CMORprojects 0.8.0
 
 * Convert manuscripts to Typst source instead of Quarto
