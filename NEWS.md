@@ -1,3 +1,7 @@
+# CMORprojects 0.10.0
+
+* Add `draft` parameter to print DRAFT watermark in Typst output
+
 # CMORprojects 0.9.0
 
 * Add `save_table()` to save Typst table to source file
