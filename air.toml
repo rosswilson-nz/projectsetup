@@ -1,3 +1,4 @@
 [format]
 exclude = ["inst/"]
-line-width = 80
+line-width = 100
+skip = ["tribble", "c"]

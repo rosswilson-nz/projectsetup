@@ -14,6 +14,7 @@
 
 # Simple skeleton outline of analysis plan - revise as required
 targets <- rlang::list2(
+  ## Example targets, for reference only ---------------------------------------
   #   tar_file(file_data, "raw_data/data.csv"),
   # 	tar_target(raw_data, read_raw_data(file_data)),
   # 	tar_target(dta_cleaned, process_data(raw_data)),
@@ -34,4 +35,5 @@ targets <- rlang::list2(
   #   tar_file(rpt_appendix, c("reports/appendix.typ", "reports/templates/appendix.typ")),
   # 	tar_render_manuscript(rpt_manuscript, "reports/manuscript.qmd"),
   # 	tar_render_manuscript(rpt_appendix, "reports/appendix.qmd", appendix = TRUE)
+  ## END targets list ----------------------------------------------------------
 )

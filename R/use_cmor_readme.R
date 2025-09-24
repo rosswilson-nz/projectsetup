@@ -11,7 +11,7 @@ use_cmor_readme <- function(data) {
   template <- system.file(
     "templates",
     "cmor-readme",
-    package = "CMORprojects",
+    package = "projectsetup",
     mustWork = TRUE
   )
 

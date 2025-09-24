@@ -6,5 +6,5 @@ warn_github_incompatible <- function(path) {
     ),
     i = "Setting {.arg github} to {.value FALSE}."
   )
-  cli_warn(x, "CMORprojects_warning_github_incompatible")
+  cli_warn(x, "projectsetup_warning_github_incompatible")
 }

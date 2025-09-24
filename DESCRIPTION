@@ -1,45 +1,34 @@
-Package: CMORprojects
-Title: Implement CMOR Data Analysis Project Workflow
-Version: 0.10.0
+Package: projectsetup
+Title: Initialise CMOR Data Analysis Project Workflow
+Version: 1.0.0
 Authors@R: 
     person("Ross", "Wilson", , "ross.wilson@otago.ac.nz", role = c("aut", "cre"))
-Description: CMORprojects provides tools to optimise a research project data
+Description: projectsetup provides tools to initialise a research project data
     analysis workflow for research projects undertaken at CMOR.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-URL: https://github.com/uo-cmor/CMORprojects
-BugReports: https://github.com/uo-cmor/CMORprojects/issues
+URL: https://github.com/rosswilson-nz/projectsetup
+BugReports: https://github.com/rosswilson-nz/projectsetup/issues
 Imports: 
     cli,
     fs,
     gert,
     gh,
-    glue,
-    jsonlite,
-    knitr,
     lifecycle,
-    quarto,
     rlang,
-    rmarkdown,
     rstudioapi,
-    tarchetypes (>= 0.6.0.9000),
-    targets,
-    ttables,
     usethis,
     whisker
 Suggests: 
     withr,
     testthat (>= 3.0.0),
     rprojroot,
-    here,
     formattr,
     tidyverse,
     tibble,
     ggplot2,
     crew
 Config/testthat/edition: 3
-Remotes:
-    uo-cmor/ttables

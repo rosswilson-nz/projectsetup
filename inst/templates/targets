@@ -4,7 +4,7 @@
 
 library(targets)
 library(tarchetypes)
-library(CMORprojects)
+library(pipelinetools)
 options(tidyverse.quiet = TRUE)
 
 # Set options

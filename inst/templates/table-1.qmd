@@ -1,4 +1,0 @@
-```{r table-1}
-# table_1 %>%
-#   ttab("Table title", "tbl-1")
-```
