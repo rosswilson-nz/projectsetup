@@ -16,7 +16,7 @@
   fontsans: ("Wickliffe Sans",),
   fontmono: ("Cascadia Mono", "Consolas", "DejaVu Sans Mono"),
   fontsize: 10pt,
-  bib: "references.yaml",
+  bib: "../references.yaml",
   bibliographystyle: "vancouver-superscript",
   sectionnumbering: none,
   appendix: [],

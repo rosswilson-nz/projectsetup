@@ -4,6 +4,8 @@
 
 * Fix call to `rlang::inform` in `_targets.R` template
 
+* Fix references and Typst manuscript template files
+
 # projectsetup 1.0.0
 
 * Initial version of `projectsetup`, forked from `uo-cmor/CMORprojects`
