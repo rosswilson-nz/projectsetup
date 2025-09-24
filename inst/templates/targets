@@ -4,7 +4,6 @@
 
 library(targets)
 library(tarchetypes)
-library(pipelinetools)
 options(tidyverse.quiet = TRUE)
 
 # Set options
