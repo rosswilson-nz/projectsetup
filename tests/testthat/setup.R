@@ -7,7 +7,7 @@ local_create_project <- function(
   old_project <- getwd()
 
   # create new folder and project
-  create_research_project(dir, open = FALSE, git = FALSE, ...)
+  create_research_project(dir, open = FALSE, git = FALSE, renv = FALSE, ...)
   withr::defer(fs::dir_delete(dir), envir = env)
 
   # change working directory

@@ -8,6 +8,8 @@
 #'     repository.
 #' @param raw_data_in_git Logical (default = `TRUE`). If FALSE, data in the
 #'     `raw_data/` directory will be excluded from the git repository.
+#' @param renv Logical. If `TRUE` (the default), renv will be initialised in the
+#'     new project.
 #' @param data_in_git Logical. If `FALSE` (the default), data in the
 #'     `derived_data/` directory will be excluded from the git repository.
 #' @param output_in_git Logical. If `FALSE` (the default), data in the
@@ -17,6 +19,7 @@
 use_project_directory <- function(
   git = TRUE,
   raw_data_in_git = TRUE,
+  renv = TRUE,
   data_in_git = FALSE,
   output_in_git = FALSE
 ) {
@@ -24,7 +27,7 @@ use_project_directory <- function(
   add_directories()
 
   # Add template
-  add_templates()
+  add_templates(renv = renv)
 
   # Populate .gitignore
   if (git) {
@@ -32,8 +35,9 @@ use_project_directory <- function(
     if (!data_in_git) {
       usethis::use_git_ignore(c("/derived_data/*", "!/derived_data/derived_data"))
     }
-    if (!raw_data_in_git)
+    if (!raw_data_in_git) {
       usethis::use_git_ignore(c("/raw_data/*", "!/raw_data/raw_data"))
+    }
     if (!output_in_git) {
       usethis::use_git_ignore(c(
         "/output/*.*",
@@ -66,7 +70,7 @@ add_directories <- function() {
 
 # Add template files
 ## This adds template files to the appropriate directories.
-add_templates <- function() {
+add_templates <- function(renv = TRUE) {
   # Skeleton targets workflow files
   file.copy(
     system.file("templates", "targets", package = "projectsetup", mustWork = TRUE),
@@ -86,6 +90,14 @@ add_templates <- function() {
     system.file("templates", "air", package = "projectsetup", mustWork = TRUE),
     fs::path_wd("air.toml")
   )
+
+  # DESCRIPTION file with development dependencies for `renv`
+  if (renv) {
+    file.copy(
+      system.file("templates", "DESCRIPTION", package = "projectsetup", mustWork = TRUE),
+      fs::path_wd("DESCRIPTION")
+    )
+  }
 
   # Manuscript templates
   file.copy(
@@ -114,7 +126,7 @@ add_templates <- function() {
   # Placeholder files in output and data folders (so they are added to Git repo)
   file.copy(
     system.file("templates", "R", package = "projectsetup", mustWork = TRUE),
-    fs::path_wd("R", "R")
+    fs::path_wd("R", "R.R")
   )
   file.copy(
     system.file("templates", "output", package = "projectsetup", mustWork = TRUE),

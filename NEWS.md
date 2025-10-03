@@ -1,4 +1,6 @@
-# projectsetup 1.0.0.9000
+# projectsetup 1.1.0
+
+* Use `renv` by default for new projects
 
 * Revise targets plan template
 

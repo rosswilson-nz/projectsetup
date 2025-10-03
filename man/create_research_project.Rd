@@ -11,6 +11,7 @@ create_research_project(
   github = TRUE,
   private = TRUE,
   organisation = NULL,
+  renv = TRUE,
   rstudio = rstudioapi::isAvailable(),
   open = rlang::is_interactive()
 )
@@ -34,6 +35,9 @@ accessible. Ignored if \code{github = FALSE}.}
 \item{organisation}{(Optional) Passed to \code{usethis::use_github()} to
 create the repo under this organisation instead of the login associated
 with the discovered GitHub token.}
+
+\item{renv}{Logical. If \code{TRUE} (the default), renv will be initialised in the
+new project.}
 
 \item{rstudio}{If \code{TRUE}, makes the new project into an RStudio
 Project.}
