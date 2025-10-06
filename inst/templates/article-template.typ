@@ -167,3 +167,23 @@
 
   appendix
 }
+
+#let figure_with_footnote(
+  content,
+  caption: none,
+  kind: auto,
+  lab: none,
+  footnote: none,
+) = {
+  figure(
+    [#show figure: set place(clearance: 0em)
+      #figure(
+        content,
+        caption: caption,
+        kind: kind,
+      ) #label(lab)
+      #footnote],
+    kind: "none",
+    supplement: none,
+  )
+}

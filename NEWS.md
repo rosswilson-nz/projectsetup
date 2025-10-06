@@ -1,3 +1,7 @@
+# projectsetup 1.1.0.9000
+
+* Define `figure_with_footnote()` in Typst manuscript templates
+
 # projectsetup 1.1.0
 
 * Use `renv` by default for new projects
