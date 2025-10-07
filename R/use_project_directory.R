@@ -42,9 +42,9 @@ use_project_directory <- function(
       usethis::use_git_ignore(c(
         "/output/*.*",
         "!/output/output",
-        "!/output/_figures/.*.",
+        "/output/_figures/.*.",
         "!/output/_figures/_figures",
-        "!/output/_tables/.*.",
+        "/output/_tables/.*.",
         "!/output/_tables/_tables"
       ))
     }
