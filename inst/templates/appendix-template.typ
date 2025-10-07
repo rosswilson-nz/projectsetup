@@ -38,6 +38,7 @@
     show block: set align(left)
     set text(size: 0.8 * fontsize)
     set place(clearance: 3em)
+    set figure(placement: none)
     set par(first-line-indent: 0em, justify: false)
     it
   }
