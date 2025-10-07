@@ -17,6 +17,8 @@
 #' @param organisation (Optional) Passed to `usethis::use_github()` to
 #'     create the repo under this organisation instead of the login associated
 #'     with the discovered GitHub token.
+#' @param renv Logical. If `TRUE` (the default), renv will be initialised in the
+#'     new project.
 #' @param rstudio If `TRUE`, makes the new project into an RStudio
 #'     Project.
 #' @param open If `TRUE`, activates the new project in a new RStudio
@@ -30,17 +32,22 @@ create_research_project <- function(
   github = TRUE,
   private = TRUE,
   organisation = NULL,
+  renv = TRUE,
   rstudio = rstudioapi::isAvailable(),
   open = rlang::is_interactive()
 ) {
   path <- usethis::create_project(path, rstudio = rstudio, open = FALSE)
   usethis::local_project(path)
-  use_project_directory(git = git, raw_data_in_git = raw_data_in_git)
+  use_project_directory(git = git, raw_data_in_git = raw_data_in_git, renv = renv)
+  if (renv) {
+    targets::tar_renv()
+    cli_alert_success("Initialising {.strong renv} in new project")
+    utils::capture.output(renv::init(settings = list(snapshot.type = "implicit")))
+    cli_alert_success("{.strong renv} initialised")
+  }
   if (git) {
     use_git()
-    if (
-      github && usethis::ui_yeah("Is it ok to push this repository to GitHub?")
-    ) {
+    if (github && usethis::ui_yeah("Is it ok to push this repository to GitHub?")) {
       usethis::use_github(private = private, organisation = organisation)
     }
   } else {
@@ -76,6 +83,7 @@ create_research_project <- function(
   ))
   cli_rule()
 
-  if (open && usethis::ui_yeah("Open the new project now?"))
+  if (open && usethis::ui_yeah("Open the new project now?")) {
     usethis::proj_activate(path)
+  }
 }

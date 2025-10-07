@@ -40,7 +40,8 @@ if (rlang::is_installed("crew")) {
   rlang::inform(
     paste("Consider installing the `crew` package to support parallel (or",
           "distributed) processing of targets"),
-    .frequency = "once"
+    .frequency = "once",
+    .frequency_id = "use_crew"
   )
 }
 

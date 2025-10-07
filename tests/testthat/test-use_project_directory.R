@@ -3,7 +3,7 @@ test_that("use_project_directory works", {
 
   use_project_directory()
 
-  expect_true(all(fs::file_exists(c("R", "R/R"))))
+  expect_true(all(fs::file_exists(c("R", "R/R.R"))))
   expect_true(all(fs::file_exists(c("raw_data", "raw_data/raw_data"))))
   expect_true(all(fs::file_exists(c("derived_data", "derived_data/derived_data"))))
   expect_true(all(fs::file_exists(c(

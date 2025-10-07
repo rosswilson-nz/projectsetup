@@ -7,6 +7,7 @@
 use_project_directory(
   git = TRUE,
   raw_data_in_git = TRUE,
+  renv = TRUE,
   data_in_git = FALSE,
   output_in_git = FALSE
 )
@@ -17,6 +18,9 @@ repository.}
 
 \item{raw_data_in_git}{Logical (default = \code{TRUE}). If FALSE, data in the
 \verb{raw_data/} directory will be excluded from the git repository.}
+
+\item{renv}{Logical. If \code{TRUE} (the default), renv will be initialised in the
+new project.}
 
 \item{data_in_git}{Logical. If \code{FALSE} (the default), data in the
 \verb{derived_data/} directory will be excluded from the git repository.}

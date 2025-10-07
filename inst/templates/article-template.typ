@@ -16,7 +16,7 @@
   fontsans: ("Wickliffe Sans",),
   fontmono: ("Cascadia Mono", "Consolas", "DejaVu Sans Mono"),
   fontsize: 10pt,
-  bib: "references.yaml",
+  bib: "../references.yaml",
   bibliographystyle: "vancouver-superscript",
   sectionnumbering: none,
   appendix: [],
@@ -166,4 +166,24 @@
   bibliography(bib)
 
   appendix
+}
+
+#let figure_with_footnote(
+  content,
+  caption: none,
+  kind: auto,
+  lab: none,
+  footnote: none,
+) = {
+  figure(
+    [#show figure: set place(clearance: 0em)
+      #figure(
+        content,
+        caption: caption,
+        kind: kind,
+      ) #label(lab)
+      #footnote],
+    kind: "none",
+    supplement: none,
+  )
 }

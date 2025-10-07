@@ -6,9 +6,8 @@ RACGP18:
   publisher:
     name: RACGP
     location: East Melbourne, Australia
-  date: 2018,
+  date: 2018
   edition: 2
-}
 
 NICE14:
   type: report
@@ -16,9 +15,8 @@ NICE14:
   author:
     name: National Clinical Guideline Centre
   organization: National Institute for Health and Care Excellence
-  date: 2014-02,
+  date: 2014-02
   note: Clinical guideline CG177
-}
 
 Zhang08:
   type: article
@@ -50,4 +48,3 @@ Zhang08:
   date: 2008
   serial-number:
     doi: "10.1016/j.joca.2007.12.013"
-}
