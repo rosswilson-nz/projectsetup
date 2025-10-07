@@ -27,19 +27,22 @@ tar_source()
 ##########################################################
 
 # See https://books.ropensci.org/targets/crew.html for further discussion
-# This default runs up to `parallel::detectCores() - 1` workers in parallel
-# as local R processes
+# Uses environment variables set in project `.Renviron` file
 
-if (rlang::is_installed("crew")) {
-	tar_option_set(
-	  controller = crew::crew_controller_local(
-	    workers = min(parallel::detectCores() - 1, parallel$max_cores)
-	  )
-	)
-} else {
+if (as.logical(Sys.getenv("TAR_PARALLEL")) && rlang::is_installed("crew")) {
+  tar_option_set(
+    controller = crew::crew_controller_local(
+      workers = min(parallel::detectCores() - 1, as.integer(Sys.getenv("TAR_CORES")))
+    )
+  )
+} else if (as.logical(Sys.getenv("TAR_PARALLEL"))) {
+  rlang::abort("Install {crew} to use parallel processing of targets")
+} else if (is.na(as.logical(Sys.getenv("TAR_PARALLEL")))) {
   rlang::inform(
-    paste("Consider installing the `crew` package to support parallel (or",
-          "distributed) processing of targets"),
+    paste(
+      "Consider using {crew} and setting envvar 'TAR_PARALLEL = true' to use parallel processing",
+      "of targets"
+    ),
     .frequency = "once",
     .frequency_id = "use_crew"
   )
