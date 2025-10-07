@@ -4,3 +4,6 @@
 .httr-oauth
 .DS_Store
 raw_data
+
+/.quarto/
+**/*.quarto_ipynb
