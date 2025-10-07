@@ -28,12 +28,13 @@ use_project_directory <- function(
 
   # Populate .gitignore
   if (git) {
-    usethis::use_git_ignore(c("/misc"))
+    usethis::use_git_ignore(c("/misc", ".Renviron"))
     if (!data_in_git) {
       usethis::use_git_ignore(c("/derived_data/*", "!/derived_data/derived_data"))
     }
-    if (!raw_data_in_git)
+    if (!raw_data_in_git) {
       usethis::use_git_ignore(c("/raw_data/*", "!/raw_data/raw_data"))
+    }
     if (!output_in_git) {
       usethis::use_git_ignore(c(
         "/output/*.*",
@@ -85,6 +86,12 @@ add_templates <- function() {
   file.copy(
     system.file("templates", "air", package = "projectsetup", mustWork = TRUE),
     fs::path_wd("air.toml")
+  )
+
+  # .Renviron file for parallel processing environment variables
+  file.copy(
+    system.file("templates", "Renviron", package = "projectsetup", mustWork = TRUE),
+    fs::path_wd(".Renviron")
   )
 
   # Manuscript templates
