@@ -1,4 +1,4 @@
-#let article(
+#let appendix(
   lang: "en",
   region: "NZ",
   font: ("Wickliffe",),

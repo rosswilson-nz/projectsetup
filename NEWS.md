@@ -4,6 +4,8 @@
 
 * Use environment variables to specify parallel processing in targets pipelines
 
+* Correct error in Typst appendix template
+
 # projectsetup 1.1.0
 
 * Use `renv` by default for new projects
