@@ -29,23 +29,25 @@ tar_source()
 # See https://books.ropensci.org/targets/crew.html for further discussion
 # Uses environment variables set in project `.Renviron` file
 
-if (is.na(as.logical(Sys.getenv("TAR_PARALLEL")))) {
-  rlang::inform(
-    paste(
-      "Consider using {crew} and setting envvar 'TAR_PARALLEL = true' to use parallel processing",
-      "of targets"
-    ),
-    .frequency = "once",
-    .frequency_id = "use_crew"
-  )
-} else if (as.logical(Sys.getenv("TAR_PARALLEL")) && rlang::is_installed("crew")) {
+if (rlang::is_installed("crew")) {
+  if (Sys.getenv("TAR_WORKERS") == "") {
+    Sys.setenv(TAR_WORKERS = 1)
+    if (tar_config_get("use_crew")) {
+      rlang::inform(paste(
+        "Set the 'TAR_WORKERS' environment variable to specify the `workers` argument of",
+        "`crew::crew_controller_local()`"
+      ))
+    }
+  }
   tar_option_set(
-    controller = crew::crew_controller_local(
-      workers = min(parallel::detectCores() - 1, as.integer(Sys.getenv("TAR_CORES")))
-    )
+    controller = crew::crew_controller_local(workers = as.integer(Sys.getenv("TAR_WORKERS")))
   )
-} else if (as.logical(Sys.getenv("TAR_PARALLEL"))) {
-  rlang::abort("Install {crew} to use parallel processing of targets")
+} else if (tar_config_get("use_crew")) {
+  rlang::warn(
+    "Install {crew} to use parallel processing of targets",
+   .frequency = "once",
+   .frequency_id = "use_crew"
+  )
 }
 
 ######################

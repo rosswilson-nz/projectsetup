@@ -24,6 +24,7 @@ test_that("use_project_directory works", {
   expect_true(fs::file_exists("_targets.R"))
   expect_true(fs::file_exists("_plan.R"))
   expect_true(fs::file_exists("_config.R"))
+  expect_true(fs::file_exists("_targets.yaml"))
   expect_true(fs::file_exists(".gitignore"))
   expect_true(fs::file_exists(".Renviron"))
   expect_true(fs::file_exists("air.toml"))

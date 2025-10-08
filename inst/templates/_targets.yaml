@@ -1,0 +1,3 @@
+main:
+  reporter_make: balanced
+  use_crew: yes
