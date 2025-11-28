@@ -15,23 +15,17 @@
 # Simple skeleton outline of analysis plan - revise as required
 targets <- rlang::list2(
   ## Example targets, for reference only ---------------------------------------
-  # tar_file(file_data, "raw_data/data.csv"),
-  # tar_target(raw_data, read_raw_data(file_data)),
+  # tar_data(data, "data.csv", read_raw_data),
   # tar_target(dta_cleaned, process_data(raw_data)),
   # tar_target(res_primary.analysis, analyse_data(dta_cleaned)),
-  # tar_file(tbl_primary.results, create_table(res_primary.analysis)),
-  # tar_target(plt_primary.results, create_plot(res_primary.analysis)),
-  # tar_file(fig_primary.results, save_plot(plt_primary.results, "my-plot")),
-  # tar_file(file_json, export_json(list(primary_result = extract_result(res_primary.analysis)))),
-  # tar_file(
-  #   rpt_manuscript,
-  #   render_manuscript(
-  #     "reports/manuscript.typ",
-  #     list(file_json, file_appendix),
-  #     fig = list(primary = fig_primary.results),
-  #     tbl = list(primary = tbl_primary.results)
-  #   )
+  # tar_table(primary.results, create_table(res_primary.analysis)),
+  # tar_figure(primary.results, create_plot(res_primary.analysis), "my-plot"),
+  # tar_render_typst(
+  #   manuscript,
+  #   values = extract_result(res_primary.analysis),
+  #   figs = list(primary = fig_primary.results),
+  #   tbls = list(primary = tbl_primary.results),
+  #   appendix = "appendix"
   # ),
-  # tar_file(file_appendix, c("reports/appendix.typ", "reports/_templates/appendix.typ")),
   ## END targets list ----------------------------------------------------------
 )

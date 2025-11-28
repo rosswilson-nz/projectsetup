@@ -21,7 +21,7 @@
   ],
 )
 
-#let r = json("manuscript-inputs.json")
+#let r = json("values.json")
 #let fig = json("fig.json")
 #let tbl = json("tbl.json")
 
