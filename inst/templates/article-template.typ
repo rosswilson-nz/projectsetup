@@ -41,7 +41,20 @@
       none
     },
   )
-  set par(leading: 0.55em, first-line-indent: 1em, justify: true, spacing: 0.55em)
+  set par(
+    leading: if draft {
+      1.5em
+    } else {
+      0.55em
+    },
+    first-line-indent: 1em,
+    justify: true,
+    spacing: if draft {
+      1.5em
+    } else {
+      0.55em
+    },
+  )
   set text(lang: lang, region: region, font: fontsans, size: fontsize)
   show raw: set text(font: fontmono, size: 0.9 * fontsize, weight: "medium")
   set heading(numbering: sectionnumbering)
@@ -163,6 +176,8 @@
   pagebreak()
 
   doc
+
+  place.flush()
 
   bibliography(bib)
 

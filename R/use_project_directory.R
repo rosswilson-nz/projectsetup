@@ -31,7 +31,7 @@ use_project_directory <- function(
 
   # Populate .gitignore
   if (git) {
-    usethis::use_git_ignore(c("/misc", ".Renviron"))
+    usethis::use_git_ignore(c("/misc", "_targets.yaml"))
     if (!data_in_git) {
       usethis::use_git_ignore(c("/derived_data/*", "!/derived_data/derived_data"))
     }
@@ -84,7 +84,10 @@ add_templates <- function(renv = TRUE) {
     system.file("templates", "config", package = "projectsetup", mustWork = TRUE),
     fs::path_wd("_config.R")
   )
-
+  file.copy(
+    system.file("templates", "_targets.yaml", package = "projectsetup", mustWork = TRUE),
+    fs::path_wd("_targets.yaml")
+  )
   # Air config file
   file.copy(
     system.file("templates", "air", package = "projectsetup", mustWork = TRUE),

@@ -2,7 +2,9 @@
 
 * Define `figure_with_footnote()` in Typst manuscript templates
 
-* Use environment variables to specify parallel processing in targets pipelines
+* Use environment variables to specify parallel processing workers in targets pipelines
+
+* Create default _targets.yaml template
 
 * Correct error in Typst appendix template
 
