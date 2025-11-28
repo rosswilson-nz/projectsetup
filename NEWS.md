@@ -1,4 +1,4 @@
-# projectsetup 1.1.0.9000
+# projectsetup 1.1.1
 
 * Define `figure_with_footnote()` in Typst manuscript templates
 
