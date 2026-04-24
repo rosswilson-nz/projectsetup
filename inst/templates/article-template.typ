@@ -5,19 +5,20 @@
   date: none,
   abstract: none,
   keywords: none,
-  margin: (x: 2.5cm, y: 2.5cm),
+  margin: (x: 2cm, y: 2cm),
   paper: "a4",
+  cols: 2,
   background: none,
   header: none,
   draft: false,
   lang: "en",
   region: "NZ",
-  font: ("Wickliffe",),
-  fontsans: ("Wickliffe Sans",),
-  fontmono: ("Cascadia Mono", "Consolas", "DejaVu Sans Mono"),
+  font: ("Charter", "Century Schoolbook", "Wickliffe", "Libertinus Serif"),
+  fontsans: ("Source Sans 3", "Wickliffe Sans", "Gill Sans MT"),
+  fontmono: ("Source Code Pro", "Consolas", "DejaVu Sans Mono"),
   fontsize: 10pt,
-  bib: "../references.yaml",
-  bibliographystyle: "vancouver-superscript",
+  bib: "../references.bib",
+  bibliographystyle: "american-medical-association",
   sectionnumbering: none,
   appendix: [],
   doc,
@@ -25,6 +26,7 @@
   set page(
     paper: paper,
     margin: margin,
+    columns: if draft { 1 } else { cols },
     numbering: "1",
     background: if background != none {
       background
@@ -41,26 +43,42 @@
       none
     },
   )
+  set columns(gutter: 1cm)
   set par(
-    leading: if draft {
-      1.5em
-    } else {
-      0.55em
-    },
+    leading: if draft { 1.55em } else { 0.45em },
     first-line-indent: 1em,
     justify: true,
-    spacing: if draft {
-      1.5em
-    } else {
-      0.55em
-    },
+    spacing: if draft { 1.55em } else { 0.45em },
   )
-  set text(lang: lang, region: region, font: fontsans, size: fontsize)
+  set text(
+    lang: lang,
+    region: region,
+    font: font,
+    size: fontsize,
+    bottom-edge: "descender",
+    top-edge: "ascender",
+  )
   show raw: set text(font: fontmono, size: 0.9 * fontsize, weight: "medium")
   set heading(numbering: sectionnumbering)
-  show heading: set block(above: 1.4em, below: 1em)
-  show heading: set text(font: font)
-  set super(typographic: false)
+  show heading: set block(
+    above: if draft { 30pt } else { 16pt },
+    below: if draft { 10pt } else { 5pt },
+  )
+  show heading: it => {
+    // Clever trick to reduce spacing between consecutive headings
+    // See https://github.com/typst/typst/issues/2953
+    let previous_headings = query(selector(heading).before(here(), inclusive: false))
+    if previous_headings.len() > 0 {
+      let ploc = previous_headings.last().location().position()
+      let iloc = it.location().position()
+      if (iloc.page == ploc.page and iloc.x == ploc.x and iloc.y - ploc.y < 50pt) {
+        // threshold
+        v(-13pt) // amount to reduce spacing, could make this dependent on it.level
+      }
+    }
+    it
+  }
+  show heading: set text(font: fontsans, weight: "medium")
   set bibliography(style: bibliographystyle, title: "References")
   set footnote.entry(
     separator: line(length: 100%),
@@ -69,76 +87,90 @@
   show footnote.entry: set align(left)
   set list(indent: 1em, marker: [•])
 
-  if title != none {
-    align(center)[#block(inset: 2em)[#par(justify: false)[
-      #text(font: font, weight: "bold", size: 2em)[#title]
-    ]]]
-  }
+  page(columns: 1)[
+    #if title != none {
+      block(inset: (top: if draft { 1cm } else { 2.5cm }), width: 100%)[#align(center)[#par(
+        justify: false,
+      )[
+        #text(font: fontsans, weight: "medium", size: 2em)[#title]
+      ]]]
+    }
 
-  if subtitle != none {
-    align(center)[#block(inset: (x: 2em))[#par(justify: false)[
-      #text(font: font, weight: "bold", size: 1.5em)[#subtitle]
-    ]]]
-  }
+    #if subtitle != none {
+      block(inset: (top: 1cm), width: 100%)[#align(center)[#par(justify: false)[
+        #text(font: fontsans, weight: "medium", size: 1.5em)[#subtitle]
+      ]]]
+    }
 
-  if authors != none {
-    let affiliations = ()
-    for author in authors {
-      for affiliation in author.affiliation {
-        if affiliation not in affiliations {
-          affiliations.push(affiliation)
+    #if authors != none {
+      let affiliations = ()
+      for author in authors {
+        for affiliation in author.affiliation {
+          if affiliation not in affiliations { affiliations.push(affiliation) }
         }
       }
-    }
-    let affiliations_fn = affiliations.map(it => {
-      let idx = affiliations.position(i => it == i) + 1
-      [#super[#idx] #it]
-    })
-    footnote(numbering: x => [#sym.zws])[
-      #affiliations_fn.join(linebreak())#linebreak()#linebreak()
-    ]
-    counter(footnote).update(0)
-    let names = authors
-      .map(author => {
-        let affiliation = author
-          .affiliation
-          .map(aff => str(affiliations.position(i => aff == i) + 1))
-          .join(",")
-        [#author.name#if author.email != "" {
-            [#footnote(numbering: "*")[Corresponding author.#linebreak()_Email_: #link(
-                "mailto:" + author.email.replace("\\", ""),
-              )]]
-          }#super[#affiliation]]
+      let affiliations_fn = affiliations.map(it => {
+        let idx = affiliations.position(i => it == i) + 1
+        [#super[#idx] #it]
       })
-      .join(", ")
-    align(center)[#par(justify: false)[#names]]
-  }
+      footnote(numbering: x => [#sym.zws])[
+        #affiliations_fn.join(linebreak())#linebreak()#linebreak()
+      ]
+      counter(footnote).update(0)
+      let names = authors
+        .map(author => {
+          let affiliation = author
+            .affiliation
+            .map(
+              aff => str(affiliations.position(i => aff == i) + 1),
+            )
+            .join(",")
+          [
+            #author.name#if author.email != "" {
+              [#footnote(numbering: "*")[
+                Corresponding author.
+                #linebreak()
+                _Email_: #link("mailto:" + author.email.replace("\\", ""))
+              ]]
+            }#super[#affiliation]
+          ]
+        })
+        .join(", ")
+      block(inset: (top: if draft { 0cm } else { 2.5cm }), width: 100%)[#align(center)[#par(
+        justify: false,
+      )[#names]]]
+    }
 
-  if date != none {
-    align(center)[#block(inset: 1em)[
-      #date
-    ]]
-  }
+    #if date != none {
+      block(inset: (top: 0.5cm), width: 100%)[#align(center)[#date]]
+    }
 
-  if abstract != none {
-    block(inset: 1em)[
-      #set par(first-line-indent: 0em, spacing: 1em)
-      *Abstract*
+    #if abstract != none {
+      block(inset: (x: 2cm, top: if draft { 0.5cm } else { 2cm }), width: 100%)[
+        #set par(
+          first-line-indent: 0em,
+          spacing: if draft { 1.55em } else { 1em },
+          leading: if draft { 1em } else { 0.45em },
+        )
+        *Abstract*
 
-      #abstract
+        #abstract
 
-      #if keywords != none { [*Keywords:* #keywords.join("; ")] }
-    ]
-  }
+        #if keywords != none { [*Keywords:* #keywords.join("; ")] }
+      ]
+    }
+  ]
 
   set figure(placement: auto)
+  show figure.where(kind: table): set figure.caption(position: top)
+  show figure.where(kind: "suppl-table"): set figure.caption(position: top)
   show figure: it => {
     set block(spacing: 0.65em, breakable: true)
     show block: set align(left)
     set text(size: 0.8 * fontsize)
     set place(clearance: 3em)
     set figure(placement: none)
-    set par(first-line-indent: 0em, justify: false)
+    set par(first-line-indent: 0em, justify: false, leading: 0.45em)
     it
   }
   show figure.caption: it => {
