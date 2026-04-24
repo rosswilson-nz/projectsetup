@@ -1,1 +1,1 @@
-TAR_WORKERS = 4
+TAR_WORKERS = ""

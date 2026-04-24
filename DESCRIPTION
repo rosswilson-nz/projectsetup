@@ -1,6 +1,6 @@
 Package: projectsetup
 Title: Initialise CMOR Data Analysis Project Workflow
-Version: 1.1.0.9000
+Version: 1.1.1
 Authors@R: 
     person("Ross", "Wilson", , "ross.wilson@otago.ac.nz", role = c("aut", "cre"))
 Description: projectsetup provides tools to initialise a research project data
@@ -32,5 +32,8 @@ Suggests:
     tidyverse,
     tibble,
     ggplot2,
-    crew
+    crew,
+    pipelinetools (>= 1.1.0)
 Config/testthat/edition: 3
+Remotes:  
+    rosswilson-nz/pipelinetools
