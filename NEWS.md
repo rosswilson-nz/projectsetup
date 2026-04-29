@@ -1,3 +1,9 @@
+# projectsetup 1.2
+
+* Move Typst templates to `output/` instead of `reports/`
+
+* Update Typst template and default manuscript.typ file
+
 # projectsetup 1.1.1
 
 * Define `figure_with_footnote()` in Typst manuscript templates

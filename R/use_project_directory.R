@@ -40,8 +40,8 @@ use_project_directory <- function(
     }
     if (!output_in_git) {
       usethis::use_git_ignore(c(
-        "/output/*.*",
-        "!/output/output",
+        "/output/*.pdf",
+        "/output/*.docx",
         "/output/_figures/*.*",
         "!/output/_figures/_figures",
         "/output/_tables/*.*",
@@ -60,11 +60,10 @@ use_project_directory <- function(
 add_directories <- function() {
   usethis::use_directory("raw_data")
   usethis::use_directory("derived_data")
-  usethis::use_directory("reports")
-  usethis::use_directory("reports/_templates")
   usethis::use_directory("output")
   usethis::use_directory("output/_figures")
   usethis::use_directory("output/_tables")
+  usethis::use_directory("output/_templates")
   usethis::use_directory("R")
 }
 
@@ -111,11 +110,11 @@ add_templates <- function(renv = TRUE) {
   # Manuscript templates
   file.copy(
     system.file("templates", "article-template.typ", package = "projectsetup", mustWork = TRUE),
-    fs::path_wd("reports", "_templates", "article.typ")
+    fs::path_wd("output", "_templates", "article.typ")
   )
   file.copy(
     system.file("templates", "appendix-template.typ", package = "projectsetup", mustWork = TRUE),
-    fs::path_wd("reports", "_templates", "appendix.typ")
+    fs::path_wd("output", "_templates", "appendix.typ")
   )
   file.copy(
     system.file(
@@ -124,12 +123,12 @@ add_templates <- function(renv = TRUE) {
       package = "projectsetup",
       mustWork = TRUE
     ),
-    fs::path_wd("reports")
+    fs::path_wd("output")
   )
   ## References file
   file.copy(
-    system.file("templates", "references.yaml", package = "projectsetup", mustWork = TRUE),
-    fs::path_wd("reports")
+    system.file("templates", "references.bib", package = "projectsetup", mustWork = TRUE),
+    fs::path_wd("output")
   )
 
   # Placeholder files in output and data folders (so they are added to Git repo)

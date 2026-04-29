@@ -16,14 +16,13 @@
     _Conclusion_
   ],
   appendix: [
-    #pagebreak()
     #include "appendix.typ"
   ],
 )
 
-#let r = json("values.json")
-#let fig = json("fig.json")
-#let tbl = json("tbl.json")
+// #let r = json("values.json")
+// #let fig = json("fig.json")
+// #let tbl = json("tbl.json")
 
 = Introduction <introduction>
 

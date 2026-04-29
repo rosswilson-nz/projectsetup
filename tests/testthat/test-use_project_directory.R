@@ -11,15 +11,12 @@ test_that("use_project_directory works", {
     "output/_figures",
     "output/_figures/_figures",
     "output/_tables",
-    "output/_tables/_tables"
-  ))))
-  expect_true(all(fs::file_exists(c(
-    "reports",
-    "reports/manuscript.typ",
-    "reports/appendix.typ",
-    "reports/references.yaml",
-    "reports/_templates/article.typ",
-    "reports/_templates/appendix.typ"
+    "output/_tables/_tables",
+    "output/manuscript.typ",
+    "output/appendix.typ",
+    "output/references.bib",
+    "output/_templates/article.typ",
+    "output/_templates/appendix.typ"
   ))))
   expect_true(fs::file_exists("_targets.R"))
   expect_true(fs::file_exists("_plan.R"))

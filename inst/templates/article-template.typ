@@ -13,10 +13,10 @@
   draft: false,
   lang: "en",
   region: "NZ",
-  font: ("Charter", "Century Schoolbook", "Wickliffe", "Libertinus Serif"),
-  fontsans: ("Source Sans 3", "Wickliffe Sans", "Gill Sans MT"),
+  font: ("Charter", "Century Schoolbook", "Wickliffe", "Libertinus Serif", "DejaVu Serif"),
+  fontsans: ("Source Sans 3", "Wickliffe Sans", "Gill Sans MT", "DejaVu Sans"),
   fontmono: ("Source Code Pro", "Consolas", "DejaVu Sans Mono"),
-  fontsize: 10pt,
+  fontsize: 9pt,
   bib: "../references.bib",
   bibliographystyle: "american-medical-association",
   sectionnumbering: none,
@@ -26,7 +26,7 @@
   set page(
     paper: paper,
     margin: margin,
-    columns: if draft { 1 } else { cols },
+    columns: if draft { (x: 2.5cm, y: 2cm) } else { margin },
     numbering: "1",
     background: if background != none {
       background
@@ -73,12 +73,15 @@
       let iloc = it.location().position()
       if (iloc.page == ploc.page and iloc.x == ploc.x and iloc.y - ploc.y < 50pt) {
         // threshold
-        v(-13pt) // amount to reduce spacing, could make this dependent on it.level
+        v(-1.3 * fontsize) // amount to reduce spacing
       }
     }
     it
   }
   show heading: set text(font: fontsans, weight: "medium")
+  show heading.where(level: 1): set text(weight: "bold", size: 1.1 * fontsize)
+  show heading.where(level: 2): set text(size: 1.1 * fontsize)
+  show heading.where(level: 3): set text(size: fontsize)
   set bibliography(style: bibliographystyle, title: "References")
   set footnote.entry(
     separator: line(length: 100%),
@@ -125,20 +128,18 @@
               aff => str(affiliations.position(i => aff == i) + 1),
             )
             .join(",")
-          [
-            #author.name#if author.email != "" {
+          [#author.name#if author.email != "" {
               [#footnote(numbering: "*")[
                 Corresponding author.
                 #linebreak()
                 _Email_: #link("mailto:" + author.email.replace("\\", ""))
               ]]
-            }#super[#affiliation]
-          ]
+            }#super[#affiliation]]
         })
         .join(", ")
-      block(inset: (top: if draft { 0cm } else { 2.5cm }), width: 100%)[#align(center)[#par(
-        justify: false,
-      )[#names]]]
+      block(inset: (top: if draft { 0cm } else { 2.5cm }), width: 100%)[
+        #align(center)[#par(justify: false)[#names]]
+      ]
     }
 
     #if date != none {
@@ -146,7 +147,10 @@
     }
 
     #if abstract != none {
-      block(inset: (x: 2cm, top: if draft { 0.5cm } else { 2cm }), width: 100%)[
+      block(
+        inset: (x: if draft { 1.5cm } else { 2cm }, top: if draft { 0.5cm } else { 2cm }),
+        width: 100%,
+      )[
         #set par(
           first-line-indent: 0em,
           spacing: if draft { 1.55em } else { 1em },
@@ -165,10 +169,10 @@
   show figure.where(kind: table): set figure.caption(position: top)
   show figure.where(kind: "suppl-table"): set figure.caption(position: top)
   show figure: it => {
-    set block(spacing: 0.65em, breakable: true)
+    set block(spacing: 0.4em, breakable: true)
     show block: set align(left)
     set text(size: 0.8 * fontsize)
-    set place(clearance: 3em)
+    set place(clearance: 3.5em)
     set figure(placement: none)
     set par(first-line-indent: 0em, justify: false, leading: 0.45em)
     it
@@ -202,7 +206,7 @@
   }
 
   show table.cell: set text(size: 0.9 * fontsize)
-  set table(inset: (x: 6pt, y: 0.3em), stroke: none)
+  set table(inset: (x: 4pt, y: 0.3em), stroke: none)
   set table.hline(stroke: 0.5pt)
 
   pagebreak()
