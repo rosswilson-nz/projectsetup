@@ -13,7 +13,14 @@
   draft: false,
   lang: "en",
   region: "NZ",
-  font: ("Charter", "Century Schoolbook", "Wickliffe", "Libertinus Serif", "DejaVu Serif"),
+  font: (
+    "Charis",
+    "Charter",
+    "Century Schoolbook",
+    "Wickliffe",
+    "Libertinus Serif",
+    "DejaVu Serif",
+  ),
   fontsans: ("Source Sans 3", "Wickliffe Sans", "Gill Sans MT", "DejaVu Sans"),
   fontmono: ("Source Code Pro", "Consolas", "DejaVu Sans Mono"),
   fontsize: 9pt,
@@ -23,6 +30,7 @@
   appendix: [],
   doc,
 ) = {
+  let linespace = 1.3em
   set page(
     paper: paper,
     margin: margin,
@@ -45,24 +53,24 @@
   )
   set columns(gutter: 1cm)
   set par(
-    leading: if draft { 1.55em } else { 0.45em },
+    leading: if draft { 2em } else { linespace },
     first-line-indent: 1em,
     justify: true,
-    spacing: if draft { 1.55em } else { 0.45em },
+    spacing: if draft { 2em } else { linespace },
   )
   set text(
     lang: lang,
     region: region,
     font: font,
     size: fontsize,
-    bottom-edge: "descender",
-    top-edge: "ascender",
+    bottom-edge: "baseline",
+    top-edge: "baseline",
   )
   show raw: set text(font: fontmono, size: 0.9 * fontsize, weight: "medium")
   set heading(numbering: sectionnumbering)
   show heading: set block(
-    above: if draft { 30pt } else { 16pt },
-    below: if draft { 10pt } else { 5pt },
+    above: if draft { 30pt + 2em } else { 10pt + linespace },
+    below: if draft { 10pt + 2em } else { 2pt + linespace },
   )
   show heading: it => {
     // Clever trick to reduce spacing between consecutive headings
@@ -73,7 +81,7 @@
       let iloc = it.location().position()
       if (iloc.page == ploc.page and iloc.x == ploc.x and iloc.y - ploc.y < 50pt) {
         // threshold
-        v(-1.3 * fontsize) // amount to reduce spacing
+        v(-6pt) // amount to reduce spacing
       }
     }
     it
@@ -94,13 +102,17 @@
     #if title != none {
       block(inset: (top: if draft { 1cm } else { 2.5cm }), width: 100%)[#align(center)[#par(
         justify: false,
+        leading: linespace + 1em,
       )[
         #text(font: fontsans, weight: "medium", size: 2em)[#title]
       ]]]
     }
 
     #if subtitle != none {
-      block(inset: (top: 1cm), width: 100%)[#align(center)[#par(justify: false)[
+      block(inset: (top: 1cm), width: 100%)[#align(center)[#par(
+        justify: false,
+        leading: linespace + 1em,
+      )[
         #text(font: fontsans, weight: "medium", size: 1.5em)[#subtitle]
       ]]]
     }
@@ -116,9 +128,11 @@
         let idx = affiliations.position(i => it == i) + 1
         [#super[#idx] #it]
       })
-      footnote(numbering: x => [#sym.zws])[
-        #affiliations_fn.join(linebreak())#linebreak()#linebreak()
-      ]
+      footnote(numbering: x => [#sym.zws])[#par(
+        first-line-indent: 0em,
+        leading: linespace,
+        spacing: linespace,
+      )[ #affiliations_fn.join(linebreak()) ]]
       counter(footnote).update(0)
       let names = authors
         .map(author => {
@@ -129,16 +143,20 @@
             )
             .join(",")
           [#author.name#if author.email != "" {
-              [#footnote(numbering: "*")[
-                Corresponding author.
+              [#footnote(numbering: x => [#sym.zws])[#par(
+                first-line-indent: 0em,
+                leading: linespace,
+                spacing: linespace,
+              )[
+                \* Corresponding author.
                 #linebreak()
                 _Email_: #link("mailto:" + author.email.replace("\\", ""))
-              ]]
+              ]]]
             }#super[#affiliation]]
         })
         .join(", ")
       block(inset: (top: if draft { 0cm } else { 2.5cm }), width: 100%)[
-        #align(center)[#par(justify: false)[#names]]
+        #align(center)[#par(justify: false, leading: linespace + 1em)[#names]]
       ]
     }
 
@@ -153,8 +171,8 @@
       )[
         #set par(
           first-line-indent: 0em,
-          spacing: if draft { 1.55em } else { 1em },
-          leading: if draft { 1em } else { 0.45em },
+          spacing: if draft { 2.5em } else { linespace + 0.5em },
+          leading: if draft { 2em } else { linespace },
         )
         *Abstract*
 
@@ -165,16 +183,16 @@
     }
   ]
 
-  set figure(placement: auto)
+  set figure(placement: auto, scope: "parent")
   show figure.where(kind: table): set figure.caption(position: top)
   show figure.where(kind: "suppl-table"): set figure.caption(position: top)
   show figure: it => {
-    set block(spacing: 0.4em, breakable: true)
+    set block(spacing: 1.2em, breakable: true)
     show block: set align(left)
     set text(size: 0.8 * fontsize)
-    set place(clearance: 3.5em)
+    set place(clearance: 4.5em)
     set figure(placement: none)
-    set par(first-line-indent: 0em, justify: false, leading: 0.45em)
+    set par(first-line-indent: 0em, justify: false, leading: linespace, spacing: linespace)
     it
   }
   show figure.caption: it => {
@@ -206,7 +224,7 @@
   }
 
   show table.cell: set text(size: 0.9 * fontsize)
-  set table(inset: (x: 4pt, y: 0.3em), stroke: none)
+  set table(inset: (x: 4pt, top: 1.2em, bottom: 0.3em), stroke: none)
   set table.hline(stroke: 0.5pt)
 
   pagebreak()

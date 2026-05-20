@@ -8,7 +8,7 @@
     it
   }
 
-  set figure(placement: none)
+  set figure(placement: none, scope: "column")
   show figure.where(kind: "suppl-table"): set figure(
     numbering: (..nums) => [#context { numbering("A", counter(heading).get().at(0)) }#numbering(
         "1",
