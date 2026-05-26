@@ -36,19 +36,23 @@
     margin: margin,
     columns: if draft { (x: 2.5cm, y: 2cm) } else { margin },
     numbering: "1",
-    background: if background != none {
+    background: if background == auto {
+      if draft {
+        rotate(56deg, text(80pt, fill: rgb("FFCBC4"))[DRAFT])
+      } else {
+        none
+      }
+    } else {
       background
-    } else if draft {
-      rotate(56deg, text(80pt, fill: rgb("FFCBC4"))[DRAFT])
-    } else {
-      none
     },
-    header: if header != none {
-      header
-    } else if draft {
-      align(center)[_DRAFT MANUSCRIPT: DO NOT CITE_]
+    header: if header == auto {
+      if draft {
+        align(center)[_DRAFT MANUSCRIPT: DO NOT CITE_]
+      } else {
+        none
+      }
     } else {
-      none
+      header
     },
   )
   set columns(gutter: 1cm)
