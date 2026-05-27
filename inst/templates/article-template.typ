@@ -33,8 +33,8 @@
   let linespace = 1.3em
   set page(
     paper: paper,
-    margin: margin,
-    columns: if draft { (x: 2.5cm, y: 2cm) } else { margin },
+    margin: if draft { (x: 2.5cm, y: 2cm) } else { margin },
+    columns: if draft { 1 } else { cols },
     numbering: "1",
     background: if background == auto {
       if draft {
