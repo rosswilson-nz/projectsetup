@@ -1,3 +1,4 @@
 main:
   reporter_make: balanced
+  reporter_outdated: silent
   use_crew: yes

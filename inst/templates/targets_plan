@@ -8,9 +8,13 @@
 # res_: Analysis results (regression, etc.)
 # msc_: Miscellaneous objects not included elsewhere
 # tbl_: Table (as saved `.typ` file, in `output/_tables/`)
-# plt_: Plots (as R objects, e.g. `ggplot`)
+# plt_: Plots (as R objects, e.g. `ggplot`,
+#         or as functions generating base plots (usually with {tinyplot}))
 # fig_: Saved figures (as files, usually `.svg`, in `output/_figures/`)
-# rpt_: Output reports (as files, usually with `render_manuscript()`)
+#
+# `tar_data()` generates matched `file_` and `raw_` targets
+# `tar_table()` generates a `tbl_` target
+# `tar_figure()` and `tar_tinyfigure()` generate `fig_` targets
 
 # Simple skeleton outline of analysis plan - revise as required
 targets <- rlang::list2(
@@ -18,14 +22,23 @@ targets <- rlang::list2(
   # tar_data(data, "data.csv", read_raw_data),
   # tar_target(dta_cleaned, process_data(raw_data)),
   # tar_target(res_primary.analysis, analyse_data(dta_cleaned)),
-  # tar_table(primary.results, create_table(res_primary.analysis)),
-  # tar_figure(primary.results, create_plot(res_primary.analysis), "my-plot"),
-  # tar_render_typst(
-  #   manuscript,
-  #   values = extract_result(res_primary.analysis),
-  #   figs = list(primary = fig_primary.results),
-  #   tbls = list(primary = tbl_primary.results),
-  #   appendix = "appendix"
+  # tar_table(
+  #   primary.results,
+  #   create_table(res_primary.analysis),
+  #   "my-table",
+  #   packages = c("fastverse", "ttables")
+  # ),
+  # tar_figure(
+  #   primary.results,
+  #   create_plot(res_primary.analysis), # a ggplot object
+  #   "my-plot",
+  #   packages = c("fastverse", "ggplot2", "scales")
+  # ),
+  # tar_tinyfigure(
+  #   primary.results_tiny,
+  #   create_tinyplot(res_primary.analysis), # a (no-argument) function
+  #   "my-tinyplot",
+  #   packages = c("fastverse", "tinyplot")
   # ),
   ## END targets list ----------------------------------------------------------
 )

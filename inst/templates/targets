@@ -5,11 +5,10 @@
 library(targets)
 library(tarchetypes)
 library(pipelinetools)
-options(tidyverse.quiet = TRUE)
 
 # Set options
 tar_option_set(
-  packages = c("tidyverse"), # add other required packages in here
+  packages = c("fastverse"), # add other required packages in here
   format = "qs",
   error = "trim",
   memory = "transient",
