@@ -8,6 +8,7 @@ use_git <- function(message = "Initial commit") {
     ".Rhistory",
     ".RData",
     ".Rproj.user",
+    ".Renviron",
     ".httr-oauth",
     ".DS_Store",
     "_targets/",
