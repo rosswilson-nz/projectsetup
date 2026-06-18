@@ -42,10 +42,12 @@ use_project_directory <- function(
       usethis::use_git_ignore(c(
         "/output/*.pdf",
         "/output/*.docx",
+        "/output/*.html",
         "/output/_figures/*.*",
         "!/output/_figures/_figures",
         "/output/_tables/*.*",
-        "!/output/_tables/_tables"
+        "!/output/_tables/_tables",
+        "/output/_misc/*"
       ))
     }
 
