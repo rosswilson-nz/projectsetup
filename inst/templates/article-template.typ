@@ -5,7 +5,7 @@
   date: none,
   abstract: none,
   keywords: none,
-  margin: (x: 2cm, y: 2cm),
+  margin: (inside: 3cm, outside: 2cm, y: 2cm),
   paper: "a4",
   cols: 2,
   background: auto,
@@ -14,16 +14,24 @@
   lang: "en",
   region: "NZ",
   font: (
-    "Charis",
     "Charter",
-    "Century Schoolbook",
-    "Wickliffe",
-    "Libertinus Serif",
-    "DejaVu Serif",
+    "Charis",
+    "Century Schoolbook", // system fallback
+    "Book Antiqua", // system fallback
+    "Libertinus Serif", // Typst CLI fallback
   ),
-  fontsans: ("Source Sans 3", "Wickliffe Sans", "Gill Sans MT", "DejaVu Sans"),
-  fontmono: ("Source Code Pro", "Consolas", "DejaVu Sans Mono"),
-  fontsize: 9pt,
+  fontsans: (
+    "Source Sans 3",
+    "Gill Sans MT", // system fallback
+    "Libertinus Serif", // Typst CLI fallback
+  ),
+  fontmono: (
+    "Source Code Pro",
+    "Fira Mono",
+    "Consolas", // system fallback
+    "DejaVu Sans Mono", // Typst CLI fallback
+  ),
+  fontsize: 10pt,
   bib: "../references.bib",
   bibliographystyle: "american-medical-association",
   sectionnumbering: none,
@@ -33,7 +41,7 @@
   let linespace = 1.3em
   set page(
     paper: paper,
-    margin: if draft { (x: 2.5cm, y: 2cm) } else { margin },
+    margin: if draft { (x: 2.5cm, y: 2.5cm) } else { margin },
     columns: if draft { 1 } else { cols },
     numbering: "1",
     background: if background == auto {
@@ -54,6 +62,8 @@
     } else {
       header
     },
+    header-ascent: 50% - 0.5em,
+    footer-descent: 50% - 0.5em,
   )
   set columns(gutter: 1cm)
   set par(
@@ -108,7 +118,7 @@
         if target() == "html" {
           html.elem("h1")[#text(font: fontsans, weight: "medium", size: 2 * fontsize)[#title]]
         } else {
-          block(inset: (top: if draft { 1cm } else { 2.5cm }), width: 100%)[#align(center)[#par(
+          block(inset: (top: if draft { 1cm } else { 1.5cm }), width: 100%)[#align(center)[#par(
             justify: false,
             leading: linespace + 1em,
           )[
@@ -123,7 +133,7 @@
         if target() == "html" {
           html.elem("h1")[#text(font: fontsans, weight: "medium", size: 1.5 * fontsize)[#subtitle]]
         } else {
-          block(inset: (top: 1cm), width: 100%)[#align(center)[#par(
+          block(inset: (top: 0.5cm), width: 100%)[#align(center)[#par(
             justify: false,
             leading: linespace + 1em,
           )[
@@ -176,7 +186,7 @@
                 }#super[#affiliation]]
             })
             .join(", ")
-          block(inset: (top: if draft { 0cm } else { 2.5cm }), width: 100%)[
+          block(inset: (top: if draft { 0cm } else { 1.5cm }), width: 100%)[
             #align(center)[#par(justify: false, leading: linespace + 1em)[#names]]
           ]
         }
@@ -195,7 +205,7 @@
 
     #if abstract != none {
       block(
-        inset: (x: if draft { 1.5cm } else { 2cm }, top: if draft { 0.5cm } else { 2cm }),
+        inset: (x: if draft { 1.5cm } else { 1.5cm }, top: if draft { 0.5cm } else { 1.5cm }),
         width: 100%,
       )[
         #set par(
