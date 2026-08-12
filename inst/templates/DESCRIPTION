@@ -2,4 +2,6 @@ Suggests:
     devtools,
     targets,
     pak,
-    lobstr
+    lobstr,
+    gitcreds,
+    qs2
