@@ -43,6 +43,17 @@ create_research_project <- function(
     targets::tar_renv()
     cli_alert_success("Initialising {.strong renv} in new project")
     utils::capture.output(renv::init(settings = list(snapshot.type = "implicit")))
+    cat(
+      "\nwith(",
+      "  list(profile = Sys.getenv(\"R_PROFILE_USER\", unset = \"~/.Rprofile\")),",
+      "  if (file.exists(profile)) {",
+      "    sys.source(profile, envir = globalenv())",
+      "  }",
+      ")",
+      sep = "\n",
+      file = ".Rprofile",
+      append = TRUE
+    )
     cli_alert_success("{.strong renv} initialised")
   }
   if (git) {
@@ -76,10 +87,14 @@ create_research_project <- function(
     "*" = if (github) {
       "Render {.file README.Rmd} to {.file README.md} for GitHub"
     },
-    "*" = paste("Use {.file _targets.R}, {.file _plan.R}, and",
-                "{.file _config.R} to specify the analysis workflow"),
-    "i" = paste("See {.url https://books.ropensci.org/targets/} for more",
-                "information on the {.pkg targets} package.")
+    "*" = paste(
+      "Use {.file _targets.R}, {.file _plan.R}, and",
+      "{.file _config.R} to specify the analysis workflow"
+    ),
+    "i" = paste(
+      "See {.url https://books.ropensci.org/targets/} for more",
+      "information on the {.pkg targets} package."
+    )
   ))
   cli_rule()
 
