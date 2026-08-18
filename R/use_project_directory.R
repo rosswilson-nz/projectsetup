@@ -127,6 +127,10 @@ add_templates <- function(renv = TRUE) {
     ),
     fs::path_wd("output")
   )
+  file.copy(
+    system.file("templates", "reference.docx", package = "projectsetup", mustWork = TRUE),
+    fs::path_wd("output", "_templates")
+  )
   ## References file
   file.copy(
     system.file("templates", "references.bib", package = "projectsetup", mustWork = TRUE),
