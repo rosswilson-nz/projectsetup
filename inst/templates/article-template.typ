@@ -41,7 +41,7 @@
   let linespace = 1.3em
   set page(
     paper: paper,
-    margin: if draft { (x: 2.5cm, y: 2.5cm) } else { margin },
+    margin: if draft { (left: 2cm, right: 4cm, y: 2.5cm) } else { margin },
     columns: if draft { 1 } else { cols },
     numbering: "1",
     background: if background == auto {
@@ -67,10 +67,10 @@
   )
   set columns(gutter: 1cm)
   set par(
-    leading: if draft { 2em } else { linespace },
+    leading: if draft { 2.5em } else { linespace },
     first-line-indent: 1em,
     justify: true,
-    spacing: if draft { 2em } else { linespace },
+    spacing: if draft { 2.5em } else { linespace },
   )
   set text(
     lang: lang,
@@ -112,7 +112,7 @@
   show footnote.entry: set align(left)
   set list(indent: 1em, marker: [•])
 
-  page(columns: 1)[
+  page(columns: 1, margin: margin)[
     #if title != none {
       context {
         if target() == "html" {
