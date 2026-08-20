@@ -297,6 +297,8 @@
         content,
         caption: caption,
         kind: kind,
+        scope: "column",
+        placement: none,
       ) #label(lab)
       #footnote],
     kind: "none",
