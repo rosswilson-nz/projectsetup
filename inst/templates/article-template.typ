@@ -5,7 +5,7 @@
   date: none,
   abstract: none,
   keywords: none,
-  margin: (inside: 3cm, outside: 2cm, y: 2cm),
+  margin: (inside: 2.5cm, outside: 2cm, y: 2cm),
   paper: "a4",
   cols: 2,
   background: auto,
@@ -14,8 +14,8 @@
   lang: "en",
   region: "NZ",
   font: (
-    "Charter",
     "Charis",
+    "Charter",
     "Century Schoolbook", // system fallback
     "Book Antiqua", // system fallback
     "Libertinus Serif", // Typst CLI fallback
@@ -31,7 +31,8 @@
     "Consolas", // system fallback
     "DejaVu Sans Mono", // Typst CLI fallback
   ),
-  fontsize: 10pt,
+  fontsize: 9pt,
+  fontsize_draft: 10pt,
   bib: "../references.bib",
   bibliographystyle: "american-medical-association",
   sectionnumbering: none,
@@ -76,7 +77,7 @@
     lang: lang,
     region: region,
     font: font,
-    size: fontsize,
+    size: if draft { fontsize_draft } else { fontsize },
     bottom-edge: "baseline",
     top-edge: "baseline",
   )
@@ -174,15 +175,15 @@
                 )
                 .join(",")
               [#author.name#if author.email != "" {
-                  [#footnote(numbering: x => [#sym.zws])[#par(
-                    first-line-indent: 0em,
-                    leading: linespace,
-                    spacing: linespace,
-                  )[
-                    \* Corresponding author.#linebreak() _Email_: #link(
-                      "mailto:" + author.email.replace("\\", ""),
-                    )
-                  ]]]
+                  [#super[\*]#footnote(numbering: x => [#sym.zws])[#par(
+                      first-line-indent: 0em,
+                      leading: linespace,
+                      spacing: linespace,
+                    )[
+                      \* Corresponding author.#linebreak() _Email_: #link(
+                        "mailto:" + author.email.replace("\\", ""),
+                      )
+                    ]]]
                 }#super[#affiliation]]
             })
             .join(", ")
