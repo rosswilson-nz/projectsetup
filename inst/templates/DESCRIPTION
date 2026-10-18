@@ -3,5 +3,7 @@ Suggests:
     targets,
     pak,
     lobstr,
+    languageserver,
+    lintr,
     gitcreds,
     qs2

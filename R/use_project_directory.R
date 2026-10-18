@@ -47,7 +47,8 @@ use_project_directory <- function(
         "!/output/_figures/_figures",
         "/output/_tables/*.*",
         "!/output/_tables/_tables",
-        "/output/_misc/*"
+        "/output/_misc/*",
+        "!/output/_misc/_misc"
       ))
     }
 
