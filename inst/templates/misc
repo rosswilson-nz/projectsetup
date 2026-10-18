@@ -1,0 +1,2 @@
+Miscellaneous output files (e.g. JSON files with analysis results for inclusion
+in the Typst manuscript source) should be saved in here as part of the workflow.

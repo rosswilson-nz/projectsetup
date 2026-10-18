@@ -66,6 +66,7 @@ add_directories <- function() {
   usethis::use_directory("output/_figures")
   usethis::use_directory("output/_tables")
   usethis::use_directory("output/_templates")
+  usethis::use_directory("output/_misc")
   usethis::use_directory("R")
 }
 
@@ -153,6 +154,10 @@ add_templates <- function(renv = TRUE) {
   file.copy(
     system.file("templates", "tables", package = "projectsetup", mustWork = TRUE),
     fs::path_wd("output", "_tables", "_tables")
+  )
+  file.copy(
+    system.file("templates", "misc", package = "projectsetup", mustWork = TRUE),
+    fs::path_wd("output", "_misc", "_misc")
   )
   file.copy(
     system.file("templates", "raw_data", package = "projectsetup", mustWork = TRUE),
