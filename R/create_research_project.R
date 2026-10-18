@@ -34,8 +34,16 @@ create_research_project <- function(
   organisation = NULL,
   renv = TRUE,
   rstudio = rstudioapi::isAvailable(),
-  open = rlang::is_interactive()
+  open = rlang::is_interactive(),
+  overwrite = FALSE
 ) {
+  if (dir.exists(path) && !overwrite) {
+    cli::cli_abort(c(
+      x = "The folder {.path {path}} already exists",
+      i = "If you are sure you want to use this existing directory, pass {.arg overwrite = TRUE}",
+      i = "Otherwise, please specify a new directory to create for this project"
+    ))
+  }
   path <- usethis::create_project(path, rstudio = rstudio, open = FALSE)
   usethis::local_project(path)
   use_project_directory(git = git, raw_data_in_git = raw_data_in_git, renv = renv)
